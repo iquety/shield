@@ -4,39 +4,64 @@ declare(strict_types=1);
 
 namespace Iquety\Shield;
 
-use Exception;
+use Iquety\Shield\Assertion;
 
 class Shield
 {
-    private ?Assertion $last = null;
-
+    /** @var array<int,Field> */
+    private array $fieldList = [];
+    
+    /** @var array<int,Assertion> */
     private array $assertionList = [];
 
     private array $errorList = [];
 
-    public function assert(Assertion $assertion): self
+    public function field(string $name): Field
     {
-        $this->errorList = [];
+        $index = count($this->fieldList);
 
-        $this->last = $assertion;
+        $this->fieldList[$index] = new Field($name);
 
-        $this->assertionList[] = $this->last;
-
-        return $this;
+        return $this->fieldList[$index];
     }
 
-    public function identity(string $identity): self
+    public function assert(Assertion $assertion): Assertion
     {
-        $this->last->setIdentity($identity);
+        $index = count($this->assertionList);
 
-        return $this;
+        $this->assertionList[$index] = $assertion;
+
+        return $this->assertionList[$index];
     }
 
-    public function orThrow(string $exceptionType): self
+    private function proccess(): void
     {
-        $this->last->setExceptionType($exceptionType);
+        $list = [];
 
-        return $this;
+        foreach($this->fieldList as $field) {
+            $name = $field->getName();
+
+            if (isset($list[$name]) === false) {
+                $list[$name] = [];
+            }
+
+            $this->appendErrors($list[$name], $field->getErrorList());
+        }
+
+        $this->errorList = $list;
+
+        foreach($this->assertionList as $assertion) {
+            if ($assertion->isValid() === false) {
+                $this->errorList[] = $assertion->makeMessage();
+            }
+        }
+    }
+
+    private function appendErrors(array & $list, array $errorList): void
+    {
+        foreach($errorList as $assertion) {
+            $list[] = $assertion->makeMessage();
+        }
     }
 
     public function hasErrors(): bool
@@ -44,36 +69,25 @@ class Shield
         return $this->getErrorList() !== [];
     }
 
-    /** @return array<int,Assertion> */
     public function getErrorList(): array
     {
-        if ($this->errorList !== []) {
-            return $this->errorList;
-        }
-
-        foreach ($this->assertionList as $assert) {
-            if ($assert->isValid() === false) {
-                $this->errorList[] = $assert;
-            }
+        if ($this->errorList === []) {
+            $this->proccess();
         }
 
         return $this->errorList;
     }
 
-    public function validOrThrow(string $defaultExceptionType = Exception::class): void
+    public function validOrThrow(string $exceptionType = AssertionException::class): void
     {
         if ($this->hasErrors() === true) {
-            $list = $this->getErrorList();
+            $exception = new $exceptionType(
+                'The value was not successfully asserted'
+            );
 
-            $assert = $list[0];
+            $exception->extractErrorsFrom($this);
 
-            $assertExceptionType = $assert->getExceptionType();
-
-            $exceptionType = $assertExceptionType !== Exception::class
-                ? $assertExceptionType
-                : $defaultExceptionType;
-
-            throw new $exceptionType($assert->getErrorMessage());
+            throw $exception;
         }
     }
 }

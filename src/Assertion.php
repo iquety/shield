@@ -4,87 +4,124 @@ declare(strict_types=1);
 
 namespace Iquety\Shield;
 
-use Exception;
-use InvalidArgumentException;
+use Iquety\Shield\Message;
+use ReflectionObject;
 
 abstract class Assertion
 {
-    private mixed $actual = '';
+    private string $fieldName = '';
 
-    private mixed $comparison = '';
+    private mixed $value = '';
 
-    private string $errorMessage = '';
+    private mixed $assertValue = '';
 
-    private string $identity = '';
-
-    private string $exceptionType = Exception::class;
+    private ?Message $message = null;
 
     abstract public function isValid(): bool;
 
-    public function getActual(): mixed
+    abstract public function getDefaultMessage(): Message;
+
+    abstract public function getDefaultNamedMessage(): Message;
+
+    public function getFieldName(): string
     {
-        return $this->actual;
+        return $this->fieldName;
     }
 
-    public function getComparison(): mixed
+    public function getValue(): mixed
     {
-        return $this->comparison;
+        return $this->value;
     }
 
-    public function getErrorMessage(): string
+    public function getAssertValue(): mixed
     {
-        $identity = trim($this->getIdentity(), ":");
+        return $this->assertValue;
+    }
 
-        $nodes = explode(':', $identity);
+    public function setFieldName(string $name): void
+    {
+        $this->fieldName = $name;
+    }
 
-        $tag   = $nodes[0];
-        $label = $nodes[1] ?? $tag;
+    public function setValue(mixed $value): void
+    {
+        $this->value = $value;
+    }
 
-        return str_replace(
-            ['{id}', '{label}'],
-            [$tag, $label],
-            $this->errorMessage
+    public function setAssertValue(mixed $value): void
+    {
+        $this->assertValue = $value;
+    }
+
+    public function makeMessage(): string
+    {
+        if ($this->message === null) {
+            return $this->makeDefaultMessage();
+        }
+
+        return $this->message->make(
+            $this->getFieldName(),
+            $this->stringfy($this->getValue()),
+            $this->stringfy($this->getAssertValue())
         );
     }
 
-    public function getIdentity(): string
+    protected function stringfy(mixed $value): string
     {
-        return $this->identity;
+        if (is_bool($value) && $value === true) {
+            return 'true';
+        }
+
+        if (is_bool($value) && $value === false) {
+            return 'false';
+        }
+
+        if (is_object($value) === true) {
+            return $this->extractState($value);
+        }
+        
+        return (string) $value;
     }
 
-    public function getExceptionType(): string
+    private function extractState(object $object): string
     {
-        return $this->exceptionType;
+        $state = [];
+
+        $reflector = new ReflectionObject($object);
+        $properties = $reflector->getProperties();
+        
+        foreach ($properties as $property) {
+            $property->setAccessible(true);
+
+            $state[$property->getName()] = $property->getValue($object);
+        }
+
+        return sprintf(
+            '%s:%s',
+            $object::class,
+            str_replace([':', '{', '}'], ['=>', '[', ']'], json_encode($state))
+        );
     }
 
-    public function setActual(mixed $value): void
+    private function makeDefaultMessage(): string
     {
-        $this->actual = $value;
-    }
-
-    public function setComparison(mixed $value): void
-    {
-        $this->comparison = $value;
-    }
-
-    public function setErrorMessage(string $message): void
-    {
-        $this->errorMessage = $message;
-    }
-
-    public function setIdentity(string $identity): void
-    {
-        if (substr_count($identity, ":") > 1) {
-            throw new InvalidArgumentException(
-                "Invalid format for identity \"$identity\". Use id:label"
+        if ($this->getFieldName() !== '') {
+            return $this->getDefaultNamedMessage()->make(
+                $this->getFieldName(),
+                $this->stringfy($this->getValue()),
+                $this->stringfy($this->getAssertValue())
             );
         }
 
-        $this->identity = $identity;
+        return $this->getDefaultMessage()->make(
+            '',
+            $this->stringfy($this->getValue()),
+            $this->stringfy($this->getAssertValue())
+        );
     }
 
-    public function setExceptionType(string $exceptionType): void
+    public function message(string $pattern): void
     {
-        $this->exceptionType = $exceptionType;
+        $this->message = new Message($pattern);
     }
 }

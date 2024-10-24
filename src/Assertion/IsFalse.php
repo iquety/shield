@@ -9,7 +9,7 @@ use Iquety\Shield\Message;
 
 class IsFalse extends Assertion
 {
-    public function __construct(private mixed $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
@@ -25,7 +25,7 @@ class IsFalse extends Assertion
             "The value is not false"
         );
     }
-    
+
     public function getDefaultNamedMessage(): Message
     {
         return new Message(

@@ -9,6 +9,7 @@ use Tests\TestCase;
 
 class MaxLengthTest extends TestCase
 {
+    /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
         $list = [];
@@ -32,6 +33,7 @@ class MaxLengthTest extends TestCase
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<string,array<int,mixed>> */
     public function incorrectValueProvider(): array
     {
         $list = [];

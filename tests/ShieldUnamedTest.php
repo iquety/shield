@@ -36,7 +36,7 @@ class ShieldUnamedTest extends TestCase
         $instance = new Shield();
 
         $instance->field('name')->assert(new EqualTo('palavra', 'palavra diferente'));
-        
+
         $this->assertTrue($instance->hasErrors());
     }
 
@@ -64,7 +64,7 @@ class ShieldUnamedTest extends TestCase
             "Segunda mensagem personalizada"
         ], $instance->getErrorList());
     }
-    
+
     /** @test */
     public function throwing(): void
     {

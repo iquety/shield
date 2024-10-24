@@ -34,7 +34,7 @@ class NotEqualTo extends Assertion
     {
         return new Message("The values ​​must be different");
     }
-    
+
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(

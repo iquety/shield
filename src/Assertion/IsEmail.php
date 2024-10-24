@@ -27,7 +27,7 @@ class IsEmail extends Assertion
     {
         return new Message("Value must be a valid email");
     }
-    
+
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(

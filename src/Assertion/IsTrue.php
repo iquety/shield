@@ -25,7 +25,7 @@ class IsTrue extends Assertion
             "The value is not true"
         );
     }
-    
+
     public function getDefaultNamedMessage(): Message
     {
         return new Message(

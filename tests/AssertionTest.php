@@ -19,7 +19,7 @@ class AssertionTest extends TestCase
             {
                 return true;
             }
-    
+
             public function getDefaultMessage(): Message
             {
                 return new Message('{{ value }} / {{ assert-value }}');
@@ -63,7 +63,7 @@ class AssertionTest extends TestCase
             {
                 return true;
             }
-    
+
             public function getDefaultMessage(): Message
             {
                 return new Message('{{ value }} / {{ assert-value }}');

@@ -79,7 +79,7 @@ abstract class Assertion
         if (is_object($value) === true) {
             return $this->extractState($value);
         }
-        
+
         return (string) $value;
     }
 
@@ -89,7 +89,7 @@ abstract class Assertion
 
         $reflector = new ReflectionObject($object);
         $properties = $reflector->getProperties();
-        
+
         foreach ($properties as $property) {
             $property->setAccessible(true);
 
@@ -99,7 +99,7 @@ abstract class Assertion
         return sprintf(
             '%s:%s',
             $object::class,
-            str_replace([':', '{', '}'], ['=>', '[', ']'], json_encode($state))
+            str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($state))
         );
     }
 

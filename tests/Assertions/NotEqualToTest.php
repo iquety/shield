@@ -10,6 +10,7 @@ use Tests\TestCase;
 
 class NotEqualToTest extends TestCase
 {
+    /** @return array<string,array<int,mixed>> */
     public function validEquality(): array
     {
         $list = [];
@@ -34,6 +35,7 @@ class NotEqualToTest extends TestCase
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<string,array<int,mixed>> */
     public function incorrectValueProvider(): array
     {
         $list = [];
@@ -85,6 +87,7 @@ class NotEqualToTest extends TestCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function notAssertedWithNamedAssertionCase(
         mixed $one,

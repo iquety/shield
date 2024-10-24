@@ -8,11 +8,12 @@
         "php": "^8.3.0"
     },
     "require-dev": {
+        "behat/behat": "^3.14",
         "codacy/coverage": "dev-master",
-        "phpunit/phpunit": "^9",
-        "phpstan/phpstan": "^0.12",
+        "iquety/docmap": "*",
         "phpmd/phpmd": "@stable",
-        "iquety/docmap": "dev-main",
+        "phpstan/phpstan": "^1.8",
+        "phpunit/phpunit": "^9",
         "squizlabs/php_codesniffer": "3.*"
     },
     "autoload": {
@@ -33,21 +34,32 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts" : {
-        "test": "vendor/bin/phpunit --testdox",
-        "coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "test": [
+            "vendor/bin/phpunit --testdox"
+        ],
         "docmap" : [
             "rm -Rf docs/pt-br/*",
             "vendor/bin/docmap -s docs-src/pt-br -d docs/pt-br -r leiame.md -l pt-br",
             "rm -Rf docs/en/*",
             "vendor/bin/docmap -s docs-src/en -d docs/en"
         ],
-        "analyse": [
-            "phpcbf --standard=PSR1,PSR12 src tests",
-            "phpcs --standard=PSR1,PSR12 src tests",
+        "coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "mess": [
             "phpmd ./src ansi cleancode,codesize,unusedcode,naming,design,controversial",
-            "phpmd ./tests ansi cleancode,codesize,unusedcode,naming,design,controversial",
+            "phpmd ./tests ansi cleancode,codesize,unusedcode,naming,design,controversial"
+        ],
+        "stan": [
             "phpstan analyse --level=8 src",
             "phpstan analyse --level=8 tests"
+        ],
+        "psr": [
+            "phpcbf --standard=PSR1,PSR12 src tests",
+            "phpcs --standard=PSR1,PSR12 src tests"
+        ],
+        "analyse": [
+            "@psr",
+            "@mess",
+            "@stan"
         ]
     }
 }

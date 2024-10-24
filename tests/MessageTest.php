@@ -9,6 +9,7 @@ use Tests\TestCase;
 
 class MessageTest extends TestCase
 {
+    /** @return array<string,array<mixed>> */
     public function patternProvider(): array
     {
         $list = [];
@@ -37,7 +38,7 @@ class MessageTest extends TestCase
             "Meu valor se chama '{{value }}'",
             "Meu valor se chama 'ricardo@gmail.com'",
         ];
-        
+
         $list['only value with both spaces'] = [
             "Meu valor se chama '{{ value }}'",
             "Meu valor se chama 'ricardo@gmail.com'",

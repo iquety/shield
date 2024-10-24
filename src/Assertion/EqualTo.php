@@ -34,7 +34,7 @@ class EqualTo extends Assertion
     {
         return new Message("The values ​​must be equal");
     }
-    
+
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(

@@ -44,7 +44,7 @@ class MaxLength extends Assertion
             $this->getAssertValue()
         ));
     }
-    
+
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(

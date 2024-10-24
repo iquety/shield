@@ -8,7 +8,7 @@ use Exception;
 
 class AssertionException extends Exception
 {
-    /** @var array<string,array<int,string>> */
+    /** @var array<int|string,array<int,string>|string> */
     private array $errorList = [];
 
     public function extractErrorsFrom(Shield $shield): self
@@ -18,7 +18,7 @@ class AssertionException extends Exception
         return $this;
     }
 
-    /** @var array<string,array<int,string>> */
+    /** @return array<int|string,array<int,string>|string> */
     public function toArray(): array
     {
         return $this->errorList;

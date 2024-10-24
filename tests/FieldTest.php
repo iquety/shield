@@ -25,7 +25,7 @@ class FieldTest extends TestCase
 
         $this->assertEquals([], $field->getErrorList());
     }
-    
+
     /** @test */
     public function processAssertionsAndGetErrorList(): void
     {
@@ -39,7 +39,7 @@ class FieldTest extends TestCase
 
         $this->assertCount(1, $field->getErrorList());
     }
-    
+
     /** @test */
     public function assertAddsAssertionToList(): void
     {

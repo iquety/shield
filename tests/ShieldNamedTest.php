@@ -8,6 +8,7 @@ use Iquety\Shield\Assertion\EqualTo;
 use Iquety\Shield\AssertionException;
 use Iquety\Shield\Field;
 use Iquety\Shield\Shield;
+use ReflectionClass;
 use Tests\Stubs\AssertionFake;
 use Tests\TestCase;
 
@@ -36,7 +37,7 @@ class ShieldNamedTest extends TestCase
         $fieldTwo = $instance->field('secondField');
         $fieldThree = $instance->field('thirdField');
 
-        $reflection = new \ReflectionClass($instance);
+        $reflection = new ReflectionClass($instance);
         $property = $reflection->getProperty('fieldList');
         $property->setAccessible(true);
         $fieldList = $property->getValue($instance);
@@ -54,7 +55,7 @@ class ShieldNamedTest extends TestCase
         $instance = new Shield();
 
         $instance->field('name')->assert(new EqualTo('palavra', 'palavra diferente'));
-        
+
         $instance->field('name')->assert(new EqualTo('palavra', 'palavra diferente'));
 
         $instance->field('email')->assert(new EqualTo('palavra', 'palavra diferente'));
@@ -81,7 +82,7 @@ class ShieldNamedTest extends TestCase
         $instance = new Shield();
 
         $instance->field('name')->assert(new EqualTo('palavra', 'palavra diferente'));
-        
+
         $this->assertTrue($instance->hasErrors());
     }
 
@@ -114,7 +115,7 @@ class ShieldNamedTest extends TestCase
             ]
         ], $instance->getErrorList());
     }
-    
+
     /** @test */
     public function throwing(): void
     {

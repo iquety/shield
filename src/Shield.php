@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Iquety\Shield;
 
+use Exception;
 use Iquety\Shield\Assertion;
 
 class Shield
 {
     /** @var array<int,Field> */
     private array $fieldList = [];
-    
+
     /** @var array<int,Assertion> */
     private array $assertionList = [];
 
+    /** @var array<int|string,array<int,string>|string> */
     private array $errorList = [];
 
     public function field(string $name): Field
@@ -38,7 +40,7 @@ class Shield
     {
         $list = [];
 
-        foreach($this->fieldList as $field) {
+        foreach ($this->fieldList as $field) {
             $name = $field->getName();
 
             if (isset($list[$name]) === false) {
@@ -50,16 +52,20 @@ class Shield
 
         $this->errorList = $list;
 
-        foreach($this->assertionList as $assertion) {
+        foreach ($this->assertionList as $assertion) {
             if ($assertion->isValid() === false) {
                 $this->errorList[] = $assertion->makeMessage();
             }
         }
     }
 
-    private function appendErrors(array & $list, array $errorList): void
+    /**
+     * @param array<string,> $list
+     * @param array<int,Assertion> $assertionList
+     */
+    private function appendErrors(array &$list, array $assertionList): void
     {
-        foreach($errorList as $assertion) {
+        foreach ($assertionList as $assertion) {
             $list[] = $assertion->makeMessage();
         }
     }
@@ -69,6 +75,7 @@ class Shield
         return $this->getErrorList() !== [];
     }
 
+    /** @return array<int|string,array<int,string>|string> */
     public function getErrorList(): array
     {
         if ($this->errorList === []) {
@@ -85,9 +92,18 @@ class Shield
                 'The value was not successfully asserted'
             );
 
-            $exception->extractErrorsFrom($this);
+            $this->populateErrors($exception);
 
             throw $exception;
         }
+    }
+
+    private function populateErrors(Exception &$exception): void
+    {
+        if ($exception instanceof AssertionException === false) {
+            return;
+        }
+
+        $exception->extractErrorsFrom($this);
     }
 }

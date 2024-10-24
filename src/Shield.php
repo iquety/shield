@@ -124,7 +124,7 @@ class Shield
             $list[] = $assertion->makeMessage();
         }
     }
-    
+
     private function populateErrors(Exception &$exception): void
     {
         if ($exception instanceof AssertionException === false) {

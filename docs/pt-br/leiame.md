@@ -22,7 +22,7 @@ que uma determinada condição imposta pelo desenvolvedor seja verdadeira. Se fo
 verdadeira, nada acontece. Se for falsa, os erros devem ser usados para notificar
 o usuário.
 
-O uso de asserções é muito útil, principalmente na validação de valores 
+O uso de asserções é muito útil, principalmente na validação de valores
 provenientes de argumentos de métodos ou de entradas do usuário em aplicações web.
 
 Para informações detalhadas, consulte o [Sumário da Documentação](indice.md).

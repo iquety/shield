@@ -2,10 +2,12 @@
 
 --summary-nav--
 
-## Introdução
+## Introduction
 
-Bem vindo(a) à documentação da biblioteca Iquety Security. Aqui você encontra as informações necessárias para utilizar as funcionalidades disponíveis e usufruir ao máximo da biblioteca.
+Welcome to the Iquety Shield library documentation. Here you will find the
+information you need to use the available features and get the most out of the
+library.
 
-### Conteúdo
+### Content
 
 --summary--

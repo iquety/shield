@@ -3,11 +3,13 @@
 [◂ Back to readme](../../readme.md) | [How to use ▸](01-how-to-use.md)
 -- | --
 
-## Introdução
+## Introduction
 
-Bem vindo(a) à documentação da biblioteca Iquety Security. Aqui você encontra as informações necessárias para utilizar as funcionalidades disponíveis e usufruir ao máximo da biblioteca.
+Welcome to the Iquety Shield library documentation. Here you will find the
+information you need to use the available features and get the most out of the
+library.
 
-### Conteúdo
+### Content
 
 - [How to use](01-how-to-use.md)
 - [Shield object](02-shield.md)

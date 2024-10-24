@@ -23,8 +23,8 @@ class ShieldUnamedTest extends TestCase
 
         $this->assertSame(
             [
-                'The values ​​must be equal',
-                'The values ​​must be equal'
+                "Value must be equal to 'palavra diferente'",
+                "Value must be equal to 'palavra diferente'"
             ],
             $instance->getErrorList()
         );
@@ -59,7 +59,7 @@ class ShieldUnamedTest extends TestCase
             ->message("Segunda mensagem personalizada");
 
         $this->assertSame([
-            "The values ​​must be equal",
+            "Value must be equal to 'palavra diferente'",
             "Primeira mensagem personalizada",
             "Segunda mensagem personalizada"
         ], $instance->getErrorList());
@@ -87,10 +87,10 @@ class ShieldUnamedTest extends TestCase
             $instance->validOrThrow();
         } catch (AssertionException $exception) {
             $this->assertSame([
-                "The values ​​must be equal",
+                "Value must be equal to 'palavra diferente'",
                 "Primeira mensagem personalizada",
                 "Segunda mensagem personalizada"
-            ], $exception->toArray());
+            ], $exception->getErrorList());
 
             $this->assertSame(
                 'The value was not successfully asserted',

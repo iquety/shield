@@ -19,7 +19,7 @@ class AssertionException extends Exception
     }
 
     /** @return array<int|string,array<int,string>|string> */
-    public function toArray(): array
+    public function getErrorList(): array
     {
         return $this->errorList;
     }

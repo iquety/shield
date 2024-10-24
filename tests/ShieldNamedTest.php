@@ -65,11 +65,11 @@ class ShieldNamedTest extends TestCase
         $this->assertSame(
             [
                 'name' => [
-                    "The value of the field 'name' must be equal to 'palavra diferente'",
-                    "The value of the field 'name' must be equal to 'palavra diferente'"
+                    "Value of the field 'name' must be equal to 'palavra diferente'",
+                    "Value of the field 'name' must be equal to 'palavra diferente'"
                 ],
                 'email' => [
-                    "The value of the field 'email' must be equal to 'palavra diferente'"
+                    "Value of the field 'email' must be equal to 'palavra diferente'"
                 ]
             ],
             $instance->getErrorList()
@@ -107,7 +107,7 @@ class ShieldNamedTest extends TestCase
 
         $this->assertSame([
             'name' => [
-                "The value of the field 'name' must be equal to 'palavra diferente'",
+                "Value of the field 'name' must be equal to 'palavra diferente'",
                 "O campo 'name' é legal"
             ],
             'pass' => [
@@ -140,13 +140,13 @@ class ShieldNamedTest extends TestCase
         } catch (AssertionException $exception) {
             $this->assertSame([
                 'name' => [
-                    "The value of the field 'name' must be equal to 'palavra diferente'",
+                    "Value of the field 'name' must be equal to 'palavra diferente'",
                     "O campo 'name' é legal"
                 ],
                 'pass' => [
                     "O campo 'pass' tem um valor feio"
                 ]
-            ], $exception->toArray());
+            ], $exception->getErrorList());
 
             $this->assertSame(
                 'The value was not successfully asserted',

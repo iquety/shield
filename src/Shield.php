@@ -63,6 +63,34 @@ class Shield
         return $this->assertionList[$index];
     }
 
+    public function hasErrors(): bool
+    {
+        return $this->getErrorList() !== [];
+    }
+
+    /** @return array<int|string,array<int,string>|string> */
+    public function getErrorList(): array
+    {
+        if ($this->errorList === []) {
+            $this->proccess();
+        }
+
+        return $this->errorList;
+    }
+
+    public function validOrThrow(string $exceptionType = AssertionException::class): void
+    {
+        if ($this->hasErrors() === true) {
+            $exception = new $exceptionType(
+                'The value was not successfully asserted'
+            );
+
+            $this->populateErrors($exception);
+
+            throw $exception;
+        }
+    }
+
     private function proccess(): void
     {
         $list = [];
@@ -96,35 +124,7 @@ class Shield
             $list[] = $assertion->makeMessage();
         }
     }
-
-    public function hasErrors(): bool
-    {
-        return $this->getErrorList() !== [];
-    }
-
-    /** @return array<int|string,array<int,string>|string> */
-    public function getErrorList(): array
-    {
-        if ($this->errorList === []) {
-            $this->proccess();
-        }
-
-        return $this->errorList;
-    }
-
-    public function validOrThrow(string $exceptionType = AssertionException::class): void
-    {
-        if ($this->hasErrors() === true) {
-            $exception = new $exceptionType(
-                'The value was not successfully asserted'
-            );
-
-            $this->populateErrors($exception);
-
-            throw $exception;
-        }
-    }
-
+    
     private function populateErrors(Exception &$exception): void
     {
         if ($exception instanceof AssertionException === false) {

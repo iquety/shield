@@ -15,70 +15,15 @@
 composer require iquety/shield
 ```
 
-Esta é uma biblioteca oferece um conjunto de Asserções para valores e expressões.
+Esta biblioteca oferece um conjunto de Asserções para verificar valores e expressões.
 
 Em computação, asserção (assertion) é uma verificação com o objetivo de certificar
-que uma determinada condição imposta pelo desenvolvedor seja verdadeira.
+que uma determinada condição imposta pelo desenvolvedor seja verdadeira. Se for
+verdadeira, nada acontece. Se for falsa, os erros devem ser usados para notificar
+o usuário.
 
 O uso de asserções é muito útil, principalmente na validação de valores 
-provenientes de argumentos de métodos ou de entradas do usuário.
-
-## Como usar
-
-As asserções são registradas através da biblioteca `Shield`.
-
-Pode ser usado para validar argumentos de operações:
-
-```php
-
-function minhaOperacao(string $nome): void
-{
-    $instance = new Shield();
-    
-    // $nome possui 8 caracteres ou menos?
-    $instance->assert(new MaxLength($name, 8)); 
-
-    // $nome possui 3 caracteres ou mais?
-    $instance->assert(new MinLength($name, 3)); 
-    
-    // ou todas as asserções conferem, 
-    // ou uma exceção será lançada
-    $instance->validOrThrow();
-}
-```
-
-ou para validar entradas do usuário:
-
-```php
-$nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_STRING);
-$email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_STRING);
-
-$instance = new Shield();
-
-// $nome possui 8 caracteres ou menos?
-$instance
-    ->field('nome_html')
-    ->assert(new MaxLength($name, 8)); 
-
-// $nome possui 3 caracteres ou mais?
-$instance
-    ->field('nome_html')
-    ->assert(new MinLength($name, 3)); 
-
-// $email é válido?
-$instance
-    ->field('email_html')
-    ->assert(new IsEmail($email)); 
-
-if ($instance->hasErrors() === false) {
-    $mensagensDeErros = $instance->getErrorList();
-
-    // libera mensagens de error ao usuário 
-}
-```
-
-No exemplo acima, uma exceção do tipo `Exception` será lançada com a mensagem 
-*"The value was not successfully asserted"*.
+provenientes de argumentos de métodos ou de entradas do usuário em aplicações web.
 
 Para informações detalhadas, consulte o [Sumário da Documentação](indice.md).
 

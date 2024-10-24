@@ -7,7 +7,7 @@ namespace Iquety\Shield\Assertion;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
-class IsTrue extends Assertion
+class IsNotEmpty extends Assertion
 {
     public function __construct(mixed $value)
     {
@@ -16,20 +16,20 @@ class IsTrue extends Assertion
 
     public function isValid(): bool
     {
-        return $this->getValue() === true;
+        return empty($this->getValue()) === false;
     }
 
     public function getDefaultMessage(): Message
     {
         return new Message(
-            "Value must be true"
+            "Value must not be empty"
         );
     }
 
     public function getDefaultNamedMessage(): Message
     {
         return new Message(
-            "Value of the field '{{ field }}' must be true"
+            "Value of the field '{{ field }}' must not be empty"
         );
     }
 }

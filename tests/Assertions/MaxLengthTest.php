@@ -56,7 +56,7 @@ class MaxLengthTest extends TestCase
         $this->assertFalse($assertion->isValid());
         $this->assertEquals(
             $assertion->makeMessage(),
-            "The value must have a maximum of $maxLength characters"
+            "Value must be less than $maxLength characters"
         );
     }
 
@@ -73,7 +73,7 @@ class MaxLengthTest extends TestCase
         $this->assertFalse($assertion->isValid());
         $this->assertEquals(
             $assertion->makeMessage(),
-            "The value of the field 'name' must have a maximum of 5 characters"
+            "Value of the field 'name' must be less than $maxLength characters"
         );
     }
 

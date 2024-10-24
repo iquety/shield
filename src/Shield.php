@@ -7,6 +7,33 @@ namespace Iquety\Shield;
 use Exception;
 use Iquety\Shield\Assertion;
 
+/**
+ * -> Assertions
+ * EqualTo: Value must be equal to {{ value }}
+ * NotEqualTo: Value must be different from {{ value }}
+ * IsEmail: Value must be a valid email
+ * IsEmpty: Value must be empty
+ * IsNotEmpty: Value must not be empty
+ * IsFalse: Value must be false
+ * IsTrue: Value must be true
+ * IsNull: Value must be null
+ * IsNotNull: Value must not be null
+ * MaxLength: Value must be less than {{ value }} characters
+ * MinLength: Value must be greater than {{ value }} characters
+ *
+ * -> Named assertions
+ * EqualTo: Value of the field 'name' must be equal to {{ value }}
+ * NotEqualTo: Value of the field 'name' must be different from {{ value }}
+ * IsEmail: Value of the field 'name' must be a valid email
+ * IsEmpty: Value of the field 'name' must be empty
+ * IsNotEmpty: Value of the field 'name' must not be empty
+ * IsFalse: Value of the field 'name' must be false
+ * IsTrue: Value of the field 'name' must be true
+ * IsNull: Value of the field 'name' must be null
+ * IsNotNull: Value of the field 'name' must not be null
+ * MaxLength: Value of the field 'name' must be less than {{ value }} characters
+ * MinLength: Value of the field 'name' must be greater than {{ value }} characters
+ */
 class Shield
 {
     /** @var array<int,Field> */

@@ -40,7 +40,7 @@ class MinLength extends Assertion
     public function getDefaultMessage(): Message
     {
         return new Message(sprintf(
-            "The value must have a minimum of %s characters",
+            "Value must be greater than %d characters",
             $this->getAssertValue()
         ));
     }
@@ -48,7 +48,7 @@ class MinLength extends Assertion
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(
-            "The value of the field '{{ field }}' must have a minimum of %s characters",
+            "Value of the field '{{ field }}' must be greater than %d characters",
             $this->getAssertValue()
         ));
     }

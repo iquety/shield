@@ -25,7 +25,9 @@ class IsEmail extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid email");
+        return new Message(
+            "Value must be a valid email"
+        );
     }
 
     public function getDefaultNamedMessage(): Message

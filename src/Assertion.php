@@ -76,14 +76,22 @@ abstract class Assertion
             return 'false';
         }
 
+        if ($value === null) {
+            return 'null';
+        }
+
         if (is_object($value) === true) {
-            return $this->extractState($value);
+            return $this->extractObjectState($value);
+        }
+
+        if (is_array($value) === true) {
+            return $this->extractArrayState($value);
         }
 
         return (string) $value;
     }
 
-    private function extractState(object $object): string
+    private function extractObjectState(object $object): string
     {
         $state = [];
 
@@ -101,6 +109,18 @@ abstract class Assertion
             $object::class,
             str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($state))
         );
+    }
+
+    /** @param array<int|string,mixed> $list */
+    private function extractArrayState(array $list): string
+    {
+        $state = [];
+
+        foreach ($list as $name => $value) {
+            $state[$name] = $value;
+        }
+
+        return str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($state));
     }
 
     private function makeDefaultMessage(): string

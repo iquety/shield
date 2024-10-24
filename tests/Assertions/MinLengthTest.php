@@ -26,9 +26,9 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, int $maxLength): void
+    public function assertedCase(mixed $value, int $minLength): void
     {
-        $assertion = new MinLength($value, $maxLength);
+        $assertion = new MinLength($value, $minLength);
 
         $this->assertTrue($assertion->isValid());
     }
@@ -49,14 +49,14 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, int $maxLength): void
+    public function notAssertedCase(mixed $value, int $minLength): void
     {
-        $assertion = new MinLength($value, $maxLength);
+        $assertion = new MinLength($value, $minLength);
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals(
             $assertion->makeMessage(),
-            "The value must have a minimum of 10 characters"
+            "Value must be greater than $minLength characters"
         );
     }
 
@@ -64,16 +64,16 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, int $maxLength): void
+    public function notAssertedCaseWithNamedAssertion(mixed $value, int $minLength): void
     {
-        $assertion = new MinLength($value, $maxLength);
+        $assertion = new MinLength($value, $minLength);
 
         $assertion->setFieldName('name');
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals(
             $assertion->makeMessage(),
-            "The value of the field 'name' must have a minimum of $maxLength characters"
+            "Value of the field 'name' must be greater than $minLength characters"
         );
     }
 
@@ -81,9 +81,9 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, int $maxLength): void
+    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, int $minLength): void
     {
-        $assertion = new MinLength($value, $maxLength);
+        $assertion = new MinLength($value, $minLength);
 
         $assertion->setFieldName('name');
 
@@ -97,9 +97,9 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, int $maxLength): void
+    public function notAssertedCaseWithCustomMessage(mixed $value, int $minLength): void
     {
-        $assertion = new MinLength($value, $maxLength);
+        $assertion = new MinLength($value, $minLength);
 
         $assertion->message('O valor {{ value }} está errado');
 

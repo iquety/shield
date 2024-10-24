@@ -32,13 +32,15 @@ class EqualTo extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("The values ​​must be equal");
+        return new Message(
+            "Value must be equal to '{{ assert-value }}'"
+        );
     }
 
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(
-            "The value of the field '{{ field }}' must be equal to '%s'",
+            "Value of the field '{{ field }}' must be equal to '%s'",
             $this->stringfy($this->getAssertValue())
         ));
     }

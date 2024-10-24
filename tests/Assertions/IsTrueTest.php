@@ -23,7 +23,11 @@ class IsTrueTest extends TestCase
         $assertion = new IsTrue(false);
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "The value is not true");
+
+        $this->assertEquals(
+            $assertion->makeMessage(),
+            "Value must be true"
+        );
     }
 
     /** @test */
@@ -34,7 +38,11 @@ class IsTrueTest extends TestCase
         $assertion->setFieldName('name');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "The value of field 'name' is not true");
+
+        $this->assertEquals(
+            $assertion->makeMessage(),
+            "Value of the field 'name' must be true"
+        );
     }
 
     /** @test */

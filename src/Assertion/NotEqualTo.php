@@ -32,13 +32,15 @@ class NotEqualTo extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("The values ​​must be different");
+        return new Message(
+            "Value must be different from '{{ assert-value }}'"
+        );
     }
 
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(
-            "The '{{ field }}' field value must be different from '%s'",
+            "Value of the field '{{ field }}' must be different from '%s'",
             $this->stringfy($this->getAssertValue())
         ));
     }

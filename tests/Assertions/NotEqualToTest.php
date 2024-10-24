@@ -71,16 +71,21 @@ class NotEqualToTest extends TestCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function notAssertedCase(mixed $one, mixed $two): void
-    {
+    public function notAssertedCase(
+        mixed $one,
+        mixed $two,
+        string $oneString,
+        string $twoString
+    ): void {
         $assertion = new NotEqualTo($one, $two);
 
         $this->assertFalse($assertion->isValid());
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "The values ​​must be different"
+            "Value must be different from '$twoString'"
         );
     }
 
@@ -102,7 +107,7 @@ class NotEqualToTest extends TestCase
         $this->assertFalse($assertion->isValid());
         $this->assertEquals(
             $assertion->makeMessage(),
-            "The 'name' field value must be different from '$twoString'"
+            "Value of the field 'name' must be different from '$twoString'"
         );
     }
 

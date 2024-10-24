@@ -22,14 +22,14 @@ class IsFalse extends Assertion
     public function getDefaultMessage(): Message
     {
         return new Message(
-            "The value is not false"
+            "Value must be false"
         );
     }
 
     public function getDefaultNamedMessage(): Message
     {
         return new Message(
-            "The value of field '{{ field }}' is not false"
+            "Value of the field '{{ field }}' must be false"
         );
     }
 }

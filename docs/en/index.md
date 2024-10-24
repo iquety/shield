@@ -10,4 +10,5 @@ Bem vindo(a) à documentação da biblioteca Iquety Security. Aqui você encontr
 ### Conteúdo
 
 - [How to use](01-how-to-use.md)
-- [Assertions](02-assertions.md)
+- [Shield object](02-shield.md)
+- [Asserções](03-assertions.md)

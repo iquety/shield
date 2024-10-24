@@ -15,47 +15,14 @@
 composer require iquety/shield
 ```
 
-This is a library offering a set of Assertions for values and expressions.
+This library provides a set of Assertions to verify values ​​and expressions.
 
-In computing, assertion is a check with the aim of certifying that a certain 
-condition imposed by the developer is true.
+In computing, an assertion is a verification with the objective of certifying
+that a certain condition imposed by the developer is true. If it is true, nothing
+happens. If it is false, errors should be used to notify the user.
 
-The use of assertions is very useful, especially when validating values coming 
-from method arguments or user input.
-
-## How to use
-
-Assertions are registered through the `Shield` library.
-
-Can be used in the conventional way:
-
-```php
-
-$name = 'Ricardo';
-
-$instance = new Shield();
-
-// Does 'Ricardo' 4 characters or less?
-$instance->assert(new MaxLength($name, 4)); 
-
-// or all assertions match,
-// or an exception is thrown
-$instance->validOrThrow();
-```
-
-or in fluent form:
-
-```php
-
-$name = 'Ricardo';
-
-$instance = (new Shield())
-    ->assert(new MaxLength($name, 4))
-    ->validOrThrow();
-```
-
-In the example above, an exception of type `Exception` will be thrown with the 
-message *"The value was not successfully asserted"*.
+The use of assertions is very useful, especially in the validation of values
+​​coming from method arguments or user input in web applications.
 
 For detailed information, see [Documentation Summary](docs/en/index.md).
 

@@ -11,7 +11,7 @@ class MinLength extends Assertion
 {
     public function __construct(
         float|int|string $value,
-        int $minLength,
+        float|int $minLength,
     ) {
         $this->setValue($value);
 
@@ -27,20 +27,20 @@ class MinLength extends Assertion
         return $this->isValidNumber($this->getValue(), $this->getAssertValue());
     }
 
-    private function isValidNumber(float|int $value, int $minLength): bool
+    private function isValidNumber(float|int $value, float|int $minLength): bool
     {
         return $value >= $minLength;
     }
 
-    private function isValidString(string $value, int $minLength): bool
+    private function isValidString(string $value, float|int $minLength): bool
     {
-        return mb_strlen($value) >= $minLength;
+        return mb_strlen($value) >= (int)$minLength;
     }
 
     public function getDefaultMessage(): Message
     {
         return new Message(sprintf(
-            "Value must be greater than %d characters",
+            "Value must be greater than %s characters",
             $this->getAssertValue()
         ));
     }
@@ -48,7 +48,7 @@ class MinLength extends Assertion
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(
-            "Value of the field '{{ field }}' must be greater than %d characters",
+            "Value of the field '{{ field }}' must be greater than %s characters",
             $this->getAssertValue()
         ));
     }

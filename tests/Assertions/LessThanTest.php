@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
-use Iquety\Shield\Assertion\MinLength;
+use Iquety\Shield\Assertion\LessThan;
 use Tests\TestCase;
 
-class MinLengthTest extends TestCase
+class LessThanTest extends TestCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 5];
-        $list['string utf8'] = ['coração', 7]; // exatamente 7 caracteres
-        $list['int'] = [9, 5];
-        $list['float + int'] = [9.9, 5];
-        $list['float'] = [9.9, 5.5];
+        $list['string'] = ['Palavra', 8];
+        $list['int'] = [9, 10];
+        $list['float'] = [9.7, 9.8];
+        $list['float + int'] = [9.9, 10];
 
         return $list;
     }
@@ -27,9 +26,9 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, float|int $minLength): void
+    public function assertedCase(mixed $value, float|int $length): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new LessThan($value, $length);
 
         $this->assertTrue($assertion->isValid());
     }
@@ -39,10 +38,11 @@ class MinLengthTest extends TestCase
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 10, '10'];
-        $list['int'] = [9, 10, '10'];
-        $list['float'] = [9.9, 10, '10'];
-        $list['float + int'] = [9.8, 9.9, '9.9'];
+        $list['string'] = ['Palavra', 6];
+        $list['string utf8'] = ['coração', 6]; // exatamente 7 caracteres
+        $list['int'] = [9, 8];
+        $list['float'] = [9.9, 9.0];
+        $list['float + int'] = [9.8, 9];
 
         return $list;
     }
@@ -51,15 +51,15 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, float|int $minLength, string $lengthString): void
+    public function notAssertedCase(mixed $value, float|int $length): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new LessThan($value, $length);
 
         $this->assertFalse($assertion->isValid());
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be greater than $lengthString characters"
+            "Value must be less than $length characters"
         );
     }
 
@@ -67,9 +67,9 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $minLength): void
+    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $length): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new LessThan($value, $length);
 
         $assertion->setFieldName('name');
 
@@ -77,7 +77,7 @@ class MinLengthTest extends TestCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value of the field 'name' must be greater than $minLength characters"
+            "Value of the field 'name' must be less than $length characters"
         );
     }
 
@@ -85,15 +85,16 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, float|int $minLength): void
+    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, float|int $length): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new LessThan($value, $length);
 
         $assertion->setFieldName('name');
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
+
         $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
     }
 
@@ -101,13 +102,14 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, float|int $minLength): void
+    public function notAssertedCaseWithCustomMessage(mixed $value, float|int $length): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new LessThan($value, $length);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
+
         $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
     }
 }

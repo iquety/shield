@@ -7,15 +7,15 @@ namespace Iquety\Shield\Assertion;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
-class MaxLength extends Assertion
+class LessThan extends Assertion
 {
     public function __construct(
         float|int|string $value,
-        float|int $maxLength,
+        float|int $length,
     ) {
         $this->setValue($value);
 
-        $this->setAssertValue($maxLength);
+        $this->setAssertValue($length);
     }
 
     public function isValid(): bool
@@ -27,14 +27,14 @@ class MaxLength extends Assertion
         return $this->isValidNumber($this->getValue(), $this->getAssertValue());
     }
 
-    private function isValidNumber(float|int $value, float|int $maxLength): bool
+    private function isValidNumber(float|int $value, float|int $length): bool
     {
-        return $value <= $maxLength;
+        return $value < $length;
     }
 
-    private function isValidString(string $value, float|int $maxLength): bool
+    private function isValidString(string $value, float|int $length): bool
     {
-        return mb_strlen($value) <= (int)$maxLength;
+        return mb_strlen($value) < (int)$length;
     }
 
     public function getDefaultMessage(): Message

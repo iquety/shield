@@ -20,8 +20,8 @@ The following assertions are used to validate the value of a variable:
 
 The following assertions will still be implemented:
 
-| Assertion            | Description |
-| :--                  | :-- |
+| Assertion            | Description                                           |
+| :--                  | :--                                                   |
 | Length               | Checks if the value has the expected length           |
 | GreaterThan          | Checks if the value is greater than the expected value|
 | LessThan             | Checks if the value is less than the expected value   |

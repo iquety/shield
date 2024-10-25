@@ -1,0 +1,80 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Iquety\Shield\Assertion;
+
+use DateTime;
+use Exception;
+use Iquety\Shield\Assertion;
+use Iquety\Shield\Message;
+
+class IsDate extends Assertion
+{    
+    public function __construct(string $value)
+    {
+        $this->setValue($value);
+    }
+
+    public function isValid(): bool
+    {
+        // European format = 31/12/2024
+        //                   dd/mm/yyyy
+        $regex = '/^' 
+            . '(0[1-9]|[12][0-9]|3[01])\/' // 1 - 31
+            . '(0[1-9]|1[0-2])\/' // 1 - 12
+            . '\d{4}'
+            . '$/';
+
+        if (preg_match($regex, $this->getValue()) === 1) {
+            try {
+                DateTime::createFromFormat('d/m/Y', $this->getValue());
+    
+                return true;
+            } catch (Exception) {
+            }
+        }
+
+        // Alternative format = 2024.12.31
+        //                      YYYY.mm.dd
+        $regex = '/^' 
+            . '\d{4}\.'
+            . '(0[1-9]|1[0-2])\.' // 1 - 12
+            . '(0[1-9]|[12][0-9]|3[01])' // 1 - 31
+            . '$/';
+
+        if (preg_match($regex, $this->getValue()) === 1) {
+            try {
+                DateTime::createFromFormat('Y.m.d', $this->getValue());
+    
+                return true;
+            } catch (Exception) {
+            }
+        }
+
+        // ISO 8601 = '2024-12-31'
+        // US format = '12/31/2024'
+        // Abbreviated month name = '31-Dec-2024'
+        // Full month name = 'December 31, 2024'
+        try {
+            new DateTime($this->getValue());
+            
+            return true;
+        } catch (Exception) {
+        }
+
+        return false;
+    }
+
+    public function getDefaultMessage(): Message
+    {
+        return new Message("Value must be a valid date");
+    }
+
+    public function getDefaultNamedMessage(): Message
+    {
+        return new Message(
+            "Value of the field '{{ field }}' must be a valid date",
+        );
+    }
+}

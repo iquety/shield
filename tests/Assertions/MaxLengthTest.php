@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests;
+namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\MaxLength;
 use Tests\TestCase;
@@ -18,6 +18,7 @@ class MaxLengthTest extends TestCase
         $list['string utf8'] = ['coração', 7]; // exatamente 7 caracteres
         $list['int'] = [9, 10];
         $list['float'] = [9.9, 10];
+        $list['float + int'] = [9.8, 9.9];
 
         return $list;
     }
@@ -26,7 +27,7 @@ class MaxLengthTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, int $maxLength): void
+    public function assertedCase(mixed $value, float|int $maxLength): void
     {
         $assertion = new MaxLength($value, $maxLength);
 
@@ -41,6 +42,7 @@ class MaxLengthTest extends TestCase
         $list['string'] = ['Palavra', 5];
         $list['int'] = [9, 5];
         $list['float'] = [9.9, 5];
+        $list['float + int'] = [9.9, 9.8];
 
         return $list;
     }
@@ -49,7 +51,7 @@ class MaxLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, int $maxLength): void
+    public function notAssertedCase(mixed $value, float|int $maxLength): void
     {
         $assertion = new MaxLength($value, $maxLength);
 
@@ -64,7 +66,7 @@ class MaxLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, int $maxLength): void
+    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $maxLength): void
     {
         $assertion = new MaxLength($value, $maxLength);
 
@@ -81,7 +83,7 @@ class MaxLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, int $maxLength): void
+    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, float|int $maxLength): void
     {
         $assertion = new MaxLength($value, $maxLength);
 
@@ -97,7 +99,7 @@ class MaxLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, int $maxLength): void
+    public function notAssertedCaseWithCustomMessage(mixed $value, float|int $maxLength): void
     {
         $assertion = new MaxLength($value, $maxLength);
 

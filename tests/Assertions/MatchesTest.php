@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
-use Iquety\Shield\Assertion\MinLength;
+use Iquety\Shield\Assertion\Matches;
 use Tests\TestCase;
 
-class MinLengthTest extends TestCase
+class MatchesTest extends TestCase
 {
-    /** @return array<string,array<int,mixed>> */
+    /** @return array<int,array<int,string>> */
     public function correctValueProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 5];
-        $list['string utf8'] = ['coração', 7]; // exatamente 7 caracteres
-        $list['int'] = [9, 5];
-        $list['float + int'] = [9.9, 5];
-        $list['float'] = [9.9, 5.5];
+        $list[] = ['Coração de Leão', '/oraç/'];
+        $list[] = ['123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/'];
+        $list[] = ['Hello World', '/World/'];
 
         return $list;
     }
@@ -27,9 +25,9 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, float|int $minLength): void
+    public function assertedCase(string $value, string $pattern): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new Matches($value, $pattern);
 
         $this->assertTrue($assertion->isValid());
     }
@@ -39,10 +37,7 @@ class MinLengthTest extends TestCase
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 10, '10'];
-        $list['int'] = [9, 10, '10'];
-        $list['float'] = [9.9, 10, '10'];
-        $list['float + int'] = [9.8, 9.9, '9.9'];
+        $list[] = ['Coração de Leão', '/orax/'];
 
         return $list;
     }
@@ -51,15 +46,15 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, float|int $minLength, string $lengthString): void
+    public function notAssertedCase(mixed $value, string $pattern): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new Matches($value, $pattern);
 
         $this->assertFalse($assertion->isValid());
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be greater than $lengthString characters"
+            "Value must match $pattern",
         );
     }
 
@@ -67,17 +62,16 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $minLength): void
+    public function notAssertedCaseWithNamedAssertion(mixed $value, string $pattern): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new Matches($value, $pattern);
 
         $assertion->setFieldName('name');
 
         $this->assertFalse($assertion->isValid());
-
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value of the field 'name' must be greater than $minLength characters"
+            "Value of the field 'name' must match $pattern"
         );
     }
 
@@ -85,9 +79,9 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, float|int $minLength): void
+    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, string $pattern): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new Matches($value, $pattern);
 
         $assertion->setFieldName('name');
 
@@ -101,9 +95,9 @@ class MinLengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, float|int $minLength): void
+    public function notAssertedCaseWithCustomMessage(mixed $value, string $pattern): void
     {
-        $assertion = new MinLength($value, $minLength);
+        $assertion = new Matches($value, $pattern);
 
         $assertion->message('O valor {{ value }} está errado');
 

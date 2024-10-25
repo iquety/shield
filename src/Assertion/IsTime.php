@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
+use DateTime;
+use Exception;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
@@ -16,8 +18,28 @@ class IsTime extends Assertion
 
     public function isValid(): bool
     {
-        // validar tempo
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        // ISO 8601 format : 23:59:59
+        //                   hh:mm:ss
+        $regex = '/^' 
+            . '(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])'
+            . '$/';
+
+        if (preg_match($regex, $this->getValue()) === 1) {
+            return true;
+        }
+
+        // US format = 11:59:59 PM
+        //             hh:mm:ss AM/PM
+        $regex = '/^' 
+            . '(0[0-9]|1[0-1]):([0-5][0-9]):([0-5][0-9]) ([AaPp][Mm])'
+            . '$/';
+
+        if (preg_match($regex, $this->getValue()) === 1) {
+            return true;
+        }
+
+        return false;
+
     }
 
     public function getDefaultMessage(): Message

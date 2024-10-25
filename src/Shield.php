@@ -34,6 +34,7 @@ use Iquety\Shield\Assertion;
  * IsDate: Value must be a valid date
  * IsDateTime: Value must be a valid date and time
  * IsTime: Value must be a valid time
+ * IsAmountOfTime: Value must be a valid amount of time
  * IsCreditCard: Value must be a valid credit card
  * IsUrl: Value must be a valid URL
  * IsIp: Value must be a valid IP address
@@ -72,7 +73,8 @@ use Iquety\Shield\Assertion;
  * NotMatches: Value of the field 'name' must not match {{ assert-value }}
  * IsDate: Value of the field 'name' must be a valid date
  * IsDateTime: Value of the field 'name' must be a valid date and time
- * - IsTime: Value of the field 'name' must be a valid time
+ * IsTime: Value of the field 'name' must be a valid time
+ * IsAmountOfTime: Value of the field 'name' must be a valid amount of time
  * - IsCreditCard: Value of the field 'name' must be a valid credit card
  * - IsUrl: Value of the field 'name' must be a valid URL
  * - IsIp: Value of the field 'name' must be a valid IP address

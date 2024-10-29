@@ -75,7 +75,7 @@ use Iquety\Shield\Assertion;
  * IsDateTime: Value of the field 'name' must be a valid date and time
  * IsTime: Value of the field 'name' must be a valid time
  * IsAmountOfTime: Value of the field 'name' must be a valid amount of time
- * - IsCreditCard: Value of the field 'name' must be a valid credit card
+ * IsCreditCard: Value of the field 'name' must be a valid credit card
  * - IsUrl: Value of the field 'name' must be a valid URL
  * - IsIp: Value of the field 'name' must be a valid IP address
  * - IsMacAddress: Value of the field 'name' must be a valid MAC address

@@ -27,12 +27,7 @@ class IsDate extends Assertion
             . '$/';
 
         if (preg_match($regex, $this->getValue()) === 1) {
-            try {
-                DateTime::createFromFormat('d/m/Y', $this->getValue());
-    
-                return true;
-            } catch (Exception) {
-            }
+            return true;
         }
 
         // Alternative format = 2024.12.31
@@ -44,12 +39,7 @@ class IsDate extends Assertion
             . '$/';
 
         if (preg_match($regex, $this->getValue()) === 1) {
-            try {
-                DateTime::createFromFormat('Y.m.d', $this->getValue());
-    
-                return true;
-            } catch (Exception) {
-            }
+            return true;
         }
 
         // ISO 8601 = '2024-12-31'

@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Exception;
 use Iquety\Shield\Assertion\EqualTo;
 use Iquety\Shield\AssertionException;
 use Iquety\Shield\Field;
 use Iquety\Shield\Shield;
 use ReflectionClass;
+use ReflectionObject;
 use Tests\Stubs\AssertionFake;
 use Tests\TestCase;
 
@@ -147,6 +149,38 @@ class ShieldNamedTest extends TestCase
                     "O campo 'pass' tem um valor feio"
                 ]
             ], $exception->getErrorList());
+
+            $this->assertSame(
+                'The value was not successfully asserted',
+                $exception->getMessage()
+            );
+        }
+    }
+
+    /** @test */
+    public function throwingCustomException(): void
+    {
+        $instance = new Shield();
+
+        // mensagem padrão
+        $instance->field('name')
+            ->assert(new EqualTo('palavra', 'palavra diferente'));
+
+        // mensagem personalizada
+        $instance->field('name')
+            ->assert(new EqualTo('palavra', 'palavra diferente'))
+            ->message("O campo '{{ field }}' é legal");
+
+        // mensagem personalizada
+        $instance->field('pass')
+            ->assert(new EqualTo('palavra', 'palavra diferente'))
+            ->message("O campo '{{ field }}' tem um valor feio");
+
+        try {
+            $instance->validOrThrow(Exception::class);
+        } catch (Exception $exception) {
+            $reflection = new ReflectionObject($exception);
+            $this->assertFalse($reflection->hasMethod('getErrorList'));
 
             $this->assertSame(
                 'The value was not successfully asserted',

@@ -16,8 +16,11 @@ class IsIp extends Assertion
 
     public function isValid(): bool
     {
-        // validar
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        if (filter_var($this->getValue(), FILTER_VALIDATE_IP) === false) {
+            return false;
+        }
+
+        return true;
     }
 
     public function getDefaultMessage(): Message

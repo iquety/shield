@@ -16,8 +16,51 @@ class IsUrl extends Assertion
 
     public function isValid(): bool
     {
-        // validar
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        $value = trim($this->getValue());
+
+        // é vazio 
+        if ($value === '') {
+            return false;
+        }
+
+        // espaços não são permitidos
+        if (strpos($value, ' ') !== false) {
+            return false;
+        }
+
+        // pontos seguidos não são permitidos
+        if (strpos($value, '..') !== false) {
+            return false;
+        }
+
+        // scheme - e.g. http
+        // host
+        // port
+        // user
+        // pass
+        // path
+        // query - after the question mark ?
+        // fragment - after the hashmark #
+        $urlInfo = (array)parse_url($value);
+
+        // protocolo e domínio são obrigatórios
+        if (
+            isset($urlInfo['scheme']) === false
+            || isset($urlInfo['host']) === false
+        ) {
+            return false;
+        }
+
+        if (filter_var($this->getValue(), FILTER_VALIDATE_URL) === false) {
+            return false;
+        }
+
+        return true;
+        // var_dump(
+        //     filter_var($this->getValue(), FILTER_VALIDATE_URL),
+        //     $this->getValue()
+        // );
+        // exit;
     }
 
     public function getDefaultMessage(): Message

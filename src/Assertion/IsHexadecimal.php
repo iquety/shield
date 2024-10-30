@@ -16,8 +16,7 @@ class IsHexadecimal extends Assertion
 
     public function isValid(): bool
     {
-        // validar
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        return preg_match('/^[0-9a-fA-F]+$/', $this->getValue()) === 1;
     }
 
     public function getDefaultMessage(): Message

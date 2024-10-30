@@ -16,8 +16,7 @@ class IsBase64 extends Assertion
 
     public function isValid(): bool
     {
-        // validar
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        return preg_match('/^[A-Za-z0-9+\/=]*$/', $this->getValue()) === 1;
     }
 
     public function getDefaultMessage(): Message

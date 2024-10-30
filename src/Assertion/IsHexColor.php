@@ -16,8 +16,9 @@ class IsHexColor extends Assertion
 
     public function isValid(): bool
     {
-        // validar
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        $pattern = '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/';
+
+        return preg_match($pattern, $this->getValue()) === 1;
     }
 
     public function getDefaultMessage(): Message

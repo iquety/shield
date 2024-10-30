@@ -16,8 +16,9 @@ class IsAlpha extends Assertion
 
     public function isValid(): bool
     {
-        // validar
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        $pattern = '/^[a-zA-ZáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕçÇ\s]+$/';
+        
+        return preg_match($pattern, $this->getValue()) === 1;
     }
 
     public function getDefaultMessage(): Message

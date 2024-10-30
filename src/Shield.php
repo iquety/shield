@@ -82,11 +82,11 @@ use Iquety\Shield\Assertion;
  * - IsPostalCode: Value of the field 'name' must be a valid postal code
  * - IsPhoneNumber: Value of the field 'name' must be a valid phone number
  * - IsGuid: Value of the field 'name' must be a valid GUID
- * - IsAlpha: Value of the field 'name' must contain only letters
- * - IsAlphaNumeric: Value of the field 'name' must contain only letters and numbers
- * - IsBase64: Value of the field 'name' must be a valid base64 string
- * - IsHexadecimal: Value of the field 'name' must be a valid hexadecimal number
- * - IsHexColor: Value of the field 'name' must be a valid hexadecimal color
+ * IsAlpha: Value of the field 'name' must contain only letters
+ * IsAlphaNumeric: Value of the field 'name' must contain only letters and numbers
+ * IsBase64: Value of the field 'name' must be a valid base64 string
+ * IsHexadecimal: Value of the field 'name' must be a valid hexadecimal number
+ * IsHexColor: Value of the field 'name' must be a valid hexadecimal color
  */
 class Shield
 {

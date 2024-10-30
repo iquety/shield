@@ -16,8 +16,9 @@ class IsAlphaNumeric extends Assertion
 
     public function isValid(): bool
     {
-        // validar
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        $pattern = '/^[a-zA-Z0-9áéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕçÇ\s]+$/';
+        
+        return preg_match($pattern, $this->getValue()) === 1;
     }
 
     public function getDefaultMessage(): Message

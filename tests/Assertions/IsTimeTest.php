@@ -39,7 +39,7 @@ class IsTimeTest extends TestCase
 
         $list['ISO 8601 dirty'] = ['xxx23:59:59'];
         $list['US format dirty'] = ['xxx11:59:59 PM'];
-        
+
         $list['ISO 8601 invalid hour'] = ['25:59:59'];
         $list['ISO 8601 invalid minute'] = ['20:62:59'];
         $list['ISO 8601 invalid second'] = ['20:59:62'];
@@ -53,7 +53,7 @@ class IsTimeTest extends TestCase
         $list['US format second am'] = ['11:59:62 AM'];
         $list['US format second pm'] = ['11:59:62 PM'];
 
-        
+
         return $list;
     }
 

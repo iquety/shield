@@ -9,7 +9,7 @@ use Iquety\Shield\CreditCardBrand;
 use Iquety\Shield\Message;
 
 class IsCreditCardBrand extends Assertion
-{    
+{
     public function __construct(int|string $creditCardNumber, CreditCardBrand $brand)
     {
         // Remove todos os caracteres não-numéricos

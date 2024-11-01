@@ -59,7 +59,7 @@ class CreditCardBrandTest extends TestCase
         $list['Diners Club with signals'] = ['3000-000000-0004', CreditCardBrand::DINERS_CLUB];
         $list['Discover with signals'] = ['6011-0000-0000-0004', CreditCardBrand::DISCOVER];
         $list['JCB with signals'] = ['3088-0000-0000-0009', CreditCardBrand::JCB];
-        
+
         return $list;
     }
 
@@ -79,7 +79,7 @@ class CreditCardBrandTest extends TestCase
             CreditCardBrand::fromNumber($number)
         );
     }
-    
+
     /** @return array<string,array<int,mixed>> */
     public function incorrectValueProvider(): array
     {
@@ -105,7 +105,7 @@ class CreditCardBrandTest extends TestCase
         $list["Too long 20 string"] = ['55000000000000000000'];
         $list["Non-numeric string"] = ['abcdefg'];
         $list["Empty string string"] = [''];
-    
+
         $list["Random number numeric"] = [1234567890123456];
         $list["Too short 1 digit numeric"] = [4];
         $list["Too short 2 digits numeric"] = [41];
@@ -139,7 +139,7 @@ class CreditCardBrandTest extends TestCase
             $number,
             CreditCardBrand::class
         ));
-        
+
         CreditCardBrand::fromNumber($number);
-    } 
+    }
 }

@@ -10,7 +10,7 @@ use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class IsDateTime extends Assertion
-{    
+{
     public function __construct(string $value)
     {
         $this->setValue($value);
@@ -20,7 +20,7 @@ class IsDateTime extends Assertion
     {
         // European format : 31/12/2024 23:59:59
         //                   dd/mm/yyyy hh:mm:ss
-        $regex = '/^' 
+        $regex = '/^'
             . '(0[1-9]|[12][0-9]|3[01])\/' // 1 - 31
             . '(0[1-9]|1[0-2])\/' // 1 - 12
             . '\d{4}'
@@ -34,7 +34,7 @@ class IsDateTime extends Assertion
 
         // Alternative format = '2024.12.31 23:59:59'
         //                       YYYY.mm.dd hh:mm:ss
-        $regex = '/^' 
+        $regex = '/^'
             . '\d{4}\.'
             . '(0[1-9]|1[0-2])\.' // 1 - 12
             . '(0[1-9]|[12][0-9]|3[01])' // 1 - 31
@@ -52,7 +52,7 @@ class IsDateTime extends Assertion
         // Full month name = 'December 31, 2024 23:59:59'
         try {
             new DateTime($this->getValue());
-            
+
             return true;
         } catch (Exception) {
         }

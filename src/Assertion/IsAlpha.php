@@ -8,7 +8,7 @@ use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class IsAlpha extends Assertion
-{    
+{
     public function __construct(string $value)
     {
         $this->setValue($value);
@@ -17,7 +17,7 @@ class IsAlpha extends Assertion
     public function isValid(): bool
     {
         $pattern = '/^[a-zA-ZáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕçÇ\s]+$/';
-        
+
         return preg_match($pattern, $this->getValue()) === 1;
     }
 

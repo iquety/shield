@@ -37,7 +37,7 @@ class IsCreditCardTest extends TestCase
         $list['Discover with signals'] = ['6011-0000-0000-0004'];
         // $list['enRoute with signals'] = ['2014-0000-0000-009'];
         $list['JCB with signals'] = ['3088-0000-0000-0009'];
-        
+
         return $list;
     }
 
@@ -62,7 +62,7 @@ class IsCreditCardTest extends TestCase
         $list['Too long'] = [ '55000000000000000000'];
         $list['Non-numeric'] = [ 'abcdefg'];
         $list['Empty string'] = [ '' ];
-        
+
         return $list;
     }
 

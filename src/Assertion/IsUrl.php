@@ -8,7 +8,7 @@ use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class IsUrl extends Assertion
-{    
+{
     public function __construct(string $value)
     {
         $this->setValue($value);
@@ -18,7 +18,7 @@ class IsUrl extends Assertion
     {
         $value = trim($this->getValue());
 
-        // é vazio 
+        // é vazio
         if ($value === '') {
             return false;
         }
@@ -56,11 +56,6 @@ class IsUrl extends Assertion
         }
 
         return true;
-        // var_dump(
-        //     filter_var($this->getValue(), FILTER_VALIDATE_URL),
-        //     $this->getValue()
-        // );
-        // exit;
     }
 
     public function getDefaultMessage(): Message

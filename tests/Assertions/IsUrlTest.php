@@ -58,7 +58,7 @@ class IsUrlTest extends TestCase
             . '?c=umhistmath;cc=umhistmath;rgn=full%20text;'
             . 'idno=ABS3153.0001.001;didno=ABS3153.0001.001;view=image;seq=00000140'
         ];
-        
+
 
         return $list;
     }

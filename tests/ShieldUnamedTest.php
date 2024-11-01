@@ -124,7 +124,7 @@ class ShieldUnamedTest extends TestCase
         } catch (Exception $exception) {
             $reflection = new ReflectionObject($exception);
             $this->assertFalse($reflection->hasMethod('getErrorList'));
-            
+
             $this->assertSame(
                 'The value was not successfully asserted',
                 $exception->getMessage()

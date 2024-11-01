@@ -55,7 +55,7 @@ class IsDateTest extends TestCase
 
         $list['US format month'] = ['13/31/2024'];
         $list['US format day'] = ['12/32/2024'];
-        
+
         $list['Alternative format month'] = ['2024.13.31'];
         $list['Alternative format day'] = ['2024.12.32'];
 

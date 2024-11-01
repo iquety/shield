@@ -47,7 +47,7 @@ use Iquety\Shield\Assertion;
  * IsBase64: Value must be a valid base64 string
  * IsHexadecimal: Value must be a valid hexadecimal number
  * IsHexColor: Value must be a valid hexadecimal color
- * 
+ *
  * -> Named assertions
  * EqualTo: Value of the field 'name' must be equal to {{ assert-value }}
  * NotEqualTo: Value of the field 'name' must be different from {{ assert-value }}

@@ -10,7 +10,7 @@ use Iquety\Shield\Message;
 use ValueError;
 
 class IsCreditCard extends Assertion
-{    
+{
     public function __construct(int|string $value)
     {
         $this->setValue($value);

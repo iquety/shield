@@ -10,7 +10,7 @@ use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class IsTime extends Assertion
-{    
+{
     public function __construct(string $value)
     {
         $this->setValue($value);
@@ -20,7 +20,7 @@ class IsTime extends Assertion
     {
         // ISO 8601 format : 23:59:59
         //                   hh:mm:ss
-        $regex = '/^' 
+        $regex = '/^'
             . '(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])'
             . '$/';
 
@@ -30,7 +30,7 @@ class IsTime extends Assertion
 
         // US format = 11:59:59 PM
         //             hh:mm:ss AM/PM
-        $regex = '/^' 
+        $regex = '/^'
             . '(0[0-9]|1[0-1]):([0-5][0-9]):([0-5][0-9]) ([AaPp][Mm])'
             . '$/';
 
@@ -39,7 +39,6 @@ class IsTime extends Assertion
         }
 
         return false;
-
     }
 
     public function getDefaultMessage(): Message

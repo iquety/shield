@@ -65,7 +65,7 @@ class IsBrPhoneNumberTest extends TestCase
             '0500 dots' => ["0500.313.4701"],
             '0800 dots' => ["0800.729.0722"],
             '0900 dots' => ["0900.313.4701"],
-            
+
             '3003 dots' => ["3003.3030"],
             '4003 dots' => ["4003.3030"],
             '4004 dots' => ["4004.3030"],
@@ -85,7 +85,7 @@ class IsBrPhoneNumberTest extends TestCase
             'Invalid Phone - 7 digits' => ['1234-567'],
             'Invalid Phone - 9 digits' => ['1234-56789'],
             'Invalid Phone - 12 digits' => ['12 345678-9012'],
-            
+
             'Invalid Phone - invalid characters' => ['12A45-678'],
             'Invalid Phone - empty string' => [''],
             'Invalid Phone - special characters' => ['123@5-678'],

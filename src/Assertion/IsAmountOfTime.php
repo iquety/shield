@@ -8,7 +8,7 @@ use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class IsAmountOfTime extends Assertion
-{    
+{
     public function __construct(string $value)
     {
         $this->setValue($value);
@@ -18,7 +18,7 @@ class IsAmountOfTime extends Assertion
     {
         // 150:59:59
         // *:mm:ss
-        $regex = '/^' 
+        $regex = '/^'
             . '(\d*)'
             . ':([0-5][0-9])'
             . ':([0-5][0-9])'

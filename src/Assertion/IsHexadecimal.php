@@ -8,7 +8,7 @@ use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class IsHexadecimal extends Assertion
-{    
+{
     public function __construct(string $value)
     {
         $this->setValue($value);

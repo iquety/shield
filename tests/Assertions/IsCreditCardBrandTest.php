@@ -35,7 +35,7 @@ class IsCreditCardBrandTest extends TestCase
         $list['Diners Club with signals'] = ['3000-000000-0004', CreditCardBrand::DINERS_CLUB];
         $list['Discover with signals'] = ['6011-0000-0000-0004', CreditCardBrand::DISCOVER];
         $list['JCB with signals'] = ['3088-0000-0000-0009', CreditCardBrand::JCB];
-        
+
         return $list;
     }
 
@@ -80,11 +80,11 @@ class IsCreditCardBrandTest extends TestCase
             $list["Too long $brand 18"] = ['550000000000000000', CreditCardBrand::from($brand)];
             $list["Too long $brand 19"] = ['5500000000000000000', CreditCardBrand::from($brand)];
             $list["Too long $brand 20"] = ['55000000000000000000', CreditCardBrand::from($brand)];
-            
+
             $list["Non-numeric $brand"] = ['abcdefg', CreditCardBrand::from($brand)];
             $list["Empty string $brand"] = ['', CreditCardBrand::from($brand)];
         }
-        
+
         return $list;
     }
 

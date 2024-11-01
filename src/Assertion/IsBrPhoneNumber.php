@@ -13,15 +13,15 @@ use Iquety\Shield\Message;
  * 3003 9999        - numero fixo nacional (a tarifa é dividida entre a empresa e o usuário)
  * 4003 9999        - numero fixo nacional (a tarifa é dividida entre a empresa e o usuário)
  * 4004 9999        - numero fixo nacional (a tarifa é dividida entre a empresa e o usuário)
- * 0300 999 9999    - Serviços não gratuitos 
+ * 0300 999 9999    - Serviços não gratuitos
  * 0500 999 9999    - Serviços de doação a instituições de utilidade pública
- * 0800 999 9999    - Serviços gratuitos 
+ * 0800 999 9999    - Serviços gratuitos
  * 0900 999 9999    - Serviços de valor adicionado
  * (99) 9999-9999   - telefonia fixa
  * (99) 9 9999-9999 - telefonia móvel
  */
 class IsBrPhoneNumber extends Assertion
-{   
+{
     public function __construct(string $value)
     {
         $this->setValue($value);
@@ -40,24 +40,24 @@ class IsBrPhoneNumber extends Assertion
         if ($length === 8) {
             return preg_match('/[0-4]{4}[0-9]{4}/', $number) === 1;
         }
-        
+
         // (99) 9999-9999 - telefonia fixa
         if ($length === 10) {
             return preg_match('/[0-9]{2}[0-9]{4}[0-9]{4}/', $number) === 1;
         }
-        
-        // 0300 999 9999 - Serviços não gratuitos 
+
+        // 0300 999 9999 - Serviços não gratuitos
         // 0500 999 9999 - Serviços de doação a instituições de utilidade pública
-        // 0800 999 9999 - Serviços gratuitos 
+        // 0800 999 9999 - Serviços gratuitos
         // 0900 999 9999 - Serviços de valor adicionado
         if ($length === 11) {
-            return 
-                // 0300 999 9999 - serviços 
+            return
+                // 0300 999 9999 - serviços
                 preg_match('/0300|0500|0800|0900[0-9]{3}[0-9]{4}/', $number) === 1
                 // (99) 9 9999-9999 - telefonia móvel
                 || preg_match('/[0-9]{4}[0-9]{3}[0-9]{4}/', $number) === 1;
         }
-        
+
         return false;
     }
 

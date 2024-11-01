@@ -48,7 +48,7 @@ class IsCvvTest extends TestCase
         $list['Discover invalido'] = [CreditCardBrand::DISCOVER, 4442];
         $list['JCB invalido'] = [CreditCardBrand::JCB, 4442];
         $list['Diners Club invalido'] = [CreditCardBrand::DINERS_CLUB, 4442];
-        
+
         return $list;
     }
 

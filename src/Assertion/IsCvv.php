@@ -9,7 +9,7 @@ use Iquety\Shield\CreditCardBrand;
 use Iquety\Shield\Message;
 
 class IsCvv extends Assertion
-{    
+{
     public function __construct(int|string $cvv, CreditCardBrand $brand)
     {
         $this->setValue($cvv);
@@ -25,7 +25,7 @@ class IsCvv extends Assertion
         // Remove todos os caracteres não-numéricos
         $cvv = preg_replace('/\D/', '', $cvv);
 
-        return match ($brand) {            
+        return match ($brand) {
             CreditCardBrand::AMEX => $this->resolveAmex($cvv),
             default => strlen($cvv) === 3,
         };

@@ -8,7 +8,7 @@ use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class IsCep extends Assertion
-{    
+{
     public function __construct(string $value)
     {
         $this->setValue($value);

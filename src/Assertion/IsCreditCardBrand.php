@@ -25,11 +25,12 @@ class IsCreditCardBrand extends Assertion
         return $brand === $this->resolvedBrand();
     }
 
+    /** @SuppressWarnings(PHPMD.StaticAccess) */
     private function resolvedBrand(): CreditCardBrand
     {
         $creditCardNumber = (string)$this->getValue();
 
-        $creditCardNumber = preg_replace('/\D/', '', $creditCardNumber);
+        $creditCardNumber = (string)preg_replace('/\D/', '', $creditCardNumber);
 
         $brandList = CreditCardBrand::all();
 

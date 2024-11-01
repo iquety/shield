@@ -10,7 +10,10 @@ use ValueError;
 
 class CreditCardBrandTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function allBrands(): void
     {
         $this->assertSame([
@@ -23,7 +26,10 @@ class CreditCardBrandTest extends TestCase
         ], CreditCardBrand::all());
     }
 
-    /** @test */
+    /**
+     * @test
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function patterns(): void
     {
         // todos os padrões estão definidos
@@ -66,6 +72,7 @@ class CreditCardBrandTest extends TestCase
     /**
      * @test
      * @dataProvider correctNumberProvider
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function fromNumber(int|string $number, CreditCardBrand $brand): void
     {
@@ -130,8 +137,9 @@ class CreditCardBrandTest extends TestCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function notAssertedCase(float|int|string $number): void
+    public function notAssertedCase(int|string $number): void
     {
         $this->expectException(ValueError::class);
         $this->expectExceptionMessage(sprintf(

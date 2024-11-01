@@ -14,7 +14,7 @@ class NotMatchesTest extends TestCase
     {
         $list = [];
 
-        $list[] = ['Coração de Leão', '/orax/'];
+        $list['utf8'] = ['Coração de Leão', '/orax/'];
 
         return $list;
     }
@@ -30,14 +30,14 @@ class NotMatchesTest extends TestCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,array<int,string>> */
+    /** @return array<string,array<int,string>> */
     public function incorrectValueProvider(): array
     {
         $list = [];
 
-        $list[] = ['Coração de Leão', '/oraç/'];
-        $list[] = ['123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/'];
-        $list[] = ['Hello World', '/World/'];
+        $list['utf8'] = ['Coração de Leão', '/oraç/'];
+        $list['numeric'] = ['123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/'];
+        $list['latin'] = ['Hello World', '/World/'];
 
         return $list;
     }

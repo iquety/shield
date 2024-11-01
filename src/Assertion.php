@@ -7,6 +7,7 @@ namespace Iquety\Shield;
 use Iquety\Shield\Message;
 use ReflectionObject;
 
+/** @SuppressWarnings(PHPMD.NumberOfChildren) */
 abstract class Assertion
 {
     private string $fieldName = '';

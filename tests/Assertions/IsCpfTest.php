@@ -15,10 +15,10 @@ class IsCpfTest extends TestCase
         return [
             'Valid CPF - 1' => ['187.260.788-80'],
             'Valid CPF - 2' => ['254.659.882-15'],
-            'Valid CPF - 2' => ['153.347.537-70'],
-            'Valid CPF - 3' => ['18726078880'],
-            'Valid CPF - 4' => ['25465988215'],
-            'Valid CPF - 5' => ['15334753770'],
+            'Valid CPF - 3' => ['153.347.537-70'],
+            'Valid CPF - 4' => ['18726078880'],
+            'Valid CPF - 5' => ['25465988215'],
+            'Valid CPF - 6' => ['15334753770'],
         ];
     }
 
@@ -47,7 +47,7 @@ class IsCpfTest extends TestCase
             'Invalid CPF - 7' => ['77777777777'],
             'Invalid CPF - 8' => ['88888888888'],
             'Invalid CPF - 9' => ['99999999999'],
-            
+
             'Invalid CPF - 0 signals' => ['000.000.000-00'],
             'Invalid CPF - 1 signals' => ['111.111.111-11'],
             'Invalid CPF - 2 signals' => ['222.222.222-22'],

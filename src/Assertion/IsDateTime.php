@@ -55,9 +55,8 @@ class IsDateTime extends Assertion
 
             return true;
         } catch (Exception) {
+            return false;
         }
-
-        return false;
     }
 
     public function getDefaultMessage(): Message

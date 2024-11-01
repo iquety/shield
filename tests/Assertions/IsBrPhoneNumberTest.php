@@ -9,40 +9,42 @@ use Tests\TestCase;
 
 class IsBrPhoneNumberTest extends TestCase
 {
-    /** @return array<string,array<int,mixed>> */
+    /** @return array<string,array<int,string>> */
     public function correctValueProvider(): array
     {
-        return [
-            '0300' => ["0300 313 4701"],
-            '0500' => ["0500 313 4701"],
-            '0800' => ["0800 729 0722"],
-            '0900' => ["0900 313 4701"],
+        $list = [];
 
-            '0300 dashs' => ["0300-313-4701"],
-            '0500 dashs' => ["0500-313-4701"],
-            '0800 dashs' => ["0800-729-0722"],
-            '0900 dashs' => ["0900-313-4701"],
+        $list['0300 spaces'] = ["0300 313 4701"];
+        $list['0500 spaces'] = ["0500 313 4701"];
+        $list['0800 spaces'] = ["0800 729 0722"];
+        $list['0900 spaces'] = ["0900 313 4701"];
 
-            '3003' => ["3003 3030"],
-            '4003' => ["4003 3030"],
-            '4004' => ["4004 3030"],
+        $list['0300 dashs'] = ["0300-313-4701"];
+        $list['0500 dashs'] = ["0500-313-4701"];
+        $list['0800 dashs'] = ["0800-729-0722"];
+        $list['0900 dashs'] = ["0900-313-4701"];
 
-            '3003 dash' => ["3003-3030"],
-            '4003 dash' => ["4003-3030"],
-            '4004 dash' => ["4004-3030"],
+        $list['3003 spaces'] = ["3003 3030"];
+        $list['4003 spaces'] = ["4003 3030"];
+        $list['4004 spaces'] = ["4004 3030"];
 
-            // movel
-            'mobile' => ["(87) 9985-0997" ],
-            'mobile dashes' => ["87-9985-0997" ],
-            'mobile digits' => ["8799850997" ],
-            'mobile spaces' => ["87 9985 0997" ],
+        $list['3003 dash'] = ["3003-3030"];
+        $list['4003 dash'] = ["4003-3030"];
+        $list['4004 dash'] = ["4004-3030"];
 
-            // // movel SP
-            'mobile prefix 9' => ["(11) 9 9985-0997" ],
-            'mobile prefix 9 dashes' => ["11-9-9985-0997" ],
-            'mobile prefix 9 digits' => ["11999850997" ],
-            'mobile prefix 9 spaces' => ["11 9 9985 0997" ],
-        ];
+        // movel
+        $list['mobile'] = ["(87) 9985-0997"];
+        $list['mobile dashes'] = ["87-9985-0997"];
+        $list['mobile digits'] = ["8799850997"];
+        $list['mobile spaces'] = ["87 9985 0997"];
+
+        // movel SP
+        $list['mobile prefix 9'] = ["(11) 9 9985-0997"];
+        $list['mobile prefix 9 dashes'] = ["11-9-9985-0997"];
+        $list['mobile prefix 9 digits'] = ["11999850997"];
+        $list['mobile prefix 9 spaces'] = ["11 9 9985 0997"];
+
+        return $list;
     }
 
     /**
@@ -59,7 +61,6 @@ class IsBrPhoneNumberTest extends TestCase
     /** @return array<string,array<int,mixed>> */
     public function incorrectValueProvider(): array
     {
-
         return [
             '0300 dots' => ["0300.313.4701"],
             '0500 dots' => ["0500.313.4701"],

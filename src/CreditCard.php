@@ -27,6 +27,7 @@ class CreditCard
         return $this->number;
     }
 
+    /** @SuppressWarnings(PHPMD.StaticAccess) */
     public function getBrand(): CreditCardBrand
     {
         return CreditCardBrand::fromNumber($this->number);

@@ -17,8 +17,8 @@ class IsCpf extends Assertion
     public function isValid(): bool
     {
         // mantém somente os números
-        $cpf = preg_replace( '/[^0-9]/is', '', $this->getValue());
-        
+        $cpf = preg_replace('/[^0-9]/is', '', $this->getValue());
+
         // cpf deve possuir 11 caracteres
         if (strlen($cpf) !== 11) {
             return false;
@@ -32,7 +32,7 @@ class IsCpf extends Assertion
         // calcula o CPF
         for ($position = 9; $position < 11; $position++) {
             for ($digit = 0, $index = 0; $index < $position; $index++) {
-                $digit += $cpf[$index] * (($position + 1) - $index);
+                $digit += (int)$cpf[$index] * (($position + 1) - $index);
             }
 
             $digit = ((10 * $digit) % 11) % 10;

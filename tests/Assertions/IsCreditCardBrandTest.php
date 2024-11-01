@@ -50,16 +50,15 @@ class IsCreditCardBrandTest extends TestCase
         $this->assertTrue($assertion->isValid());
     }
 
-    // /** @return array<string,array<int,mixed>> */
+    /**
+     * @return array<string,array<int,mixed>>
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     */
     public function incorrectValueProvider(): array
     {
         $list = [];
 
         foreach (CreditCardBrand::all() as $brand) {
-            // if ($brand === CreditCardBrand::UNKNOWN->value) {
-            //     continue;
-            // }
-
             $list["Random number $brand"] = ['1234567890123456', CreditCardBrand::from($brand)];
 
             $list["Too short $brand 1 digit"] = ['4', CreditCardBrand::from($brand)];
@@ -155,6 +154,7 @@ class IsCreditCardBrandTest extends TestCase
     /**
      * @test
      * @dataProvider correctValueProvider
+     * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function fromNumber(int|string $number, CreditCardBrand $brand): void
     {

@@ -16,12 +16,13 @@ class IsCreditCard extends Assertion
         $this->setValue($value);
     }
 
+    /** @SuppressWarnings(PHPMD.StaticAccess) */
     public function isValid(): bool
     {
         $value = (string)$this->getValue();
 
         // Remove todos os caracteres não-numéricos
-        $value = preg_replace('/\D/', '', $value);
+        $value = (string)preg_replace('/\D/', '', $value);
 
         try {
             CreditCardBrand::fromNumber($value);

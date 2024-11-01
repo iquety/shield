@@ -29,7 +29,7 @@ enum CreditCardBrand: string
         ];
     }
 
-    public function pattern(): ?string
+    public function pattern(): string
     {
         return match ($this) {
             // 16 dígitos: 5555 5555 5555 4444
@@ -50,7 +50,7 @@ enum CreditCardBrand: string
             self::AMEX => "/^3[47][0-9]{13}$/",
             // 14 dígitos: 3056 930902 5904
             self::DINERS_CLUB => "/^3(?:0[0-5]|[68][0-9])[0-9]{11}$/",
-            default => null
+            default => ""
         };
     }
 

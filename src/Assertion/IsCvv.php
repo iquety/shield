@@ -23,7 +23,7 @@ class IsCvv extends Assertion
         $cvv = (string)$this->getValue();
 
         // Remove todos os caracteres não-numéricos
-        $cvv = preg_replace('/\D/', '', $cvv);
+        $cvv = (string)preg_replace('/\D/', '', $cvv);
 
         return match ($brand) {
             CreditCardBrand::AMEX => $this->resolveAmex($cvv),

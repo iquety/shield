@@ -9,14 +9,14 @@ use Tests\TestCase;
 
 class MatchesTest extends TestCase
 {
-    /** @return array<int,array<int,string>> */
+    /** @return array<string,array<int,string>> */
     public function correctValueProvider(): array
     {
         $list = [];
 
-        $list[] = ['Coração de Leão', '/oraç/'];
-        $list[] = ['123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/'];
-        $list[] = ['Hello World', '/World/'];
+        $list['utf8'] = ['Coração de Leão', '/oraç/'];
+        $list['numeric'] = ['123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/'];
+        $list['latin'] = ['Hello World', '/World/'];
 
         return $list;
     }
@@ -37,7 +37,7 @@ class MatchesTest extends TestCase
     {
         $list = [];
 
-        $list[] = ['Coração de Leão', '/orax/'];
+        $list['utf8'] = ['Coração de Leão', '/orax/'];
 
         return $list;
     }

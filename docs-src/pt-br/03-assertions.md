@@ -42,7 +42,7 @@ As seguintes asserções ainda serão implementadas:
 | IsMacAddress         | Verifica se o valor é um endereço MAC válido          |
 | IsPostalCode         | Verifica se o valor é um código postal válido         |
 | IsPhoneNumber        | Verifica se o valor é um número de telefone válido    |
-| IsGuid               | Verifica se o valor é um GUID válido                  |
+| IsUuid               | Verifica se o valor é um UUID válido                  |
 | IsAlpha              | Verifica se o valor contém apenas letras              |
 | IsAlphaNumeric       | Verifica se o valor contém apenas letras e números    |
 | IsBase64             | Verifica se o valor é uma string codificada em base64 |

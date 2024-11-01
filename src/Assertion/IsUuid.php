@@ -7,7 +7,7 @@ namespace Iquety\Shield\Assertion;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
-class IsPhoneNumber extends Assertion
+class IsUuid extends Assertion
 {    
     public function __construct(string $value)
     {
@@ -16,19 +16,20 @@ class IsPhoneNumber extends Assertion
 
     public function isValid(): bool
     {
-        // validar
-        return preg_match($this->getAssertValue(), $this->getValue()) === false;
+        $pattern = '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/';
+
+        return preg_match($pattern, $this->getValue()) === 1;
     }
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid phone number");
+        return new Message("Value must be a valid UUID");
     }
 
     public function getDefaultNamedMessage(): Message
     {
         return new Message(
-            "Value of the field '{{ field }}' must be a valid phone number",
+            "Value of the field '{{ field }}' must be a valid UUID",
         );
     }
 }

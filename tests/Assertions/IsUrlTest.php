@@ -52,6 +52,13 @@ class IsUrlTest extends TestCase
         $list['Invalid URL - missing slashes'] = ['http:example.com'];
         $list['Invalid URL - double dots'] = ['http://example..com'];
         $list['Invalid URL - empty string'] = [''];
+        $list['Invalid URL chars 1'] = ['http://&example.com/捦挺挎/bar'];
+        $list['Invalid URL chars 2'] = [
+            'www.hti.umich.edu/cgi/t/text/pageviewer-idx'
+            . '?c=umhistmath;cc=umhistmath;rgn=full%20text;'
+            . 'idno=ABS3153.0001.001;didno=ABS3153.0001.001;view=image;seq=00000140'
+        ];
+        
 
         return $list;
     }

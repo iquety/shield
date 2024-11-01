@@ -41,7 +41,7 @@ use Iquety\Shield\Assertion;
  * IsMacAddress: Value must be a valid MAC address
  * IsPostalCode: Value must be a valid postal code
  * IsPhoneNumber: Value must be a valid phone number
- * IsGuid: Value must be a valid GUID
+ * IsUuid: Value must be a valid UUID
  * IsAlpha: Value must contain only letters
  * IsAlphaNumeric: Value must contain only letters and numbers
  * IsBase64: Value must be a valid base64 string
@@ -78,10 +78,10 @@ use Iquety\Shield\Assertion;
  * IsCreditCard: Value of the field 'name' must be a valid credit card
  * IsUrl: Value of the field 'name' must be a valid URL
  * IsIp: Value of the field 'name' must be a valid IP address
- * - IsMacAddress: Value of the field 'name' must be a valid MAC address
- * - IsPostalCode: Value of the field 'name' must be a valid postal code
- * - IsPhoneNumber: Value of the field 'name' must be a valid phone number
- * - IsGuid: Value of the field 'name' must be a valid GUID
+ * IsMacAddress: Value of the field 'name' must be a valid MAC address
+ * IsCep: Value of the field 'name' must be a valid postal code
+ * IsPhoneNumber: Value of the field 'name' must be a valid phone number
+ * IsUuid: Value of the field 'name' must be a valid UUID
  * IsAlpha: Value of the field 'name' must contain only letters
  * IsAlphaNumeric: Value of the field 'name' must contain only letters and numbers
  * IsBase64: Value of the field 'name' must be a valid base64 string

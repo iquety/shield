@@ -5,51 +5,46 @@
 
 The following assertions are used to validate the value of a variable:
 
-| Assertion  | Description                                                     |
-| :--        | :--                                                             |
-| EqualTo    | Checks if both values ​​are equal                                 |
-| IsEmail    | Checks if the value is a valid email address                    |
-| IsEmpty    | Checks if the value is empty                                    |
-| IsFalse    | Checks if the value is false                                    |
-| IsNotEmpty | Checks if the value is not empty                                |
-| IsNotNull  | Checks if the value is not null                                 |
-| IsNull     | Checks if the value is null                                     |
-| IsTrue     | Checks if the value is true                                     |
-| MaxLength  | Checks if the value does not exceed the maximum expected length |
-| MinLength  | Checks if the value has at least the minimum expected length    |
-| NotEqualTo | Checks if the values ​​are different                              |
-
-The following assertions will still be implemented:
-
-| Assertion            | Description |
-| :--                  | :-- |
-| Length               | Checks if the value has the expected length           |
-| GreaterThan          | Checks if the value is greater than the expected value|
-| LessThan             | Checks if the value is less than the expected value   |
-| GreaterThanOrEqualTo | If the value is greater than or equal to the expected |
-| LessThanOrEqualTo    | If the value is less than or equal to the expected    |
-| Contains             | Checks if the value contains the expected value       |
-| NotContains          | If the value does not contain the expected value      |
-| StartsWith           | Checks if the value starts with the expected value    |
-| EndsWith             | Checks if the value ends with the expected value      |
-| Matches              | Checks if the value matches the expected pattern      |
-| DoesNotMatch         | Checks if the value does not match the pattern        |
-| IsDate               | Checks if the value is a valid date                   |
-| IsDateTime           | Checks if the value is a valid date and time          |
-| IsTime               | Checks if the value is a valid time                   |
-| IsCreditCard         | Checks if the value is a valid credit card            |
-| IsUrl                | Checks if the value is a valid URL                    |
-| IsIp                 | Checks if the value is a valid IP address             |
-| IsMacAddress         | Checks if the value is a valid MAC address            |
-| IsPostalCode         | Checks if the value is a valid postal code            |
-| IsPhoneNumber        | Checks if the value is a valid phone number           |
-| IsGuid               | Checks if the value is a valid GUID                   |
-| IsAlpha              | Checks if the value contains only letters             |
-| IsAlphaNumeric       | Checks if the value contains only letters and numbers |
-| IsBase64             | Checks if the value is a base64 encoded string        |
-| IsBase32             | Checks if the value is a base32 encoded string        |
-| IsHexadecimal        | Checks if the value is a valid hexadecimal number     |
-| IsHexColor           | Checks if the value is a valid hexadecimal color      |
+| Assertion            | Description                                          |
+| :--                  | :--                                                  |
+| Contains             | The value contains the expected value                |
+| EndsWith             | The value ends with the expected value               |
+| EqualTo              | Both values ​​are equal                                |
+| GreaterThan          | The value is greater than the expected value         |
+| GreaterThanOrEqualTo | The value is greater than or equal to the expected   |
+| IsAlpha              | The value contains only letters                      |
+| IsAlphaNumeric       | The value contains only letters and numbers          |
+| IsBase32             | The value is a base32 encoded string                 |
+| IsBase64             | The value is a base64 encoded string                 |
+| IsCreditCard         | The value is a valid credit card                     |
+| IsDate               | The value is a valid date                            |
+| IsDateTime           | The value is a valid date and time                   |
+| IsEmail              | The value is a valid email address                   |
+| IsEmpty              | Value is empty                                       |
+| IsFalse              | Value is false                                       |
+| IsHexadecimal        | Value is a valid hexadecimal number                  |
+| IsHexColor           | Value is a valid hexadecimal color                   |
+| IsIp                 | Value is a valid IP address                          |
+| IsMacAddress         | Value is a valid MAC address                         |
+| IsNotEmpty           | Value is not empty                                   |
+| IsNotNull            | Value is not null                                    |
+| IsNull               | Value is null                                        |
+| IsPhoneNumber        | Value is a valid phone number                        |
+| IsPostalCode         | Value is a valid postal code                         |
+| IsTime               | Value is a valid time                                |
+| IsTrue               | Value is true                                        |
+| IsUrl                | Value is a valid URL                                 |
+| IsUuid               | Value is a valid UUID                                |
+| Length               | Value is the expected length                         |
+| LessThan             | Value is less than expected value                    |
+| LessThanOrEqualTo    | Value is less than or equal to expected value        |
+| Matches              | Value matches expected pattern                       |
+| MaxLength            | Value has maximum expected length                    |
+| MinLength            | Value has at least minimum expected length           |
+| NotContains          | Value does not contain expected value                |
+| NotEqualTo           | Values ​​are different                                 |
+| NotMatches           | Value does not match expected pattern                |
+| StartsWith           | Value starts with expected value                     |
 
 [◂ Shield object](02-shield.md) | [Documentation Summary ▸](index.md)
 -- | --

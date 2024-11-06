@@ -37,9 +37,19 @@ class ShieldUnamedTest extends TestCase
     {
         $instance = new Shield();
 
-        $instance->field('name')->assert(new EqualTo('palavra', 'palavra diferente'));
+        $instance->assert(new EqualTo('palavra', 'palavra diferente'));
 
         $this->assertTrue($instance->hasErrors());
+    }
+
+    /** @test */
+    public function notHasErrors(): void
+    {
+        $instance = new Shield();
+
+        $instance->assert(new EqualTo('palavra', 'palavra'));
+
+        $this->assertFalse($instance->hasErrors());
     }
 
     /** @test */

@@ -11,7 +11,6 @@ use Iquety\Shield\Field;
 use Iquety\Shield\Shield;
 use ReflectionClass;
 use ReflectionObject;
-use Tests\Stubs\AssertionFake;
 use Tests\TestCase;
 
 class ShieldNamedTest extends TestCase
@@ -86,6 +85,16 @@ class ShieldNamedTest extends TestCase
         $instance->field('name')->assert(new EqualTo('palavra', 'palavra diferente'));
 
         $this->assertTrue($instance->hasErrors());
+    }
+
+    /** @test */
+    public function notHasErrors(): void
+    {
+        $instance = new Shield();
+
+        $instance->field('name')->assert(new EqualTo('palavra', 'palavra'));
+
+        $this->assertFalse($instance->hasErrors());
     }
 
     /** @test */

@@ -119,7 +119,21 @@ class Shield
 
     public function hasErrors(): bool
     {
-        return $this->getErrorList() !== [];
+        // asserções diretas
+        // o indice é numerico e o valor é uma mensagem
+        if ($this->getErrorList() === []) {
+            return false;
+        }
+
+        // asserções nomeadas
+        // o indice é o nome do campo e o valor é uma lista de mensagens
+        foreach($this->getErrorList() as $error) {
+            if ($error !== []) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /** @return array<int|string,array<int,string>|string> */

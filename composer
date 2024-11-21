@@ -7,7 +7,26 @@
 
 PHP_CONTAINER='iquety-shield'
 
-docker-compose up -d
+dockerUp()
+{
+    docker compose &>/dev/null
+    
+    if [ "$?" == "0" ]; then
+        docker compose up -d
+
+        return
+    fi
+
+    docker-compose &>/dev/null
+    
+    if [ "$?" == "0" ]; then
+        docker-compose up -d
+
+        return
+    fi
+}
+
+dockerUp
 
 if [ "$1" == "bash" ]; then
     docker exec --user 1000 -it $PHP_CONTAINER bash

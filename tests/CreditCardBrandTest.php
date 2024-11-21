@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Assertions;
+namespace Tests;
 
 use Iquety\Shield\CreditCardBrand;
 use Tests\TestCase;

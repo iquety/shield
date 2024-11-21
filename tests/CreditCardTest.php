@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Tests\Assertions;
+namespace Tests;
 
 use InvalidArgumentException;
 use Iquety\Shield\CreditCard;
 use Iquety\Shield\CreditCardBrand;
 use Tests\TestCase;
-use ValueError;
 
 class CreditCardTest extends TestCase
 {

@@ -127,7 +127,7 @@ class Shield
 
         // asserções nomeadas
         // o indice é o nome do campo e o valor é uma lista de mensagens
-        foreach($this->getErrorList() as $error) {
+        foreach ($this->getErrorList() as $error) {
             if ($error !== []) {
                 return true;
             }

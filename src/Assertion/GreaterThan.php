@@ -9,8 +9,9 @@ use Iquety\Shield\Message;
 
 class GreaterThan extends Assertion
 {
+    /** @param array<int|string,mixed>|float|int|string $value */
     public function __construct(
-        float|int|string $value,
+        array|float|int|string $value,
         float|int $length,
     ) {
         $this->setValue($value);
@@ -20,6 +21,10 @@ class GreaterThan extends Assertion
 
     public function isValid(): bool
     {
+        if (is_array($this->getValue()) === true) {
+            return $this->isValidArray($this->getValue(), $this->getAssertValue());
+        }
+
         if (is_string($this->getValue()) === true) {
             return $this->isValidString($this->getValue(), $this->getAssertValue());
         }
@@ -30,6 +35,12 @@ class GreaterThan extends Assertion
     private function isValidNumber(float|int $value, float|int $length): bool
     {
         return $value > $length;
+    }
+
+    /** @param array<int|string,mixed> $value */
+    private function isValidArray(array $value, float|int $length): bool
+    {
+        return count($value) > (int)$length;
     }
 
     private function isValidString(string $value, float|int $length): bool

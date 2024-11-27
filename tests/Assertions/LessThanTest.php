@@ -18,6 +18,7 @@ class LessThanTest extends TestCase
         $list['int'] = [9, 10];
         $list['float'] = [9.7, 9.8];
         $list['float + int'] = [9.9, 10];
+        $list['array'] = [[1, 2, 3], 4];
 
         return $list;
     }
@@ -38,11 +39,16 @@ class LessThanTest extends TestCase
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 6];
-        $list['string utf8'] = ['coração', 6]; // exatamente 7 caracteres
-        $list['int'] = [9, 8];
-        $list['float'] = [9.9, 9.0];
-        $list['float + int'] = [9.8, 9];
+        $list['string'] = ['Palavra', 6, "O valor Palavra está errado"];
+        $list['string utf8'] = ['coração', 6, "O valor coração está errado"]; // exatamente 7 caracteres
+        $list['int'] = [9, 8, "O valor 9 está errado"];
+        $list['float'] = [9.9, 9.0, "O valor 9.9 está errado"];
+        $list['float + int'] = [9.8, 9, "O valor 9.8 está errado"];
+
+        $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
+
+        $list['array equal'] = [[1, 2, 3], 3, "O valor $value está errado"];
+        $list['array greater'] = [[1, 2, 3], 2, "O valor $value está errado"];
 
         return $list;
     }
@@ -85,8 +91,11 @@ class LessThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, float|int $length): void
-    {
+    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+        mixed $value,
+        float|int $length,
+        string $message
+    ): void {
         $assertion = new LessThan($value, $length);
 
         $assertion->setFieldName('name');
@@ -95,21 +104,24 @@ class LessThanTest extends TestCase
 
         $this->assertFalse($assertion->isValid());
 
-        $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, float|int $length): void
-    {
+    public function notAssertedCaseWithCustomMessage(
+        mixed $value,
+        float|int $length,
+        string $message
+    ): void {
         $assertion = new LessThan($value, $length);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
 
-        $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

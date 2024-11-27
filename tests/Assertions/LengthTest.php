@@ -19,6 +19,8 @@ class LengthTest extends TestCase
         $list['int'] = [9, 9];
         $list['float'] = [9.9, 9.9];
 
+        $list['array'] = [[1, 2, 3], 3];
+
         return $list;
     }
 
@@ -38,10 +40,15 @@ class LengthTest extends TestCase
     {
         $list = [];
 
-        $list['string maior'] = ['Palavra', 6];
-        $list['string menor'] = ['Palavra', 8];
-        $list['int'] = [9, 8];
-        $list['float'] = [9.9, 9];
+        $list['string maior'] = ['Palavra', 6, "O valor Palavra está errado"];
+        $list['string menor'] = ['Palavra', 8, "O valor Palavra está errado"];
+        $list['int'] = [9, 8, "O valor 9 está errado"];
+        $list['float'] = [9.9, 9, "O valor 9.9 está errado"];
+
+        $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
+
+        $list['array greater'] = [[1, 2, 3], 2, "O valor $value está errado"];
+        $list['array less'] = [[1, 2, 3], 4, "O valor $value está errado"];
 
         return $list;
     }
@@ -83,8 +90,11 @@ class LengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, float|int $length): void
-    {
+    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+        mixed $value,
+        float|int $length,
+        string $message
+    ): void {
         $assertion = new Length($value, $length);
 
         $assertion->setFieldName('name');
@@ -92,20 +102,23 @@ class LengthTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, float|int $length): void
-    {
+    public function notAssertedCaseWithCustomMessage(
+        mixed $value,
+        float|int $length,
+        string $message
+    ): void {
         $assertion = new Length($value, $length);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

@@ -23,15 +23,12 @@ class ContainsTest extends TestCase
         $list['string contains ção!'] = ['@Coração!#', 'ção!'];
         $list['string contains ção!#'] = ['@Coração!#', 'ção!#'];
 
-        $array = ['@', '@C', '@Cora', 'ç', 'çã', 'ção', 'ção!', 'ção!#'];
+        $array = ['123', 123, '12.5', 12.5, 'ção!#'];
 
-        $list['array contains @'] = [$array, '@'];
-        $list['array contains @C'] = [$array, '@C'];
-        $list['array contains @Cora'] = [$array, '@Cora'];
-        $list['array contains ç'] = [$array, 'ç'];
-        $list['array contains çã'] = [$array, 'çã'];
-        $list['array contains ção'] = [$array, 'ção'];
-        $list['array contains ção!'] = [$array, 'ção!'];
+        $list['array contains string 123'] = [$array, '123'];
+        $list['array contains integer 123'] = [$array, 123];
+        $list['array contains string 12.5'] = [$array, '12.5'];
+        $list['array contains float 12.5'] = [$array, 12.5];
         $list['array contains ção!#'] = [$array, 'ção!#'];
 
         return $list;
@@ -56,7 +53,7 @@ class ContainsTest extends TestCase
         $list['string not contains $'] = ['@Coração!#', '$', "O valor @Coração!# está errado"];
         $list['string not contains @Cr'] = ['@Coração!#', '@Cr', "O valor @Coração!# está errado"];
 
-        $array = ['@', '@C', '@Cora', 'ç', 'çã', 'ção', 'ção!', 'ção!#'];
+        $array = ['123', 123, '12.5', 12.5, 'ção!#'];
         $string = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($array));
 
         $list['array not contains $'] = [$array, '$', "O valor $string está errado"];
@@ -102,14 +99,17 @@ class ContainsTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, float|int|string $needle, string $message): void
-    {
+    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+        mixed $value,
+        float|int|string $needle,
+        string $message
+    ): void {
         $assertion = new Contains($value, $needle);
 
         $assertion->setFieldName('name');
 
         $assertion->message('O valor {{ value }} está errado');
-        
+
         $this->assertFalse($assertion->isValid());
 
         $this->assertEquals($assertion->makeMessage(), $message);
@@ -119,8 +119,11 @@ class ContainsTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, float|int|string $needle, string $message): void
-    {
+    public function notAssertedCaseWithCustomMessage(
+        mixed $value,
+        float|int|string $needle,
+        string $message
+    ): void {
         $assertion = new Contains($value, $needle);
 
         $assertion->message('O valor {{ value }} está errado');

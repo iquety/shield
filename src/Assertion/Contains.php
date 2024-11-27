@@ -9,6 +9,7 @@ use Iquety\Shield\Message;
 
 class Contains extends Assertion
 {
+    /** @param array<int|string,mixed>|string $value */
     public function __construct(
         array|string $value,
         float|int|string $needle,

@@ -30,7 +30,7 @@ class Contains extends Assertion
 
     private function isValidInArray(): bool
     {
-        return array_search($this->getAssertValue(), $this->getValue()) !== false;
+        return array_search($this->getAssertValue(), $this->getValue(), true) !== false;
     }
 
     public function getDefaultMessage(): Message

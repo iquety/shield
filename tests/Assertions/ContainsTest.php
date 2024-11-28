@@ -53,11 +53,14 @@ class ContainsTest extends TestCase
         $list['string not contains $'] = ['@Coração!#', '$', "O valor @Coração!# está errado"];
         $list['string not contains @Cr'] = ['@Coração!#', '@Cr', "O valor @Coração!# está errado"];
 
-        $array = ['123', 123, '12.5', 12.5, 'ção!#'];
+        $array = [777, '999', '123', 123, '12.5', 12.5, 'ção!#'];
         $string = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($array));
 
         $list['array not contains $'] = [$array, '$', "O valor $string está errado"];
         $list['array not contains @Cr'] = [$array, '@Cr', "O valor $string está errado"];
+
+        $list['array not contains string 777'] = [$array, '777', "O valor $string está errado"];
+        $list['array not contains integer 999'] = [$array, 999, "O valor $string está errado"];
 
         return $list;
     }

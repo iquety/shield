@@ -18,7 +18,7 @@ class LengthTest extends AssertionCase
 
         $list['integer 9 has length 9'] = [9, 9];
         $list['float 9.9 has length 9.9'] = [9.9, 9.9];
-        
+
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements has length 7'] = [$arrayValue, 7];
@@ -65,7 +65,7 @@ class LengthTest extends AssertionCase
 
         $list['float 9.9 has not length 10.1'] = $this->makeIncorrectItem(9.9, 10.1);
         $list['float 9.9 has not length 9.8'] = $this->makeIncorrectItem(9.9, 9.8);
-        
+
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements has not length 8'] = $this->makeIncorrectItem($arrayValue, 8);

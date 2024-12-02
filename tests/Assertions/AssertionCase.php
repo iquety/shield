@@ -29,7 +29,7 @@ class AssertionCase extends TestCase
         );
     }
 
-    /** @return array<int,mixed> */
+    /** @param array<int|string,mixed> $value */
     protected function makeArrayMessage(array $value): string
     {
         return str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($value));
@@ -37,7 +37,7 @@ class AssertionCase extends TestCase
 
     protected function makeMessageValue(mixed $value): string
     {
-        switch(gettype($value)) {
+        switch (gettype($value)) {
             case 'array':
                 $messageValue = $this->makeArrayMessage($value);
 

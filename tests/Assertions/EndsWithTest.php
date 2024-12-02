@@ -23,7 +23,7 @@ class EndsWithTest extends AssertionCase
             '11.5', // decimal string
             'ção!#' // string
         ];
-        
+
         $list['array ends with string'] = [$arrayValue, 'ção!#'];
 
         array_pop($arrayValue);
@@ -71,7 +71,7 @@ class EndsWithTest extends AssertionCase
 
         $list['string not end with $'] = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string not end with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
-        
+
         $arrayValue = [
             null,
             111,    // inteiro
@@ -80,7 +80,7 @@ class EndsWithTest extends AssertionCase
             '11.5', // decimal string
             'ção!#' // string
         ];
-        
+
         $list['array not end with string ção!'] = $this->makeIncorrectItem($arrayValue, 'ção');
 
         array_pop($arrayValue);

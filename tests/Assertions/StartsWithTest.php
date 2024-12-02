@@ -23,7 +23,7 @@ class StartsWithTest extends AssertionCase
             '11.5', // decimal string
             'ção!#' // string
         ];
-        
+
         $list['array starts with integer 111'] = [$arrayValue, 111];
 
         array_shift($arrayValue);
@@ -56,7 +56,7 @@ class StartsWithTest extends AssertionCase
     private function makeIncorrectItem(mixed $value, mixed $partial): array
     {
         $messageValue = $this->makeMessageValue($value);
-        
+
         return [
             $value,
             $partial,

@@ -12,11 +12,11 @@ class ContainsTest extends AssertionCase
     public function correctValueProvider(): array
     {
         $list = [];
-        
+
         $list['string contains @Cora'] = ['@Coração!#', '@Co'];
         $list['string contains ção'] = ['@Coração!#', 'ra'];
         $list['string contains ção!#'] = ['@Coração!#', 'ção!#'];
-        
+
         $valueArray = [
             111,    // inteiro
             '222',  // inteiro string
@@ -49,7 +49,7 @@ class ContainsTest extends AssertionCase
     private function makeIncorrectItem(mixed $value, mixed $partial): array
     {
         $messageValue = $this->makeMessageValue($value);
-        
+
         return [
             $value,
             $partial,
@@ -74,7 +74,7 @@ class ContainsTest extends AssertionCase
         ];
 
         $messageValue = $this->makeArrayMessage($arrayValue);
-        
+
         $list['array not contains string 111'] = [$arrayValue, '111', "O valor $messageValue está errado"];
 
         $list['array not contains inteiro 222'] = [$arrayValue, 222, "O valor $messageValue está errado"];

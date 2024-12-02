@@ -5,31 +5,31 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\Contains;
-use Tests\TestCase;
 
-class ContainsTest extends TestCase
+class ContainsTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
         $list = [];
-
-        $list['string contains @'] = ['@Coração!#', '@'];
-        $list['string contains @C'] = ['@Coração!#', '@C'];
-        $list['string contains @Cora'] = ['@Coração!#', '@Cora'];
-        $list['string contains ç'] = ['@Coração!#', 'ç'];
-        $list['string contains çã'] = ['@Coração!#', 'çã'];
-        $list['string contains ção'] = ['@Coração!#', 'ção'];
-        $list['string contains ção!'] = ['@Coração!#', 'ção!'];
+        
+        $list['string contains @Cora'] = ['@Coração!#', '@Co'];
+        $list['string contains ção'] = ['@Coração!#', 'ra'];
         $list['string contains ção!#'] = ['@Coração!#', 'ção!#'];
+        
+        $valueArray = [
+            111,    // inteiro
+            '222',  // inteiro string
+            22.5,   // decimal
+            '11.5', // decimal string
+            'ção!#' // string
+        ];
 
-        $array = ['123', 123, '12.5', 12.5, 'ção!#'];
-
-        $list['array contains string 123'] = [$array, '123'];
-        $list['array contains integer 123'] = [$array, 123];
-        $list['array contains string 12.5'] = [$array, '12.5'];
-        $list['array contains float 12.5'] = [$array, 12.5];
-        $list['array contains ção!#'] = [$array, 'ção!#'];
+        $list['array contains integer 111'] = [$valueArray, 111];
+        $list['array contains string 222'] = [$valueArray, '222'];
+        $list['array contains decimal 22.5'] = [$valueArray, 22.5];
+        $list['array contains string 11.5'] = [$valueArray, '11.5'];
+        $list['array contains string'] = [$valueArray, 'ção!#'];
 
         return $list;
     }
@@ -38,11 +38,23 @@ class ContainsTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, float|int|string $needle): void
+    public function valueContainsNeedle(mixed $value, float|int|string $needle): void
     {
         $assertion = new Contains($value, $needle);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, mixed $partial): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+        
+        return [
+            $value,
+            $partial,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -50,17 +62,30 @@ class ContainsTest extends TestCase
     {
         $list = [];
 
-        $list['string not contains $'] = ['@Coração!#', '$', "O valor @Coração!# está errado"];
+        $list['string not contains $'] = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string not contains @Cr'] = ['@Coração!#', '@Cr', "O valor @Coração!# está errado"];
 
-        $array = [777, '999', '123', 123, '12.5', 12.5, 'ção!#'];
-        $string = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($array));
+        $arrayValue = [
+            111,    // inteiro
+            '222',  // inteiro string
+            22.5,   // decimal
+            '11.5', // decimal string
+            'ção!#' // string
+        ];
 
-        $list['array not contains $'] = [$array, '$', "O valor $string está errado"];
-        $list['array not contains @Cr'] = [$array, '@Cr', "O valor $string está errado"];
+        $messageValue = $this->makeArrayMessage($arrayValue);
+        
+        $list['array not contains string 111'] = [$arrayValue, '111', "O valor $messageValue está errado"];
 
-        $list['array not contains string 777'] = [$array, '777', "O valor $string está errado"];
-        $list['array not contains integer 999'] = [$array, 999, "O valor $string está errado"];
+        $list['array not contains inteiro 222'] = [$arrayValue, 222, "O valor $messageValue está errado"];
+
+        $list['array not contains string 22.5'] = [$arrayValue, '22.5', "O valor $messageValue está errado"];
+
+        $list['array not contains decimal 11.5'] = [$arrayValue, 11.5, "O valor $messageValue está errado"];
+
+        $list['array not contains string $'] = [$arrayValue, '$', "O valor $messageValue está errado"];
+
+        $list['array not contains string @Cr'] = [$arrayValue, '@Cr', "O valor $messageValue está errado"];
 
         return $list;
     }
@@ -69,23 +94,20 @@ class ContainsTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, float|int|string $needle): void
+    public function valueNotContainsNeedle(mixed $value, float|int|string $needle): void
     {
         $assertion = new Contains($value, $needle);
 
         $this->assertFalse($assertion->isValid());
 
-        $this->assertEquals(
-            $assertion->makeMessage(),
-            "Value must contain $needle",
-        );
+        $this->assertEquals($assertion->makeMessage(), "Value must contain $needle");
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int|string $needle): void
+    public function namedValueNotContainsNeedle(mixed $value, float|int|string $needle): void
     {
         $assertion = new Contains($value, $needle);
 
@@ -102,7 +124,7 @@ class ContainsTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueNotContainsNeedleWithCustomMessage(
         mixed $value,
         float|int|string $needle,
         string $message
@@ -122,7 +144,7 @@ class ContainsTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueNotContainsNeedleWithCustomMessage(
         mixed $value,
         float|int|string $needle,
         string $message

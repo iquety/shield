@@ -6,33 +6,55 @@ namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\EqualTo;
 use Tests\Stubs\ObjectOne;
-use Tests\TestCase;
 
-class EqualToTest extends TestCase
+class EqualToTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function validEquality(): array
+    public function correctValueProvider(): array
     {
         $list = [];
 
         $list['string'] = ['Palavra', 'Palavra'];
+
         $list['object'] = [new ObjectOne(''), new ObjectOne('')];
+
         $list['integer'] = [44, 44];
+        $list['integer string'] = ['44', '44'];
+
         $list['float'] = [44.4, 44.4];
+        $list['float string'] = ['44.4', '44.4'];
+
         $list['float zero'] = [44.0, 44.0];
+        $list['float zero string'] = ['44.0', '44.0'];
+
+        $list['array'] = [
+            ['one', 'two', 'three'],
+            ['one', 'two', 'three']
+        ];
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider validEquality
+     * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $one, mixed $two): void
+    public function valueOneEqualToTwo(mixed $valueOne, mixed $valueTwo): void
     {
-        $assertion = new EqualTo($one, $two);
+        $assertion = new EqualTo($valueOne, $valueTwo);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $valueOne, mixed $valueTwo): array
+    {
+        return [
+            $valueOne,
+            $valueTwo,
+            $this->makeMessageValue($valueOne),
+            $this->makeMessageValue($valueTwo)
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -40,30 +62,15 @@ class EqualToTest extends TestCase
     {
         $list = [];
 
-        $list['string'] = [
-            'Palavra', 'Palavra Diferente',
-            'Palavra', 'Palavra Diferente'
-        ];
+        $list['string'] = $this->makeIncorrectItem('Palavra', 'Palavra Diferente');
 
-        $list['object'] = [
-            new ObjectOne(''), new ObjectOne('x'),
-            ObjectOne::class . ':["name"=>""]', ObjectOne::class . ':["name"=>"x"]'
-        ];
+        $list['object'] = $this->makeIncorrectItem(new ObjectOne(''), new ObjectOne('x'));
 
-        $list['integer'] = [
-            44, 45,
-            '44', '45'
-        ];
+        $list['integer'] = $this->makeIncorrectItem(44, 45);
 
-        $list['float'] = [
-            44.4, 44.1,
-            '44.4', '44.1'
-        ];
+        $list['float'] = $this->makeIncorrectItem(44.4, 44.1);
 
-        $list['float zero'] = [
-            44.0, 44.1,
-            '44', '44.1'
-        ];
+        $list['float zero'] = $this->makeIncorrectItem(44.0, 44.1);
 
         return $list;
     }
@@ -73,7 +80,7 @@ class EqualToTest extends TestCase
      * @dataProvider incorrectValueProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function notAssertedCase(
+    public function valueOneNotEqualToTwo(
         mixed $one,
         mixed $two,
         string $oneString,
@@ -94,7 +101,7 @@ class EqualToTest extends TestCase
      * @dataProvider incorrectValueProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function notAssertedWithNamedAssertionCase(
+    public function namedValueOneNotEqualToTwo(
         mixed $one,
         mixed $two,
         string $oneString,
@@ -115,7 +122,7 @@ class EqualToTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedWithNamedAssertionAndCustomMessageCase(
+    public function namedValueOneNotEqualToTwoWithCustomMessageCase(
         mixed $one,
         mixed $two,
         string $oneString,
@@ -135,7 +142,7 @@ class EqualToTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueOneNotEqualToTwoWithCustomMessage(
         mixed $one,
         mixed $two,
         string $oneString,

@@ -51,7 +51,7 @@ class Length extends Assertion
     public function getDefaultMessage(): Message
     {
         return new Message(sprintf(
-            "Value must be less length %d",
+            "Value must have length %s",
             $this->getAssertValue()
         ));
     }
@@ -59,7 +59,7 @@ class Length extends Assertion
     public function getDefaultNamedMessage(): Message
     {
         return new Message(sprintf(
-            "Value of the '{{ field }}' field must be less length %d",
+            "Value of the '{{ field }}' field must have length %s",
             $this->getAssertValue()
         ));
     }

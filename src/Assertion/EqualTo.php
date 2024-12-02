@@ -10,12 +10,12 @@ use Iquety\Shield\Message;
 class EqualTo extends Assertion
 {
     public function __construct(
-        mixed $value,
-        mixed $comparison,
+        mixed $valueOne,
+        mixed $valueTwo,
     ) {
-        $this->setValue($value);
+        $this->setValue($valueOne);
 
-        $this->setAssertValue($comparison);
+        $this->setAssertValue($valueTwo);
     }
 
     public function isValid(): bool

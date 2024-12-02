@@ -14,18 +14,25 @@ class GreaterThanOrEqualToTest extends TestCase
     {
         $list = [];
 
-        $list['string less'] = ['Palavra', 5];
-        $list['int less'] = [9, 8];
-        $list['float less'] = [9.7, 8.8];
-        $list['float + int less'] = [9.9, 8];
+        $list['string 7 chars is greater than or equal to 7'] = ['Palavra', 7];
+        $list['string 7 chars is greater than or equal to 6'] = ['Palavra', 6];
 
-        $list['string equal'] = ['Palavra', 7];
-        $list['int equal'] = [9, 9];
-        $list['float equal'] = [9.7, 9.7];
-        $list['float + int equal'] = [9.9, 9.9];
+        $list['string utf8 7 chars is greater than or equal to 7'] = ['coração', 7];
+        $list['string utf8 7 chars is greater than or equal to 6'] = ['coração', 6];
 
-        $list['array greater'] = [[1, 2, 3], 2];
-        $list['array equal'] = [[1, 2, 3], 3];
+        $list['integer 9 is greater than or equal to 9'] = [9, 9];
+        $list['integer 9 is greater than or equal to 8'] = [9, 8];
+
+        $list['float 9.9 is greater than or equal to 9.9'] = [9.9, 9.9];
+        $list['float 9.9 is greater than or equal to 9.0'] = [9.9, 9.0];
+
+        $list['float 9.8 is greater than or equal to integer 9.8'] = [9.8, 9.8];
+        $list['float 9.8 is greater than or equal to integer 9'] = [9.8, 9];
+
+        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
+
+        $list['array with 7 elements is greater than 7'] = [$arrayValue, 7];
+        $list['array with 7 elements is greater than 6'] = [$arrayValue, 6];
 
         return $list;
     }
@@ -34,7 +41,7 @@ class GreaterThanOrEqualToTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, float|int $length): void
+    public function valueGreaterOrEqualTo(mixed $value, float|int $length): void
     {
         $assertion = new GreaterThanOrEqualTo($value, $length);
 
@@ -63,7 +70,7 @@ class GreaterThanOrEqualToTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, float|int $length): void
+    public function valueNotGreaterOrEqualTo(mixed $value, float|int $length): void
     {
         $assertion = new GreaterThanOrEqualTo($value, $length);
 
@@ -79,7 +86,7 @@ class GreaterThanOrEqualToTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $length): void
+    public function namedValueNotGreaterOrEqualTo(mixed $value, float|int $length): void
     {
         $assertion = new GreaterThanOrEqualTo($value, $length);
 
@@ -97,7 +104,7 @@ class GreaterThanOrEqualToTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueNotGreaterOrEqualToWithCustomMessage(
         mixed $value,
         float|int $length,
         string $message
@@ -117,7 +124,7 @@ class GreaterThanOrEqualToTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueNotGreaterOrEqualToWithCustomMessage(
         mixed $value,
         float|int $length,
         string $message

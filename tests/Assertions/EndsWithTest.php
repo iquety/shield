@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\EndsWith;
-use Tests\TestCase;
 
-class EndsWithTest extends TestCase
+class EndsWithTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
@@ -16,17 +15,28 @@ class EndsWithTest extends TestCase
 
         $list['string ends with !#'] = ['@Coração!#', '!#'];
 
-        $arrayEndStringInt = ['12.5', 12.5, 'ção!#', 123, '123'];
-        $list['array ends with string integer 123'] = [$arrayEndStringInt, '123'];
+        $arrayValue = [
+            null,
+            111,    // inteiro
+            '222',  // inteiro string
+            22.5,   // decimal
+            '11.5', // decimal string
+            'ção!#' // string
+        ];
+        
+        $list['array ends with string'] = [$arrayValue, 'ção!#'];
 
-        $arrayEndInt = ['12.5', 12.5, 'ção!#', '123', 123];
-        $list['array ends with integer 123'] = [$arrayEndInt, 123];
+        array_pop($arrayValue);
+        $list['array ends with decimal string'] = [$arrayValue, '11.5'];
 
-        $arrayEndStringFloat = [123, '123', 'ção!#', 12.5, '12.5'];
-        $list['array ends with string float 12.5'] = [$arrayEndStringFloat, '12.5'];
+        array_pop($arrayValue);
+        $list['array ends with decimal'] = [$arrayValue, 22.5];
 
-        $arrayEndFloat = [123, '123', 'ção!#', '12.5', 12.5];
-        $list['array ends with string float 12.5'] = [$arrayEndFloat, 12.5];
+        array_pop($arrayValue);
+        $list['array ends with integer string'] = [$arrayValue, '222'];
+
+        array_pop($arrayValue);
+        $list['array ends with integer'] = [$arrayValue, 111];
 
         return $list;
     }
@@ -35,11 +45,23 @@ class EndsWithTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, mixed $partial): void
+    public function valueEndsWithPartial(mixed $value, mixed $partial): void
     {
         $assertion = new EndsWith($value, $partial);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, mixed $partial): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $partial,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -47,14 +69,34 @@ class EndsWithTest extends TestCase
     {
         $list = [];
 
-        $list['string not end with $'] = ['@Coração!#', '$', "O valor @Coração!# está errado"];
-        $list['string not end with @Cr'] = ['@Coração!#', '@Cr', "O valor @Coração!# está errado"];
+        $list['string not end with $'] = $this->makeIncorrectItem('@Coração!#', '$');
+        $list['string not end with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
+        
+        $arrayValue = [
+            null,
+            111,    // inteiro
+            '222',  // inteiro string
+            22.5,   // decimal
+            '11.5', // decimal string
+            'ção!#' // string
+        ];
+        
+        $list['array not end with string ção!'] = $this->makeIncorrectItem($arrayValue, 'ção');
 
-        $array = ['12.5', 12.5, 'ção!#', 123, '123'];
-        $string = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($array));
+        array_pop($arrayValue);
+        $list['array not end with decimal 11.5'] = $this->makeIncorrectItem($arrayValue, 11.5);
 
-        $list['array not end with string 12.5'] = [$array, '12.5', "O valor $string está errado"];
-        $list['array not end with integer 123'] = [$array, 123, "O valor $string está errado"];
+        array_pop($arrayValue);
+        $list['array not end with decimal string 22.5'] = $this->makeIncorrectItem($arrayValue, '22.5');
+
+        array_pop($arrayValue);
+        $list['array not end with integer 222'] = $this->makeIncorrectItem($arrayValue, 222);
+
+        array_pop($arrayValue);
+        $list['array not end with integer string 111'] = $this->makeIncorrectItem($arrayValue, '111');
+
+        array_pop($arrayValue);
+        $list['array not end with null string'] = $this->makeIncorrectItem($arrayValue, 'null');
 
         return $list;
     }
@@ -63,23 +105,20 @@ class EndsWithTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, float|int|string $needle): void
+    public function valueNotEndsWithPartial(mixed $value, float|int|string $needle): void
     {
         $assertion = new EndsWith($value, $needle);
 
         $this->assertFalse($assertion->isValid());
 
-        $this->assertEquals(
-            $assertion->makeMessage(),
-            "Value must end with '$needle'"
-        );
+        $this->assertEquals($assertion->makeMessage(), "Value must end with '$needle'");
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int|string $needle): void
+    public function namedValueNotEndsWithPartial(mixed $value, float|int|string $needle): void
     {
         $assertion = new EndsWith($value, $needle);
 
@@ -97,7 +136,7 @@ class EndsWithTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueNotEndsWithPartialWithCustomMessage(
         mixed $value,
         float|int|string $needle,
         string $message
@@ -117,7 +156,7 @@ class EndsWithTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueNotEndsWithPartialAndCustomMessage(
         mixed $value,
         float|int|string $needle,
         string $message

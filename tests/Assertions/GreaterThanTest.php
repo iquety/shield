@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\GreaterThan;
-use Tests\TestCase;
 
-class GreaterThanTest extends TestCase
+class GreaterThanTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 6];
-        $list['string utf8'] = ['coração', 6]; // exatamente 7 caracteres
+        $list['string 7 chars is greater than 6'] = ['Palavra', 6];
+        $list['string utf8 7 chars is greater than 6'] = ['coração', 6];
 
-        $list['integer'] = [9, 8];
-        $list['float'] = [9.9, 9.0];
-        $list['float + integer'] = [9.8, 9];
+        $list['integer 9 is greater than 8'] = [9, 8];
+        $list['float 9.9 is greater than 9.0'] = [9.9, 9.0];
+        $list['float 9.8 is greater than integer 9'] = [9.8, 9];
 
-        $list['array'] = [[1, 2, 3], 2];
+        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
+
+        $list['array with 7 elements is greater than 6'] = [$arrayValue, 6];
 
         return $list;
     }
@@ -30,11 +31,23 @@ class GreaterThanTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, float|int $length): void
+    public function valueGreaterThanLength(mixed $value, float|int $length): void
     {
         $assertion = new GreaterThan($value, $length);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, float|int $length): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $length,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -42,15 +55,22 @@ class GreaterThanTest extends TestCase
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 8, "O valor Palavra está errado"];
-        $list['int'] = [9, 10, "O valor 9 está errado"];
-        $list['float'] = [9.7, 9.8, "O valor 9.7 está errado"];
-        $list['float + int'] = [9.9, 10, "O valor 9.9 está errado"];
+        $list['string 7 chars is not greater than 7'] = $this->makeIncorrectItem('Palavra', 7);
+        $list['string 7 chars is not greater than 8'] = $this->makeIncorrectItem('Palavra', 8);
 
-        $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
+        $list['string utf8 7 chars is not greater than 7'] = $this->makeIncorrectItem('Coração', 7);
+        $list['string utf8 7 chars is not greater than 8'] = $this->makeIncorrectItem('Coração', 8);
 
-        $list['array equal'] = [[1, 2, 3], 3, "O valor $value está errado"];
-        $list['array less'] = [[1, 2, 3], 4, "O valor $value está errado"];
+        $list['integer 9 is not greater than 9'] = $this->makeIncorrectItem(9, 9);
+        $list['integer 9 is not greater than 10'] = $this->makeIncorrectItem(9, 10);
+
+        $list['float 9.8 is not greater than 9.8'] = $this->makeIncorrectItem(9.8, 9.8);
+        $list['float 9.8 is not greater than 9.9'] = $this->makeIncorrectItem(9.8, 9.9);
+
+        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
+
+        $list['array with 7 elements is not greater than 7'] = $this->makeIncorrectItem($arrayValue, 7);
+        $list['array with 7 elements is not greater than 8'] = $this->makeIncorrectItem($arrayValue, 8);
 
         return $list;
     }
@@ -59,7 +79,7 @@ class GreaterThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, float|int $length): void
+    public function valueNotGreaterThanLength(mixed $value, float|int $length): void
     {
         $assertion = new GreaterThan($value, $length);
 
@@ -75,7 +95,7 @@ class GreaterThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $length): void
+    public function namedValueNotGreaterThanLength(mixed $value, float|int $length): void
     {
         $assertion = new GreaterThan($value, $length);
 
@@ -93,7 +113,7 @@ class GreaterThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueNotGreaterThanLengthAndCustomMessage(
         mixed $value,
         float|int $length,
         string $message
@@ -113,7 +133,7 @@ class GreaterThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueNotGreaterThanLengthAndCustomMessage(
         mixed $value,
         float|int $length,
         string $message

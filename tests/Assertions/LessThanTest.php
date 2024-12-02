@@ -5,20 +5,24 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\LessThan;
-use Tests\TestCase;
 
-class LessThanTest extends TestCase
+class LessThanTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 8];
-        $list['int'] = [9, 10];
-        $list['float'] = [9.7, 9.8];
-        $list['float + int'] = [9.9, 10];
-        $list['array'] = [[1, 2, 3], 4];
+        $list['string 7 chars is less than 8'] = ['Palavra', 8];
+        $list['string utf8 7 chars is less than 8'] = ['coração', 8];
+
+        $list['integer 9 is less than 10'] = [9, 10];
+        $list['float 9.8 is less than 9.9'] = [9.8, 9.9];
+        $list['float 9.8 is less than integer 10'] = [9.8, 10];
+
+        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
+
+        $list['array with 7 elements is less than 8'] = [$arrayValue, 8];
 
         return $list;
     }
@@ -27,11 +31,23 @@ class LessThanTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, float|int $length): void
+    public function valueLessThanLength(mixed $value, float|int $length): void
     {
         $assertion = new LessThan($value, $length);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, float|int $length): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $length,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -39,16 +55,22 @@ class LessThanTest extends TestCase
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 6, "O valor Palavra está errado"];
-        $list['string utf8'] = ['coração', 6, "O valor coração está errado"]; // exatamente 7 caracteres
-        $list['int'] = [9, 8, "O valor 9 está errado"];
-        $list['float'] = [9.9, 9.0, "O valor 9.9 está errado"];
-        $list['float + int'] = [9.8, 9, "O valor 9.8 está errado"];
+        $list['string 7 chars is not less than 7'] = $this->makeIncorrectItem('Palavra', 7);
+        $list['string 7 chars is not less than 6'] = $this->makeIncorrectItem('Palavra', 6);
 
-        $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
+        $list['string utf8 7 chars is not less than 7'] = $this->makeIncorrectItem('Coração', 7);
+        $list['string utf8 7 chars is not less than 6'] = $this->makeIncorrectItem('Coração', 6);
 
-        $list['array equal'] = [[1, 2, 3], 3, "O valor $value está errado"];
-        $list['array greater'] = [[1, 2, 3], 2, "O valor $value está errado"];
+        $list['integer 9 is not less than 9'] = $this->makeIncorrectItem(9, 9);
+        $list['integer 9 is not less than 8'] = $this->makeIncorrectItem(9, 8);
+
+        $list['float 9.8 is not less than 9.8'] = $this->makeIncorrectItem(9.8, 9.8);
+        $list['float 9.8 is not less than 9.7'] = $this->makeIncorrectItem(9.8, 9.7);
+
+        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
+
+        $list['array with 7 elements is not less than 7'] = $this->makeIncorrectItem($arrayValue, 7);
+        $list['array with 7 elements is not less than 6'] = $this->makeIncorrectItem($arrayValue, 6);
 
         return $list;
     }
@@ -57,7 +79,7 @@ class LessThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, float|int $length): void
+    public function valueNotLessThanLength(mixed $value, float|int $length): void
     {
         $assertion = new LessThan($value, $length);
 
@@ -73,7 +95,7 @@ class LessThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $length): void
+    public function namedValueNotLessThanLength(mixed $value, float|int $length): void
     {
         $assertion = new LessThan($value, $length);
 
@@ -91,7 +113,7 @@ class LessThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueNotLessThanLengthAndCustomMessage(
         mixed $value,
         float|int $length,
         string $message
@@ -111,7 +133,7 @@ class LessThanTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueNotLessThanLengthWithCustomMessage(
         mixed $value,
         float|int $length,
         string $message

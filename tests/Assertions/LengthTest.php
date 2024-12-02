@@ -5,21 +5,23 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\Length;
-use Tests\TestCase;
 
-class LengthTest extends TestCase
+class LengthTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 7];
-        $list['string utf8'] = ['coração', 7]; // exatamente 7 caracteres
-        $list['int'] = [9, 9];
-        $list['float'] = [9.9, 9.9];
+        $list['string 7 chars has length 7'] = ['Palavra', 7];
+        $list['string utf8 7 chars has length 7'] = ['coração', 7];
 
-        $list['array'] = [[1, 2, 3], 3];
+        $list['integer 9 has length 9'] = [9, 9];
+        $list['float 9.9 has length 9.9'] = [9.9, 9.9];
+        
+        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
+
+        $list['array with 7 elements has length 7'] = [$arrayValue, 7];
 
         return $list;
     }
@@ -28,11 +30,23 @@ class LengthTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(mixed $value, float|int $length): void
+    public function valueHasLength(mixed $value, float|int $length): void
     {
         $assertion = new Length($value, $length);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, float|int $length): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $length,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -40,15 +54,22 @@ class LengthTest extends TestCase
     {
         $list = [];
 
-        $list['string maior'] = ['Palavra', 6, "O valor Palavra está errado"];
-        $list['string menor'] = ['Palavra', 8, "O valor Palavra está errado"];
-        $list['int'] = [9, 8, "O valor 9 está errado"];
-        $list['float'] = [9.9, 9, "O valor 9.9 está errado"];
+        $list['string 7 chars has not length 8'] = $this->makeIncorrectItem('Palavra', 8);
+        $list['string 7 chars has not length 6'] = $this->makeIncorrectItem('Palavra', 6);
 
-        $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
+        $list['string utf8 7 chars has not length 8'] = $this->makeIncorrectItem('coração', 8);
+        $list['string utf8 7 chars has not length 6'] = $this->makeIncorrectItem('coração', 6);
 
-        $list['array greater'] = [[1, 2, 3], 2, "O valor $value está errado"];
-        $list['array less'] = [[1, 2, 3], 4, "O valor $value está errado"];
+        $list['integer 9 has not length 10'] = $this->makeIncorrectItem(9, 10);
+        $list['integer 9 has not length 8'] = $this->makeIncorrectItem(9, 8);
+
+        $list['float 9.9 has not length 10.1'] = $this->makeIncorrectItem(9.9, 10.1);
+        $list['float 9.9 has not length 9.8'] = $this->makeIncorrectItem(9.9, 9.8);
+        
+        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
+
+        $list['array with 7 elements has not length 8'] = $this->makeIncorrectItem($arrayValue, 8);
+        $list['array with 7 elements has not length 6'] = $this->makeIncorrectItem($arrayValue, 6);
 
         return $list;
     }
@@ -57,7 +78,7 @@ class LengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(mixed $value, float|int $length): void
+    public function valueNotHasLength(mixed $value, float|int $length): void
     {
         $assertion = new Length($value, $length);
 
@@ -65,7 +86,7 @@ class LengthTest extends TestCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be less length $length",
+            "Value must have length $length",
         );
     }
 
@@ -73,7 +94,7 @@ class LengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $length): void
+    public function namedValueNotHasLength(mixed $value, float|int $length): void
     {
         $assertion = new Length($value, $length);
 
@@ -82,7 +103,7 @@ class LengthTest extends TestCase
         $this->assertFalse($assertion->isValid());
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value of the 'name' field must be less length $length"
+            "Value of the 'name' field must have length $length"
         );
     }
 
@@ -90,7 +111,7 @@ class LengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueHasLengthAndCustomMessage(
         mixed $value,
         float|int $length,
         string $message
@@ -109,7 +130,7 @@ class LengthTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueHasLengthAndCustomMessage(
         mixed $value,
         float|int $length,
         string $message

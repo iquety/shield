@@ -10,8 +10,8 @@ use Iquety\Shield\Message;
 class NotContains extends Assertion
 {
     public function __construct(
-        string $value,
-        string $needle,
+        array|string $value,
+        float|int|string $needle,
     ) {
         $this->setValue($value);
 
@@ -20,7 +20,18 @@ class NotContains extends Assertion
 
     public function isValid(): bool
     {
+        if (is_array($this->getValue()) === true) {
+            return $this->isValidInArray();
+        }
+
         return str_contains($this->getValue(), $this->getAssertValue()) === false;
+    }
+
+    private function isValidInArray(): bool
+    {
+        $finded = array_search($this->getAssertValue(), $this->getValue(), true) !== false;
+
+        return $finded === false;
     }
 
     public function getDefaultMessage(): Message

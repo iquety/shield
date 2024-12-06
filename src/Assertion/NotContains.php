@@ -9,6 +9,7 @@ use Iquety\Shield\Message;
 
 class NotContains extends Assertion
 {
+    /** @param array<mixed>|string $value */
     public function __construct(
         array|string $value,
         float|int|string $needle,

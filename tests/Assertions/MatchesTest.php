@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\Matches;
-use Tests\TestCase;
 
-class MatchesTest extends TestCase
+class MatchesTest extends AssertionCase
 {
-    /** @return array<string,array<int,string>> */
+    /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
         $list = [];
@@ -17,6 +16,7 @@ class MatchesTest extends TestCase
         $list['utf8'] = ['Coração de Leão', '/oraç/'];
         $list['numeric'] = ['123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/'];
         $list['latin'] = ['Hello World', '/World/'];
+        $list['array'] = [['Coração', 'Hello World', 'Leão'], '/World/'];
 
         return $list;
     }
@@ -24,12 +24,28 @@ class MatchesTest extends TestCase
     /**
      * @test
      * @dataProvider correctValueProvider
+     * @param array<mixed>|string $value
      */
-    public function assertedCase(string $value, string $pattern): void
+    public function valueMatchesPattern(array|string $value, string $pattern): void
     {
         $assertion = new Matches($value, $pattern);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /**
+     * @param array<mixed>|string $value
+     * @return array<int,mixed>
+     */
+    private function makeIncorrectItem(array|string $value, string $pattern): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $pattern,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -37,7 +53,8 @@ class MatchesTest extends TestCase
     {
         $list = [];
 
-        $list['utf8'] = ['Coração de Leão', '/orax/'];
+        $list['utf8'] = $this->makeIncorrectItem('Coração de Leão', '/orax/');
+        $list['array'] = $this->makeIncorrectItem(['Coração', 'Hello World', 'Leão'], '/Worlx/');
 
         return $list;
     }
@@ -45,8 +62,9 @@ class MatchesTest extends TestCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
+     * @param array<mixed>|string $value
      */
-    public function notAssertedCase(mixed $value, string $pattern): void
+    public function valueNotMatchesPattern(array|string $value, string $pattern): void
     {
         $assertion = new Matches($value, $pattern);
 
@@ -61,8 +79,9 @@ class MatchesTest extends TestCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
+     * @param array<mixed>|string $value
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, string $pattern): void
+    public function namedValueNotMatchesPattern(array|string $value, string $pattern): void
     {
         $assertion = new Matches($value, $pattern);
 
@@ -78,9 +97,13 @@ class MatchesTest extends TestCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
+     * @param array<mixed>|string $value
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, string $pattern): void
-    {
+    public function namedValueNotMatchesPatternAndCustomMessage(
+        array|string $value,
+        string $pattern,
+        string $message
+    ): void {
         $assertion = new Matches($value, $pattern);
 
         $assertion->setFieldName('name');
@@ -88,20 +111,26 @@ class MatchesTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
+
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
+     * @param array<mixed>|string $value
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, string $pattern): void
-    {
+    public function valueNotMatchesPatternWithCustomMessage(
+        array|string $value,
+        string $pattern,
+        string $message
+    ): void {
         $assertion = new Matches($value, $pattern);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
+
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

@@ -9,18 +9,43 @@ use Iquety\Shield\Message;
 
 class Matches extends Assertion
 {
+    /** @param array<mixed>|string $value */
     public function __construct(
-        string $value,
-        string $needle,
+        array|string $value,
+        string $pattern
     ) {
         $this->setValue($value);
 
-        $this->setAssertValue($needle);
+        $this->setAssertValue($pattern);
     }
 
     public function isValid(): bool
     {
-        return preg_match($this->getAssertValue(), $this->getValue()) === 1;
+        if (is_array($this->getValue()) === true) {
+            return $this->isValidInArray();
+        }
+
+        return $this->isMatches($this->getValue(), $this->getAssertValue());
+    }
+
+    private function isMatches(string $value, string $pattern): bool
+    {
+        return preg_match($pattern, $value) === 1;
+    }
+
+    private function isValidInArray(): bool
+    {
+        $array = $this->getValue();
+
+        foreach ($array as $item) {
+            $matched = $this->isMatches((string)$item, $this->getAssertValue());
+
+            if ($matched === true) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public function getDefaultMessage(): Message

@@ -14,16 +14,14 @@ class IsAlphaNumericTest extends TestCase
     {
         $list = [];
 
-        $list['Text 1'] = ['TEXTO123'];
-        $list['Text 2'] = ['abc123'];
-        $list['Text 3'] = ['123xyz'];
-        $list['Text 4'] = ['TextoABC123'];
-        $list['Text 5'] = ['123XYZTexto'];
-        $list['Text 6'] = ['Texto123XYZ'];
-        $list['Text 7'] = ['TextoABC'];
-        $list['Text 8'] = ['abc123xyz'];
-        $list['Text 9'] = ['123'];
-        $list['Text 10'] = ['texto'];
+        $list['Upper case string'] = ['CORAÇÃO'];
+        $list['Lower case string'] = ['coração'];
+        $list['Upper case string + integer'] = ['CORAÇÃO123'];
+        $list['Lower case string + integer'] = ['coração123'];
+        $list['string integer'] = ['123'];
+        $list['string decimal'] = ['12.3'];
+        $list['integer'] = [123];
+        $list['decimal'] = [12.3];
 
         return $list;
     }
@@ -32,9 +30,9 @@ class IsAlphaNumericTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(string $text): void
+    public function valueIsAlphaNumeric(float|int|string $alphaNumeric): void
     {
-        $assertion = new IsAlphaNumeric($text);
+        $assertion = new IsAlphaNumeric($alphaNumeric);
 
         $this->assertTrue($assertion->isValid());
     }
@@ -71,9 +69,9 @@ class IsAlphaNumericTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(string $text): void
+    public function valueIsNotAlphaNumeric(string $value): void
     {
-        $assertion = new IsAlphaNumeric($text);
+        $assertion = new IsAlphaNumeric($value);
 
         $this->assertFalse($assertion->isValid());
 
@@ -87,9 +85,9 @@ class IsAlphaNumericTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $text): void
+    public function namedValueIsNotAlphaNumeric(string $value): void
     {
-        $assertion = new IsAlphaNumeric($text);
+        $assertion = new IsAlphaNumeric($value);
 
         $assertion->setFieldName('name');
 
@@ -105,29 +103,29 @@ class IsAlphaNumericTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $text): void
+    public function namedValueIsNotAlphaNumericAndCustomMessage(string $value): void
     {
-        $assertion = new IsAlphaNumeric($text);
+        $assertion = new IsAlphaNumeric($value);
 
         $assertion->setFieldName('name');
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $text está errado");
+        $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $text): void
+    public function valueIsNotAlphaNumericWithCustomMessage(string $value): void
     {
-        $assertion = new IsAlphaNumeric($text);
+        $assertion = new IsAlphaNumeric($value);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $text está errado");
+        $this->assertEquals($assertion->makeMessage(), "O valor $value está errado");
     }
 }

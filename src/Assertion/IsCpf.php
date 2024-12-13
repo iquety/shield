@@ -19,7 +19,7 @@ class IsCpf extends Assertion
         $value = (string)$this->getValue();
 
         // mantém somente os números
-        $cpf = preg_replace('/[^0-9]/is', '', $value);
+        $cpf = (string)preg_replace('/[^0-9]/is', '', $value);
 
         // cpf deve possuir 11 caracteres
         if (strlen($cpf) !== 11) {

@@ -16,9 +16,10 @@ class IsAlpha extends Assertion
 
     public function isValid(): bool
     {
-        $pattern = '/^[a-zA-ZáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕçÇ\s]+$/';
-
-        return preg_match($pattern, $this->getValue()) === 1;
+        return preg_match(
+            '/^[a-zA-ZáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕçÇ\s]+$/',
+            $this->getValue()
+        ) === 1;
     }
 
     public function getDefaultMessage(): Message

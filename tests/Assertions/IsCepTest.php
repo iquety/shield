@@ -17,6 +17,10 @@ class IsCepTest extends TestCase
             'Valid CEP - format 2' => ['98765-432'],
             'Valid CEP - format 3' => ['01000-000'],
             'Valid CEP - format 4' => ['99999-999'],
+            'Valid CEP - format 5' => [12345678],
+            'Valid CEP - format 6' => [98765432],
+            'Valid CEP - format 7' => [11000000],
+            'Valid CEP - format 8' => [99999999],
         ];
     }
 
@@ -24,7 +28,7 @@ class IsCepTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(string $cepCode): void
+    public function valueIsCep(int|string $cepCode): void
     {
         $assertion = new IsCep($cepCode);
 
@@ -42,6 +46,8 @@ class IsCepTest extends TestCase
             'Invalid CEP - empty string' => [''],
             'Invalid CEP - spaces' => ['123 45-678'],
             'Invalid CEP - special characters' => ['123@5-678'],
+            'Invalid CEP - many numbers' => [123567890],
+            'Invalid CEP - loss numbers' => [123567],
         ];
     }
 
@@ -49,7 +55,7 @@ class IsCepTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(string $cepCode): void
+    public function valueIsNotCep(int|string $cepCode): void
     {
         $assertion = new IsCep($cepCode);
 
@@ -65,7 +71,7 @@ class IsCepTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $cepCode): void
+    public function namedValueIsNotCep(int|string $cepCode): void
     {
         $assertion = new IsCep($cepCode);
 
@@ -83,7 +89,7 @@ class IsCepTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $cepCode): void
+    public function namedValueIsNotCepAndCustomMessage(int|string $cepCode): void
     {
         $assertion = new IsCep($cepCode);
 
@@ -99,7 +105,7 @@ class IsCepTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $cepCode): void
+    public function valueIsNotCepWithCustomMessage(int|string $cepCode): void
     {
         $assertion = new IsCep($cepCode);
 

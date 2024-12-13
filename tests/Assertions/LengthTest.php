@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\Length;
+use stdClass;
 
 class LengthTest extends AssertionCase
 {
@@ -70,6 +71,8 @@ class LengthTest extends AssertionCase
 
         $list['array with 7 elements has not length 8'] = $this->makeIncorrectItem($arrayValue, 8);
         $list['array with 7 elements has not length 6'] = $this->makeIncorrectItem($arrayValue, 6);
+
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
 
         return $list;
     }

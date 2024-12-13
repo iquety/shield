@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\LessThan;
+use stdClass;
 
 class LessThanTest extends AssertionCase
 {
@@ -71,6 +72,8 @@ class LessThanTest extends AssertionCase
 
         $list['array with 7 elements is not less than 7'] = $this->makeIncorrectItem($arrayValue, 7);
         $list['array with 7 elements is not less than 6'] = $this->makeIncorrectItem($arrayValue, 6);
+
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
 
         return $list;
     }

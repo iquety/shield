@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\GreaterThanOrEqualTo;
+use stdClass;
 use Tests\TestCase;
 
 class GreaterThanOrEqualToTest extends TestCase
@@ -62,6 +63,8 @@ class GreaterThanOrEqualToTest extends TestCase
         $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
 
         $list['array less'] = [[1, 2, 3], 4, "O valor $value está errado"];
+
+        $list['object not valid'] = [new stdClass(), 0, 'O valor stdClass:[] está errado'];
 
         return $list;
     }

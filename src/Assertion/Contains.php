@@ -11,7 +11,7 @@ class Contains extends Assertion
 {
     /** @param array<int|string,mixed>|string $value */
     public function __construct(
-        array|string $value,
+        mixed $value,
         float|int|string $needle,
     ) {
         $this->setValue($value);
@@ -21,11 +21,17 @@ class Contains extends Assertion
 
     public function isValid(): bool
     {
+        $value = $this->getValue();
+
+        if (is_object($value) === true) {
+            return false;
+        }
+
         if (is_array($this->getValue()) === true) {
             return $this->isValidInArray();
         }
 
-        return str_contains($this->getValue(), (string)$this->getAssertValue()) === true;
+        return str_contains((string)$this->getValue(), (string)$this->getAssertValue()) === true;
     }
 
     private function isValidInArray(): bool

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\Matches;
+use stdClass;
 
 class MatchesTest extends AssertionCase
 {
@@ -15,6 +16,9 @@ class MatchesTest extends AssertionCase
 
         $list['utf8'] = ['Coração de Leão', '/oraç/'];
         $list['numeric'] = ['123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/'];
+        $list['decimal'] = [123456.7891, '/(\d{6})\.(\d{4})/'];
+        //$list['decimal'] = [123456.7890, '/(\d{6})\.(\d{4})/']; // coerção de tipo remove o zero
+        $list['integer'] = [1234567890, '/(\d{5})(\d{5})/'];
         $list['latin'] = ['Hello World', '/World/'];
         $list['array'] = [['Coração', 'Hello World', 'Leão'], '/World/'];
 
@@ -26,18 +30,15 @@ class MatchesTest extends AssertionCase
      * @dataProvider correctValueProvider
      * @param array<mixed>|string $value
      */
-    public function valueMatchesPattern(array|string $value, string $pattern): void
+    public function valueMatchesPattern(mixed $value, string $pattern): void
     {
         $assertion = new Matches($value, $pattern);
 
         $this->assertTrue($assertion->isValid());
     }
 
-    /**
-     * @param array<mixed>|string $value
-     * @return array<int,mixed>
-     */
-    private function makeIncorrectItem(array|string $value, string $pattern): array
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, string $pattern): array
     {
         $messageValue = $this->makeMessageValue($value);
 
@@ -55,6 +56,10 @@ class MatchesTest extends AssertionCase
 
         $list['utf8'] = $this->makeIncorrectItem('Coração de Leão', '/orax/');
         $list['array'] = $this->makeIncorrectItem(['Coração', 'Hello World', 'Leão'], '/Worlx/');
+        $list['decimal'] = $this->makeIncorrectItem(123456.7891, '/(\d{3})456\.7899/');
+        $list['integer'] = $this->makeIncorrectItem(1234567890, '/(\d{5})67899/');
+
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '/x/');
 
         return $list;
     }
@@ -62,9 +67,8 @@ class MatchesTest extends AssertionCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
-     * @param array<mixed>|string $value
      */
-    public function valueNotMatchesPattern(array|string $value, string $pattern): void
+    public function valueNotMatchesPattern(mixed $value, string $pattern): void
     {
         $assertion = new Matches($value, $pattern);
 
@@ -79,9 +83,8 @@ class MatchesTest extends AssertionCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
-     * @param array<mixed>|string $value
      */
-    public function namedValueNotMatchesPattern(array|string $value, string $pattern): void
+    public function namedValueNotMatchesPattern(mixed $value, string $pattern): void
     {
         $assertion = new Matches($value, $pattern);
 
@@ -97,10 +100,9 @@ class MatchesTest extends AssertionCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
-     * @param array<mixed>|string $value
      */
     public function namedValueNotMatchesPatternAndCustomMessage(
-        array|string $value,
+        mixed $value,
         string $pattern,
         string $message
     ): void {
@@ -118,10 +120,9 @@ class MatchesTest extends AssertionCase
     /**
      * @test
      * @dataProvider incorrectValueProvider
-     * @param array<mixed>|string $value
      */
     public function valueNotMatchesPatternWithCustomMessage(
-        array|string $value,
+        mixed $value,
         string $pattern,
         string $message
     ): void {

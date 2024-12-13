@@ -9,9 +9,8 @@ use Iquety\Shield\Message;
 
 class StartsWith extends Assertion
 {
-    /** @param array<int|string,mixed>|string $value */
     public function __construct(
-        array|string $value,
+        mixed $value,
         float|int|string $needle,
     ) {
         $this->setValue($value);
@@ -21,11 +20,17 @@ class StartsWith extends Assertion
 
     public function isValid(): bool
     {
-        if (is_array($this->getValue()) === true) {
+        $value = $this->getValue();
+
+        if (is_object($value) === true) {
+            return false;
+        }
+
+        if (is_array($value) === true) {
             return $this->isValidInArray();
         }
 
-        return str_starts_with($this->getValue(), (string)$this->getAssertValue());
+        return str_starts_with($value, (string)$this->getAssertValue());
     }
 
     private function isValidInArray(): bool

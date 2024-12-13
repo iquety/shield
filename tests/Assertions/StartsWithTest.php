@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\StartsWith;
+use stdClass;
 use Tests\TestCase;
 
 class StartsWithTest extends AssertionCase
@@ -97,6 +98,8 @@ class StartsWithTest extends AssertionCase
 
         array_pop($arrayValue);
         $list['array not start with string ção!'] = $this->makeIncorrectItem($arrayValue, 'ção!');
+
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '');
 
         return $list;
     }

@@ -11,7 +11,7 @@ class Matches extends Assertion
 {
     /** @param array<mixed>|string $value */
     public function __construct(
-        array|string $value,
+        mixed $value,
         string $pattern
     ) {
         $this->setValue($value);
@@ -21,11 +21,17 @@ class Matches extends Assertion
 
     public function isValid(): bool
     {
+        $value = $this->getValue();
+
+        if (is_object($value) === true) {
+            return false;
+        }
+
         if (is_array($this->getValue()) === true) {
             return $this->isValidInArray();
         }
 
-        return $this->isMatches($this->getValue(), $this->getAssertValue());
+        return $this->isMatches((string)$this->getValue(), $this->getAssertValue());
     }
 
     private function isMatches(string $value, string $pattern): bool

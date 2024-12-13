@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\GreaterThan;
+use stdClass;
 
 class GreaterThanTest extends AssertionCase
 {
@@ -71,6 +72,8 @@ class GreaterThanTest extends AssertionCase
 
         $list['array with 7 elements is not greater than 7'] = $this->makeIncorrectItem($arrayValue, 7);
         $list['array with 7 elements is not greater than 8'] = $this->makeIncorrectItem($arrayValue, 8);
+
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
 
         return $list;
     }

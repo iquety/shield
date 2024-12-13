@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\MaxLength;
+use stdClass;
 use Tests\TestCase;
 
 class MaxLengthTest extends TestCase
@@ -50,6 +51,8 @@ class MaxLengthTest extends TestCase
         $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
 
         $list['array'] = [[1, 2, 3], 2, $value, '2'];
+
+        $list['object not valid'] = [new stdClass(), 0, 'stdClass:[]', '0'];
 
         return $list;
     }

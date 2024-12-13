@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\EndsWith;
+use stdClass;
 
 class EndsWithTest extends AssertionCase
 {
@@ -97,6 +98,8 @@ class EndsWithTest extends AssertionCase
 
         array_pop($arrayValue);
         $list['array not end with null string'] = $this->makeIncorrectItem($arrayValue, 'null');
+
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '');
 
         return $list;
     }

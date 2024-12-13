@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\Contains;
+use stdClass;
 
 class ContainsTest extends AssertionCase
 {
@@ -13,9 +14,43 @@ class ContainsTest extends AssertionCase
     {
         $list = [];
 
-        $list['string contains @Cora'] = ['@Coração!#', '@Co'];
-        $list['string contains ção'] = ['@Coração!#', 'ra'];
-        $list['string contains ção!#'] = ['@Coração!#', 'ção!#'];
+        $list['string @Coração!# contains @Co'] = ['@Coração!#', '@Co'];
+        $list['string @Coração!# contains ra'] = ['@Coração!#', 'ra'];
+        $list['string @Coração!# contains ção!#'] = ['@Coração!#', 'ção!#'];
+
+        $list['string 123456 contains string 123'] = ['123456', '123'];
+        $list['string 123456 contains string 345'] = ['123456', '345'];
+        $list['string 123456 contains string 456'] = ['123456', '456'];
+
+        $list['string 123456 contains integer 123'] = ['123456', 123];
+        $list['string 123456 contains integer 345'] = ['123456', 345];
+        $list['string 123456 contains integer 456'] = ['123456', 456];
+
+        $list['integer 123456 contains string 123'] = [123456, '123'];
+        $list['integer 123456 contains string 345'] = [123456, '345'];
+        $list['integer 123456 contains string 456'] = [123456, '456'];
+
+        $list['integer 123456 contains integer 123'] = [123456, 123];
+        $list['integer 123456 contains integer 345'] = [123456, 345];
+        $list['integer 123456 contains integer 456'] = [123456, 456];
+
+        //
+
+        $list['string 12.3456 contains string 12.3'] = ['12.3456', '12.3'];
+        $list['string 1234.56 contains string 34.5'] = ['1234.56', '34.5'];
+        $list['string 12345.6 contains string 45.6'] = ['12345.6', '45.6'];
+
+        $list['string 12.3456 contains decimal 12.3'] = ['12.3456', 12.3];
+        $list['string 1234.56 contains decimal 34.5'] = ['1234.56', 34.5];
+        $list['string 12345.6 contains decimal 45.6'] = ['12345.6', 45.6];
+
+        $list['decimal 12.3456 contains string 12.3'] = [12.3456, '12.3'];
+        $list['decimal 1234.56 contains string 34.5'] = [1234.56, '34.5'];
+        $list['decimal 12345.6 contains string 45.6'] = [12345.6, '45.6'];
+
+        $list['decimal 12.3456 contains decimal 12.3'] = [12.3456, 12.3];
+        $list['decimal 1234.56 contains decimal 34.5'] = [1234.56, 34.5];
+        $list['decimal 12345.6 contains decimal 45.6'] = [12345.6, 45.6];
 
         $valueArray = [
             111,    // inteiro
@@ -48,7 +83,9 @@ class ContainsTest extends AssertionCase
     /** @return array<int,mixed> */
     private function makeIncorrectItem(mixed $value, mixed $partial): array
     {
-        $messageValue = $this->makeMessageValue($value);
+        $messageValue = is_array($value) === true
+            ? $this->makeArrayMessage($value)
+            : $this->makeMessageValue($value);
 
         return [
             $value,
@@ -62,8 +99,8 @@ class ContainsTest extends AssertionCase
     {
         $list = [];
 
-        $list['string not contains $'] = $this->makeIncorrectItem('@Coração!#', '$');
-        $list['string not contains @Cr'] = ['@Coração!#', '@Cr', "O valor @Coração!# está errado"];
+        $list['string @Coração!# not contains $'] = $this->makeIncorrectItem('@Coração!#', '$');
+        $list['string @Coração!# not contains @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
 
         $arrayValue = [
             111,    // inteiro
@@ -73,19 +110,14 @@ class ContainsTest extends AssertionCase
             'ção!#' // string
         ];
 
-        $messageValue = $this->makeArrayMessage($arrayValue);
+        $list['array not contains string 111'] = $this->makeIncorrectItem($arrayValue, '111');
+        $list['array not contains integer 222'] = $this->makeIncorrectItem($arrayValue, 222);
+        $list['array not contains string 22.5'] = $this->makeIncorrectItem($arrayValue, '22.5');
+        $list['array not contains decimal 11.5'] = $this->makeIncorrectItem($arrayValue, 11.5);
+        $list['array not contains string $'] = $this->makeIncorrectItem($arrayValue, '$');
+        $list['array not contains string @Cr'] = $this->makeIncorrectItem($arrayValue, '@Cr');
 
-        $list['array not contains string 111'] = [$arrayValue, '111', "O valor $messageValue está errado"];
-
-        $list['array not contains inteiro 222'] = [$arrayValue, 222, "O valor $messageValue está errado"];
-
-        $list['array not contains string 22.5'] = [$arrayValue, '22.5', "O valor $messageValue está errado"];
-
-        $list['array not contains decimal 11.5'] = [$arrayValue, 11.5, "O valor $messageValue está errado"];
-
-        $list['array not contains string $'] = [$arrayValue, '$', "O valor $messageValue está errado"];
-
-        $list['array not contains string @Cr'] = [$arrayValue, '@Cr', "O valor $messageValue está errado"];
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '');
 
         return $list;
     }

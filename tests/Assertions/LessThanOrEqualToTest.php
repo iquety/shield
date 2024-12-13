@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\LessThanOrEqualTo;
+use stdClass;
 
 class LessThanOrEqualToTest extends AssertionCase
 {
@@ -64,16 +65,14 @@ class LessThanOrEqualToTest extends AssertionCase
         $list = [];
 
         $list['string 7 chars is not less than 6'] = $this->makeIncorrectItem('Palavra', 6);
-
-         $list['string utf8 7 chars is not less than 6'] = $this->makeIncorrectItem('Coração', 6);
-
+        $list['string utf8 7 chars is not less than 6'] = $this->makeIncorrectItem('Coração', 6);
         $list['integer 9 is not less than 8'] = $this->makeIncorrectItem(9, 8);
-
         $list['float 9.8 is not less than 9.7'] = $this->makeIncorrectItem(9.8, 9.7);
 
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements is not less than 6'] = $this->makeIncorrectItem($arrayValue, 6);
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
 
         return $list;
     }

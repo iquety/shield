@@ -9,9 +9,8 @@ use Iquety\Shield\Message;
 
 class LessThan extends Assertion
 {
-    /** @param array<int|string,mixed>|float|int|string $value */
     public function __construct(
-        array|float|int|string $value,
+        mixed $value,
         float|int $length,
     ) {
         $this->setValue($value);
@@ -21,15 +20,21 @@ class LessThan extends Assertion
 
     public function isValid(): bool
     {
-        if (is_array($this->getValue()) === true) {
-            return $this->isValidArray($this->getValue(), $this->getAssertValue());
+        $value = $this->getValue();
+
+        if (is_object($value) === true) {
+            return false;
         }
 
-        if (is_string($this->getValue()) === true) {
-            return $this->isValidString($this->getValue(), $this->getAssertValue());
+        if (is_array($value) === true) {
+            return $this->isValidArray($value, $this->getAssertValue());
         }
 
-        return $this->isValidNumber($this->getValue(), $this->getAssertValue());
+        if (is_string($value) === true) {
+            return $this->isValidString($value, $this->getAssertValue());
+        }
+
+        return $this->isValidNumber($value, $this->getAssertValue());
     }
 
     /** @param array<int|string,mixed> $value */

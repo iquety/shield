@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\NotContains;
+use stdClass;
 
 class NotContainsTest extends AssertionCase
 {
@@ -30,6 +31,8 @@ class NotContainsTest extends AssertionCase
         $list['array not contains decimal 11.5'] = [$arrayValue, 11.5];
         $list['array not contains string $'] = [$arrayValue, '$'];
         $list['array not contains string @Cr'] = [$arrayValue, '@Cr'];
+
+        $list['object not valid'] = [new stdClass(), ''];
 
         return $list;
     }

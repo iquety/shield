@@ -9,15 +9,17 @@ use Iquety\Shield\Message;
 
 class IsCpf extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(int|string $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
+        $value = (string)$this->getValue();
+
         // mantém somente os números
-        $cpf = preg_replace('/[^0-9]/is', '', $this->getValue());
+        $cpf = preg_replace('/[^0-9]/is', '', $value);
 
         // cpf deve possuir 11 caracteres
         if (strlen($cpf) !== 11) {

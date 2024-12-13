@@ -19,6 +19,9 @@ class IsCpfTest extends TestCase
             'Valid CPF - 4' => ['18726078880'],
             'Valid CPF - 5' => ['25465988215'],
             'Valid CPF - 6' => ['15334753770'],
+            'Valid CPF - 7' => [18726078880],
+            'Valid CPF - 8' => [25465988215],
+            'Valid CPF - 9' => [15334753770],
         ];
     }
 
@@ -26,7 +29,7 @@ class IsCpfTest extends TestCase
      * @test
      * @dataProvider validCpfProvider
      */
-    public function assertedCase(string $cpf): void
+    public function valueIsCpf(int|string $cpf): void
     {
         $assertion = new IsCpf($cpf);
 
@@ -48,6 +51,17 @@ class IsCpfTest extends TestCase
             'Invalid CPF - 8' => ['88888888888'],
             'Invalid CPF - 9' => ['99999999999'],
 
+            'Invalid integer CPF - 0' => [00000000000],
+            'Invalid integer CPF - 1' => [11111111111],
+            'Invalid integer CPF - 2' => [22222222222],
+            'Invalid integer CPF - 3' => [33333333333],
+            'Invalid integer CPF - 4' => [44444444444],
+            'Invalid integer CPF - 5' => [55555555555],
+            'Invalid integer CPF - 6' => [66666666666],
+            'Invalid integer CPF - 7' => [77777777777],
+            'Invalid integer CPF - 8' => [88888888888],
+            'Invalid integer CPF - 9' => [99999999999],
+
             'Invalid CPF - 0 signals' => ['000.000.000-00'],
             'Invalid CPF - 1 signals' => ['111.111.111-11'],
             'Invalid CPF - 2 signals' => ['222.222.222-22'],
@@ -68,6 +82,16 @@ class IsCpfTest extends TestCase
             'Invalid CPF - 7 calc' => ['13090940977'],
             'Invalid CPF - 8 calc' => ['01303816444'],
             'Invalid CPF - 9 calc' => ['00704535034'],
+
+            'Invalid CPF integer- 1 calc' => [17734532493],
+            'Invalid CPF integer- 2 calc' => [10135829304],
+            'Invalid CPF integer- 3 calc' => [12070275460],
+            'Invalid CPF integer- 4 calc' => [10138625504],
+            'Invalid CPF integer- 5 calc' => [10127436714],
+            'Invalid CPF integer- 6 calc' => [10136123694],
+            'Invalid CPF integer- 7 calc' => [13090940977],
+            'Invalid CPF integer- 8 calc' => [11303816444],
+            'Invalid CPF integer- 9 calc' => [10704535034],
         ];
     }
 
@@ -75,7 +99,7 @@ class IsCpfTest extends TestCase
      * @test
      * @dataProvider invalidCpfProvider
      */
-    public function notAssertedCase(string $cpf): void
+    public function valueIsNotCpf(int|string $cpf): void
     {
         $assertion = new IsCpf($cpf);
 
@@ -91,7 +115,7 @@ class IsCpfTest extends TestCase
      * @test
      * @dataProvider invalidCpfProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $cpf): void
+    public function namedValueIsNotCpf(int|string $cpf): void
     {
         $assertion = new IsCpf($cpf);
 
@@ -109,7 +133,7 @@ class IsCpfTest extends TestCase
      * @test
      * @dataProvider invalidCpfProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $cpf): void
+    public function namedValueIsNotCpfAndCustomMessage(int|string $cpf): void
     {
         $assertion = new IsCpf($cpf);
 
@@ -125,7 +149,7 @@ class IsCpfTest extends TestCase
      * @test
      * @dataProvider invalidCpfProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $cpf): void
+    public function valueIsNotCpfWithCustomMessage(int|string $cpf): void
     {
         $assertion = new IsCpf($cpf);
 

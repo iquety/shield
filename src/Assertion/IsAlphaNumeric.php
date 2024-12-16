@@ -25,7 +25,7 @@ class IsAlphaNumeric extends Assertion
         ) {
             return false;
         }
-        
+
         if (is_numeric($value) === true) {
             return true;
         }

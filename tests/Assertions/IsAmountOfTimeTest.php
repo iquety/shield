@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsAmountOfTime;
-use Tests\TestCase;
+use stdClass;
 
-class IsAmountOfTimeTest extends TestCase
+class IsAmountOfTimeTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
@@ -27,11 +27,22 @@ class IsAmountOfTimeTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(string $timeString): void
+    public function valueIsAmountOfTime(string $timeValue): void
     {
-        $assertion = new IsAmountOfTime($timeString);
+        $assertion = new IsAmountOfTime($timeValue);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -39,8 +50,12 @@ class IsAmountOfTimeTest extends TestCase
     {
         $list = [];
 
-        $list['in time'] = ['23:62:62'];
-        $list['greater time'] = ['66:62:62'];
+        $list['in time']      = $this->makeIncorrectItem('23:62:62');
+        $list['greater time'] = $this->makeIncorrectItem('66:62:62');
+        $list['empty string'] = $this->makeIncorrectItem('');
+        $list['boolean']      = $this->makeIncorrectItem(false);
+        $list['array']        = $this->makeIncorrectItem(['a']);
+        $list['object']       = $this->makeIncorrectItem(new stdClass());
 
         return $list;
     }
@@ -49,9 +64,9 @@ class IsAmountOfTimeTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(string $timeString): void
+    public function valueIsNotAmountOfTime(mixed $timeValue): void
     {
-        $assertion = new IsAmountOfTime($timeString);
+        $assertion = new IsAmountOfTime($timeValue);
 
         $this->assertFalse($assertion->isValid());
 
@@ -65,9 +80,9 @@ class IsAmountOfTimeTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $timeString): void
+    public function namedValueIsNotAmountOfTime(mixed $timeValue): void
     {
-        $assertion = new IsAmountOfTime($timeString);
+        $assertion = new IsAmountOfTime($timeValue);
 
         $assertion->setFieldName('name');
 
@@ -83,29 +98,29 @@ class IsAmountOfTimeTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $timeString): void
+    public function namedValueIsNotAmountOfTimeAndCustomMessage(mixed $timeValue, string $message): void
     {
-        $assertion = new IsAmountOfTime($timeString);
+        $assertion = new IsAmountOfTime($timeValue);
 
         $assertion->setFieldName('name');
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $timeString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $timeString): void
+    public function valueIsNotAmountOfTimeWithCustomMessage(mixed $timeValue, string $message): void
     {
-        $assertion = new IsAmountOfTime($timeString);
+        $assertion = new IsAmountOfTime($timeValue);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $timeString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

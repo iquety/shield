@@ -44,7 +44,7 @@ class AssertionCase extends TestCase
         if (is_bool($value) && $value === false) {
             return 'false';
         }
-        
+
         switch (gettype($value)) {
             case 'array':
                 $messageValue = $this->makeArrayMessage($value);

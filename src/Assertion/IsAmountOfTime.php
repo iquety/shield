@@ -9,13 +9,19 @@ use Iquety\Shield\Message;
 
 class IsAmountOfTime extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
+        $value = $this->getValue();
+
+        if (is_object($value) === true || is_array($value) === true) {
+            return false;
+        }
+
         // 150:59:59
         // *:mm:ss
         $regex = '/^'
@@ -24,7 +30,7 @@ class IsAmountOfTime extends Assertion
             . ':([0-5][0-9])'
             . '$/';
 
-        if (preg_match($regex, $this->getValue()) === 1) {
+        if (preg_match($regex, (string)$value) === 1) {
             return true;
         }
 

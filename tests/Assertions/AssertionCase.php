@@ -37,6 +37,14 @@ class AssertionCase extends TestCase
 
     protected function makeMessageValue(mixed $value): string
     {
+        if (is_bool($value) && $value === true) {
+            return 'true';
+        }
+
+        if (is_bool($value) && $value === false) {
+            return 'false';
+        }
+        
         switch (gettype($value)) {
             case 'array':
                 $messageValue = $this->makeArrayMessage($value);

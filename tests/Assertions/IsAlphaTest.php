@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsAlpha;
-use Tests\TestCase;
+use stdClass;
 
-class IsAlphaTest extends TestCase
+class IsAlphaTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
@@ -24,6 +24,7 @@ class IsAlphaTest extends TestCase
         $list['Text 8'] = ['abcxyz'];
         $list['Text 9'] = ['AbCxYz'];
         $list['Text 10'] = ['texto'];
+        $list['Boolean string'] = ['false'];
 
         return $list;
     }
@@ -32,38 +33,54 @@ class IsAlphaTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(string $text): void
+    public function valueIsAlpha(mixed $value): void
     {
-        $assertion = new IsAlpha($text);
+        $assertion = new IsAlpha($value);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+    
     /** @return array<string,array<int,mixed>> */
     public function incorrectValueProvider(): array
     {
         return [
-            'ISO 8601 dirty' => ['00002024-12-31xxx'],
-            'European format dirty' => ['31/12//2024'],
-            'US format dirty' => ['xxx12/31/2024'],
-            'Alternative format dirty' => ['rr2x024.12.31'],
-            'Abbreviated month name dirty' => ['xxx31-Dec-2024'],
-            'Full month name dirty' => ['xxxDecember 31, 2024'],
-            'ISO 8601 invalid month' => ['2024-13-31'],
-            'ISO 8601 invalid day' => ['2024-12-32'],
-            'European format month' => ['31/13/2024'],
-            'European format day' => ['32/12/2024'],
-            'US format month' => ['13/31/2024'],
-            'US format day' => ['12/32/2024'],
-            'Alternative format month' => ['2024.13.31'],
-            'Alternative format day' => ['2024.12.32'],
-            'Abbreviated month name month' => ['31-Err-2024'],
-            'Abbreviated month name day' => ['32-Dec-2024'],
-            'Full month name month' => ['Invalid 31, 2024'],
-            'Full month name day' => ['December 32, 2024'],
-            'Special characters' => ['@#$%^&*()'],
-            'Numbers and special characters' => ['123@#$%'],
-            'Empty string' => [''],
+            'ISO 8601 dirty' => $this->makeIncorrectItem('00002024-12-31xxx'),
+            'European format dirty' => $this->makeIncorrectItem('31/12//2024'),
+            'US format dirty' => $this->makeIncorrectItem('xxx12/31/2024'),
+            'Alternative format dirty' => $this->makeIncorrectItem('rr2x024.12.31'),
+            'Abbreviated month name dirty' => $this->makeIncorrectItem('xxx31-Dec-2024'),
+            'Full month name dirty' => $this->makeIncorrectItem('xxxDecember 31, 2024'),
+            'ISO 8601 invalid month' => $this->makeIncorrectItem('2024-13-31'),
+            'ISO 8601 invalid day' => $this->makeIncorrectItem('2024-12-32'),
+            'European format month' => $this->makeIncorrectItem('31/13/2024'),
+            'European format day' => $this->makeIncorrectItem('32/12/2024'),
+            'US format month' => $this->makeIncorrectItem('13/31/2024'),
+            'US format day' => $this->makeIncorrectItem('12/32/2024'),
+            'Alternative format month' => $this->makeIncorrectItem('2024.13.31'),
+            'Alternative format day' => $this->makeIncorrectItem('2024.12.32'),
+            'Abbreviated month name month' => $this->makeIncorrectItem('31-Err-2024'),
+            'Abbreviated month name day' => $this->makeIncorrectItem('32-Dec-2024'),
+            'Full month name month' => $this->makeIncorrectItem('Invalid 31, 2024'),
+            'Full month name day' => $this->makeIncorrectItem('December 32, 2024'),
+            'Special characters' => $this->makeIncorrectItem('@#$%^&*()'),
+            'Numbers and special characters' => $this->makeIncorrectItem('123@#$%'),
+            'Empty string' => $this->makeIncorrectItem(''),
+            'Integer' => $this->makeIncorrectItem(123456),
+            'Decimal' => $this->makeIncorrectItem(123.456),
+            'Boolen' => $this->makeIncorrectItem(false),
+            'Array' => $this->makeIncorrectItem(['a']),
+            'Object' => $this->makeIncorrectItem(new stdClass()),
         ];
     }
 
@@ -71,9 +88,9 @@ class IsAlphaTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(string $text): void
+    public function valueIsNotAlpha(mixed $value): void
     {
-        $assertion = new IsAlpha($text);
+        $assertion = new IsAlpha($value);
 
         $this->assertFalse($assertion->isValid());
 
@@ -87,9 +104,9 @@ class IsAlphaTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $text): void
+    public function namedValueIsNotAlpha(mixed $value): void
     {
-        $assertion = new IsAlpha($text);
+        $assertion = new IsAlpha($value);
 
         $assertion->setFieldName('name');
 
@@ -105,29 +122,29 @@ class IsAlphaTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $text): void
+    public function namedValueIsNotAlphaAndCustomMessage(mixed $value, string $message): void
     {
-        $assertion = new IsAlpha($text);
+        $assertion = new IsAlpha($value);
 
         $assertion->setFieldName('name');
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $text está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $text): void
+    public function valueIsNotAlphaWithCustomMessage(mixed $value, string $message): void
     {
-        $assertion = new IsAlpha($text);
+        $assertion = new IsAlpha($value);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $text está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

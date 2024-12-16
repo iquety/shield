@@ -9,20 +9,30 @@ use Iquety\Shield\Message;
 
 class IsAlphaNumeric extends Assertion
 {
-    public function __construct(float|int|string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
-        if (is_numeric($this->getValue()) === true) {
+        $value = $this->getValue();
+
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+        ) {
+            return false;
+        }
+        
+        if (is_numeric($value) === true) {
             return true;
         }
 
         return preg_match(
             '/^[a-zA-Z0-9áéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕçÇ\s]+$/',
-            $this->getValue()
+            (string)$value
         ) === 1;
     }
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsBase64;
-use Tests\TestCase;
+use stdClass;
 
-class IsBase64Test extends TestCase
+class IsBase64Test extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
@@ -32,11 +32,22 @@ class IsBase64Test extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(string $text): void
+    public function valueIsBase64(mixed $value): void
     {
-        $assertion = new IsBase64($text);
+        $assertion = new IsBase64($value);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -44,22 +55,31 @@ class IsBase64Test extends TestCase
     {
         $list = [];
 
-        $list['Not Base64 Text 1'] = ['Te&xto123'];
-        $list['Not Base64 Text 2'] = ['abçc123='];
-        $list['Not Base64 Text 3'] = ['12á3xyz='];
-        $list['Not Base64 Text 4'] = ['Te^xtoABC123='];
-        $list['Not Base64 Text 5'] = ['123*XYZTexto='];
-        $list['Not Base64 Text 6'] = ['Text)o123XYZ='];
-        $list['Not Base64 Text 7'] = ['Tex(toABC='];
-        $list['Not Base64 Text 8'] = ['ab@c123xyz='];
-        $list['Not Base64 Text 9'] = ['13#23='];
-        $list['Not Base64 Text 10'] = ['t$exto='];
-        $list['Not Base64 Text 11'] = ['%+'];
-        $list['Not Base64 Text 12'] = ['&/'];
-        $list['Not Base64 Text 13'] = ['_='];
-        $list['Not Base64 Text 14'] = ['&=+=='];
-        $list['Not Base64 Text 15'] = ['&+/='];
-        $list['Not Base64 Text 16'] = ['&+/=='];
+        $list['Not Base64 Text 1'] = $this->makeIncorrectItem('Te&xto123');
+        $list['Not Base64 Text 2'] = $this->makeIncorrectItem('abçc123=');
+        $list['Not Base64 Text 3'] = $this->makeIncorrectItem('12á3xyz=');
+        $list['Not Base64 Text 4'] = $this->makeIncorrectItem('Te^xtoABC123=');
+        $list['Not Base64 Text 5'] = $this->makeIncorrectItem('123*XYZTexto=');
+        $list['Not Base64 Text 6'] = $this->makeIncorrectItem('Text)o123XYZ=');
+        $list['Not Base64 Text 7'] = $this->makeIncorrectItem('Tex(toABC=');
+        $list['Not Base64 Text 8']  = $this->makeIncorrectItem('ab@c123xyz=');
+        $list['Not Base64 Text 9']  = $this->makeIncorrectItem('13#23=');
+        $list['Not Base64 Text 10'] = $this->makeIncorrectItem('t$exto=');
+        $list['Not Base64 Text 11'] = $this->makeIncorrectItem('%+');
+        $list['Not Base64 Text 12'] = $this->makeIncorrectItem('&/');
+        $list['Not Base64 Text 13'] = $this->makeIncorrectItem('_=');
+        $list['Not Base64 Text 14'] = $this->makeIncorrectItem('&=+==');
+        $list['Not Base64 Text 15'] = $this->makeIncorrectItem('&+/=');
+        $list['Not Base64 Text 16'] = $this->makeIncorrectItem('&+/==');
+        $list['empty string']       = $this->makeIncorrectItem('');
+        $list['one space string']   = $this->makeIncorrectItem(' ');
+        $list['two spaces string']  = $this->makeIncorrectItem('  ');
+        $list['boolean']            = $this->makeIncorrectItem(false);
+        $list['array']              = $this->makeIncorrectItem(['a']);
+        $list['object']             = $this->makeIncorrectItem(new stdClass());
+        $list['false']              = $this->makeIncorrectItem(false);
+        $list['true']               = $this->makeIncorrectItem(true);
+        $list['null']               = $this->makeIncorrectItem(null);
 
         return $list;
     }
@@ -68,9 +88,9 @@ class IsBase64Test extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(string $text): void
+    public function valueIsNotBase64(mixed $value): void
     {
-        $assertion = new IsBase64($text);
+        $assertion = new IsBase64($value);
 
         $this->assertFalse($assertion->isValid());
 
@@ -84,9 +104,9 @@ class IsBase64Test extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $text): void
+    public function namedValueIsNotBase64(mixed $value): void
     {
-        $assertion = new IsBase64($text);
+        $assertion = new IsBase64($value);
 
         $assertion->setFieldName('name');
 
@@ -102,29 +122,29 @@ class IsBase64Test extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $text): void
+    public function namedValueIsNotBase64AndCustomMessage(mixed $value, string $message): void
     {
-        $assertion = new IsBase64($text);
+        $assertion = new IsBase64($value);
 
         $assertion->setFieldName('name');
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $text está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $text): void
+    public function valueIsNotBase64WithCustomMessage(mixed $value, string $message): void
     {
-        $assertion = new IsBase64($text);
+        $assertion = new IsBase64($value);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $text está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

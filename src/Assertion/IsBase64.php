@@ -9,14 +9,30 @@ use Iquety\Shield\Message;
 
 class IsBase64 extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
-        return preg_match('/^[A-Za-z0-9+\/=]*$/', $this->getValue()) === 1;
+        $value = $this->getValue();
+
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+        ) {
+            return false;
+        }
+
+        $value = (string)$value;
+
+        if (empty($value) === true) {
+            return false;
+        }
+
+        return preg_match('/^[A-Za-z0-9+\/=]*$/', $value) === 1;
     }
 
     public function getDefaultMessage(): Message

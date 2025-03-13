@@ -10,7 +10,6 @@ use stdClass;
 
 class IsFalseTest extends AssertionCase
 {
-
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {

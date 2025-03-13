@@ -113,7 +113,7 @@ class IsCpfTest extends AssertionCase
             'false'             => $this->makeIncorrectItem(false),
             'true'              => $this->makeIncorrectItem(true),
             'null'              => $this->makeIncorrectItem(null),
-            
+
         ];
     }
 

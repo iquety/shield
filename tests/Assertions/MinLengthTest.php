@@ -66,8 +66,8 @@ class MinLengthTest extends AssertionCase
         $list['int']              = $this->makeIncorrectItem(9, 10);
         $list['float']            = $this->makeIncorrectItem(9.9, 10);
         $list['float + int']      = $this->makeIncorrectItem(9.8, 9.9);
-        $list['array']            = $this->makeIncorrectItem([1, 2, 3], 4, );
-        $list['countable']        = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 4, );
+        $list['array']            = $this->makeIncorrectItem([1, 2, 3], 4,);
+        $list['countable']        = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 4,);
         $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
         $list['null']             = $this->makeIncorrectItem(null, 0);
 

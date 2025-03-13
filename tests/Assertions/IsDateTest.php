@@ -45,7 +45,7 @@ class IsDateTest extends AssertionCase
             "O valor $messageValue está errado" // mensagem personalizada
         ];
     }
-    
+
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {

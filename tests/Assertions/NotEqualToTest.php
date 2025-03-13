@@ -22,7 +22,7 @@ class NotEqualToTest extends AssertionCase
             'float zero' => 44.1,
         ];
 
-        foreach($typeValues as $type => $value) {
+        foreach ($typeValues as $type => $value) {
             $list["string != $type"]     = ["Palavra", $value];
             $list["object != $type"]     = [new ObjectOne(''), $value];
             $list["integer != $type"]    = [44, $value];

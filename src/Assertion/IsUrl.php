@@ -14,6 +14,10 @@ class IsUrl extends Assertion
         $this->setValue($value);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function isValid(): bool
     {
         $value = $this->getValue();

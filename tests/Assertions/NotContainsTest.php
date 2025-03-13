@@ -12,7 +12,10 @@ use Stringable;
 
 class NotContainsTest extends AssertionCase
 {
-    /** @return array<string,array<int,mixed>> */
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return array<string,array<int,mixed>>
+     */
     public function validProvider(): array
     {
         $list = [];
@@ -52,7 +55,7 @@ class NotContainsTest extends AssertionCase
             $list["array not contains $type"] = [$typeValues, $comparison];
 
             $normalizedProperty = preg_replace('/[^0-9a-z]/', '_', $type);
-            $propertyValues[$normalizedProperty] = $value;    
+            $propertyValues[$normalizedProperty] = $value;
         }
 
         foreach ($propertyValues as $property => $value) {
@@ -64,8 +67,10 @@ class NotContainsTest extends AssertionCase
         }
 
         foreach ($typeValues as $type => $value) {
-            $arrayAccessObject = new class($typeValues) implements ArrayAccess {
-                public function __construct(private array $values) {}
+            $arrayAccessObject = new class ($typeValues) implements ArrayAccess {
+                public function __construct(private array $values)
+                {
+                }
 
                 public function offsetExists(mixed $offset): bool
                 {
@@ -113,7 +118,7 @@ class NotContainsTest extends AssertionCase
         if ($value instanceof Stringable) {
             $value = (string)$value;
         }
-        
+
         $messageValue = $this->makeMessageValue($value);
 
         return [
@@ -123,7 +128,10 @@ class NotContainsTest extends AssertionCase
         ];
     }
 
-    /** @return array<string,array<int,mixed>> */
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return array<string,array<int,mixed>>
+     */
     public function invalidProvider(): array
     {
         $list = [];
@@ -150,7 +158,7 @@ class NotContainsTest extends AssertionCase
             $list["array contains $type"] = $this->makeIncorrectItem($typeValues, $value);
 
             $normalizedProperty = preg_replace('/[^0-9a-z]/', '_', $type);
-            $propertyValues[$normalizedProperty] = $value;    
+            $propertyValues[$normalizedProperty] = $value;
         }
 
         foreach ($propertyValues as $property => $value) {
@@ -160,8 +168,10 @@ class NotContainsTest extends AssertionCase
         }
 
         foreach ($typeValues as $type => $value) {
-            $arrayAccessObject = new class($typeValues) implements ArrayAccess {
-                public function __construct(private array $values) {}
+            $arrayAccessObject = new class ($typeValues) implements ArrayAccess {
+                public function __construct(private array $values)
+                {
+                }
 
                 public function offsetExists(mixed $offset): bool
                 {

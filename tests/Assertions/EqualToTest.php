@@ -72,7 +72,7 @@ class EqualToTest extends AssertionCase
             'float zero' => 44.1,
         ];
 
-        foreach($typeValues as $type => $value) {
+        foreach ($typeValues as $type => $value) {
             $list["string != $type"]     = $this->makeIncorrectItem("Palavra", $value);
             $list["object != $type"]     = $this->makeIncorrectItem(new ObjectOne(''), $value);
             $list["integer != $type"]    = $this->makeIncorrectItem(44, $value);

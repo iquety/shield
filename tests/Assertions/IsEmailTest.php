@@ -27,7 +27,7 @@ class IsEmailTest extends AssertionCase
             "O valor $messageValue está errado" // mensagem personalizada
         ];
     }
-    
+
     /** @return array<int,array<int,string>> */
     public function invalidProvider(): array
     {

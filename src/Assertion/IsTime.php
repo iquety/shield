@@ -19,12 +19,12 @@ class IsTime extends Assertion
     public function isValid(): bool
     {
         $value = $this->getValue();
-        
+
         if (
             is_bool($value) === true
             || is_object($value) === true
             || is_array($value) === true
-            || is_null($value) === true            
+            || is_null($value) === true
             || empty(trim($value)) === true
         ) {
             return false;

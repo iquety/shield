@@ -83,7 +83,7 @@ class IsTrueTest extends AssertionCase
     }
 
     /**
-     * @test 
+     * @test
      * @dataProvider invalidProvider
      */
     public function namedValueIsNotTrue(mixed $value): void
@@ -119,7 +119,7 @@ class IsTrueTest extends AssertionCase
     }
 
     /**
-     * @test 
+     * @test
      * @dataProvider invalidProvider
      */
     public function valueIsNotTrueWithCustomMessage(

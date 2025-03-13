@@ -65,7 +65,7 @@ class IsNotNullTest extends AssertionCase
     }
 
     /**
-     * @test 
+     * @test
      * @dataProvider invalidProvider
      */
     public function valueIsNull(mixed $value): void
@@ -105,8 +105,7 @@ class IsNotNullTest extends AssertionCase
     public function nameValueIsNullWithCustomMessage(
         mixed $value,
         string $message
-    ): void
-    {
+    ): void {
         $assertion = new IsNotNull($value);
 
         $assertion->setFieldName('name');
@@ -118,7 +117,7 @@ class IsNotNullTest extends AssertionCase
     }
 
     /**
-     * @test 
+     * @test
      * @dataProvider invalidProvider
      */
     public function notAssertedCaseWithCustomMessage(

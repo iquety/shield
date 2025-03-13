@@ -7,6 +7,7 @@ namespace Tests\Assertions;
 use ReflectionObject;
 use Tests\TestCase;
 
+/** @SuppressWarnings(PHPMD.NumberOfChildren) */
 class AssertionCase extends TestCase
 {
     protected function makeObjectMessage(object $object): string

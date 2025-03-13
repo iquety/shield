@@ -18,7 +18,7 @@ class NotMatchesTest extends AssertionCase
         $list['array'] = [['Coração', 'Hello World', 'Leão'], '/Worlx/'];
         $list['decimal'] = [123456.7891, '/(\d{3})456\.7899/'];
         $list['integer'] = [1234567890, '/(\d{5})67899/'];
-        
+
         $list['object not valid'] = [new stdClass(), '/x/'];
 
         return $list;
@@ -63,7 +63,7 @@ class NotMatchesTest extends AssertionCase
         $list['array']        = $this->makeIncorrectItem(['Coração', 'Hello World', 'Leão'], '/World/');
         $list['partial null'] = $this->makeIncorrectItem(null, '/nu/');
         $list['null']         = $this->makeIncorrectItem(null, '/null/');
-        
+
         return $list;
     }
 

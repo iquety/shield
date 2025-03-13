@@ -48,7 +48,10 @@ class IsCvvTest extends AssertionCase
         ];
     }
 
-    /** @return array<string,array<int,mixed>> */
+    /**
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @return array<string,array<int,mixed>>
+     */
     public function invalidProvider(): array
     {
         $list = [];
@@ -60,7 +63,7 @@ class IsCvvTest extends AssertionCase
         $list['JCB invalido'] = $this->makeIncorrectItem(CreditCardBrand::JCB, 4442);
         $list['Diners Club invalido'] = $this->makeIncorrectItem(CreditCardBrand::DINERS_CLUB, 4442);
 
-        foreach(CreditCardBrand::all() as $brand) {
+        foreach (CreditCardBrand::all() as $brand) {
             $list[$brand . ' empty string']      = $this->makeIncorrectItem(CreditCardBrand::from($brand), '');
             $list[$brand . ' one space string']  = $this->makeIncorrectItem(CreditCardBrand::from($brand), ' ');
             $list[$brand . ' two spaces string'] = $this->makeIncorrectItem(CreditCardBrand::from($brand), '  ');

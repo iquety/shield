@@ -27,7 +27,7 @@ class MaxLength extends Assertion
         if ($value instanceof Countable) {
             return $this->isValidCountable($value, $this->getAssertValue());
         }
-        
+
         if (
             is_object($value) === true
             || is_null($value) === true

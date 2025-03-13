@@ -84,12 +84,12 @@ class IsBrPhoneNumberTest extends AssertionCase
             '4004 dots' => $this->makeIncorrectItem("4004.3030"),
 
             // movel
-            'mobile' => $this->makeIncorrectItem("(87).9985-0997" ),
-            'mobile digits' => $this->makeIncorrectItem("87.9985.0997" ),
+            'mobile' => $this->makeIncorrectItem("(87).9985-0997"),
+            'mobile digits' => $this->makeIncorrectItem("87.9985.0997"),
 
             // movel SP
-            'mobile prefix 9' => $this->makeIncorrectItem("(11) 9.9985-0997" ),
-            'mobile prefix 9 digits' => $this->makeIncorrectItem("11.9.9985.0997" ),
+            'mobile prefix 9' => $this->makeIncorrectItem("(11) 9.9985-0997"),
+            'mobile prefix 9 digits' => $this->makeIncorrectItem("11.9.9985.0997"),
 
             'Invalid Phone - 7 chars' => $this->makeIncorrectItem('1234567'),
             'Invalid Phone - 9 chars' => $this->makeIncorrectItem('123456789'),

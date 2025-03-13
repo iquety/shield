@@ -9,7 +9,7 @@ use Iquety\Shield\Message;
 
 class IsIp extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }

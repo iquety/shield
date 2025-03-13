@@ -10,7 +10,7 @@ use Iquety\Shield\Message;
 
 class IsCreditCardBrand extends Assertion
 {
-    public function __construct(int|string $creditCardNumber, CreditCardBrand $brand)
+    public function __construct(mixed $creditCardNumber, CreditCardBrand $brand)
     {
         // Remove todos os caracteres não-numéricos
         $this->setValue($creditCardNumber);
@@ -28,9 +28,17 @@ class IsCreditCardBrand extends Assertion
     /** @SuppressWarnings(PHPMD.StaticAccess) */
     private function resolvedBrand(): CreditCardBrand
     {
-        $creditCardNumber = (string)$this->getValue();
+        $creditCardNumber = $this->getValue();
 
-        $creditCardNumber = (string)preg_replace('/\D/', '', $creditCardNumber);
+        if (
+            is_bool($creditCardNumber) === true
+            || is_object($creditCardNumber) === true
+            || is_array($creditCardNumber) === true
+        ) {
+            return CreditCardBrand::UNKNOWN;
+        }
+
+        $creditCardNumber = (string)preg_replace('/\D/', '', (string)$creditCardNumber);
 
         $brandList = CreditCardBrand::all();
 

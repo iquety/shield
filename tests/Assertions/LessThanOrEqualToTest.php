@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayObject;
 use Iquety\Shield\Assertion\LessThanOrEqualTo;
 use stdClass;
 
 class LessThanOrEqualToTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -33,12 +34,15 @@ class LessThanOrEqualToTest extends AssertionCase
         $list['array with 7 elements is less than 7'] = [$arrayValue, 7];
         $list['array with 7 elements is less than 8'] = [$arrayValue, 8];
 
+        $list['countable with 7 elements is less than 7'] = [new ArrayObject($arrayValue), 7];
+        $list['countable with 7 elements is less than 8'] = [new ArrayObject($arrayValue), 8];
+
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
     public function valueLessThanOrEqualToLength(mixed $value, float|int $length): void
     {
@@ -60,7 +64,7 @@ class LessThanOrEqualToTest extends AssertionCase
     }
 
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
@@ -72,6 +76,7 @@ class LessThanOrEqualToTest extends AssertionCase
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements is not less than 6'] = $this->makeIncorrectItem($arrayValue, 6);
+        $list['countable with 7 elements is not less than 6'] = $this->makeIncorrectItem(new ArrayObject($arrayValue), 6);
         $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
 
         return $list;
@@ -79,7 +84,7 @@ class LessThanOrEqualToTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotLessThanOrEqualToLength(mixed $value, float|int $length): void
     {
@@ -95,7 +100,7 @@ class LessThanOrEqualToTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotLessThanOrEqualToLength(mixed $value, float|int $length): void
     {
@@ -113,7 +118,7 @@ class LessThanOrEqualToTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotLessThanOrEqualToLengthAndCustomMessage(
         mixed $value,
@@ -133,7 +138,7 @@ class LessThanOrEqualToTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotLessThanOrEqualToLengthWithCustomMessage(
         mixed $value,

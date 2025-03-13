@@ -10,7 +10,7 @@ use Iquety\Shield\Message;
 
 class IsCvv extends Assertion
 {
-    public function __construct(int|string $cvv, CreditCardBrand $brand)
+    public function __construct(mixed $cvv, CreditCardBrand $brand)
     {
         $this->setValue($cvv);
 
@@ -19,11 +19,20 @@ class IsCvv extends Assertion
 
     public function isValid(): bool
     {
+        $cvv = $this->getValue();
+
+        if (
+            is_bool($cvv) === true
+            || is_object($cvv) === true
+            || is_array($cvv) === true
+        ) {
+            return false;
+        }
+
         $brand = $this->getAssertValue();
-        $cvv = (string)$this->getValue();
 
         // Remove todos os caracteres não-numéricos
-        $cvv = (string)preg_replace('/\D/', '', $cvv);
+        $cvv = (string)preg_replace('/\D/', '', (string)$cvv);
 
         return match ($brand) {
             CreditCardBrand::AMEX => $this->resolveAmex($cvv),

@@ -6,13 +6,12 @@ namespace Tests\Assertions;
 
 use Iquety\Shield\CreditCardBrand;
 use Iquety\Shield\Assertion\IsCvv;
-use Tests\TestCase;
+use stdClass;
 
-// @todo
-class IsCvvTest extends TestCase
+class IsCvvTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -28,35 +27,59 @@ class IsCvvTest extends TestCase
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function assertedCase(CreditCardBrand $brand, int|string $number): void
+    public function valueIsCvv(CreditCardBrand $brand, mixed $number): void
     {
         $assertion = new IsCvv($number, $brand);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(CreditCardBrand $brand, mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $brand,
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['Amex invalido'] = [CreditCardBrand::AMEX, 444];
-        $list['MasterCard invalido'] = [CreditCardBrand::MASTERCARD, 4442];
-        $list['Visa invalido'] = [CreditCardBrand::VISA, 4442];
-        $list['Discover invalido'] = [CreditCardBrand::DISCOVER, 4442];
-        $list['JCB invalido'] = [CreditCardBrand::JCB, 4442];
-        $list['Diners Club invalido'] = [CreditCardBrand::DINERS_CLUB, 4442];
+        $list['Amex invalido'] = $this->makeIncorrectItem(CreditCardBrand::AMEX, 444);
+        $list['MasterCard invalido'] = $this->makeIncorrectItem(CreditCardBrand::MASTERCARD, 4442);
+        $list['Visa invalido'] = $this->makeIncorrectItem(CreditCardBrand::VISA, 4442);
+        $list['Discover invalido'] = $this->makeIncorrectItem(CreditCardBrand::DISCOVER, 4442);
+        $list['JCB invalido'] = $this->makeIncorrectItem(CreditCardBrand::JCB, 4442);
+        $list['Diners Club invalido'] = $this->makeIncorrectItem(CreditCardBrand::DINERS_CLUB, 4442);
+
+        foreach(CreditCardBrand::all() as $brand) {
+            $list[$brand . ' empty string']      = $this->makeIncorrectItem(CreditCardBrand::from($brand), '');
+            $list[$brand . ' one space string']  = $this->makeIncorrectItem(CreditCardBrand::from($brand), ' ');
+            $list[$brand . ' two spaces string'] = $this->makeIncorrectItem(CreditCardBrand::from($brand), '  ');
+            $list[$brand . ' boolean']           = $this->makeIncorrectItem(CreditCardBrand::from($brand), false);
+            $list[$brand . ' array']             = $this->makeIncorrectItem(CreditCardBrand::from($brand), ['a']);
+            $list[$brand . ' object']            = $this->makeIncorrectItem(CreditCardBrand::from($brand), new stdClass());
+            $list[$brand . ' false']             = $this->makeIncorrectItem(CreditCardBrand::from($brand), false);
+            $list[$brand . ' true']              = $this->makeIncorrectItem(CreditCardBrand::from($brand), true);
+            $list[$brand . ' null']              = $this->makeIncorrectItem(CreditCardBrand::from($brand), null);
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCase(CreditCardBrand $brand, int|string $number): void
+    public function valueIsNotCvv(CreditCardBrand $brand, mixed $number): void
     {
         $assertion = new IsCvv($number, $brand);
 
@@ -68,11 +91,11 @@ class IsCvvTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertion(
+    public function namedValueIsNotCvv(
         CreditCardBrand $brand,
-        int|string $number
+        mixed $number
     ): void {
         $assertion = new IsCvv($number, $brand);
 
@@ -88,11 +111,12 @@ class IsCvvTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueIsNotCvvWithCustomMessage(
         CreditCardBrand $brand,
-        int|string $number
+        mixed $number,
+        string $message
     ): void {
         $assertion = new IsCvv($number, $brand);
 
@@ -101,22 +125,23 @@ class IsCvvTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $number está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueIsNotCvvWithCustomMessage(
         CreditCardBrand $brand,
-        int|string $number
+        mixed $number,
+        string $message
     ): void {
         $assertion = new IsCvv($number, $brand);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $number está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

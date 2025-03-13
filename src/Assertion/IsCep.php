@@ -9,7 +9,7 @@ use Iquety\Shield\Message;
 
 class IsCep extends Assertion
 {
-    public function __construct(int|string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
@@ -18,9 +18,17 @@ class IsCep extends Assertion
     {
         $value = $this->getValue();
 
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+        ) {
+            return false;
+        }
+
         if (is_string($value) === true) {
             // Brazilian CEP format: 5 digits, a hyphen, and 3 digits (e.g., 12345-678)
-            return preg_match('/^\d{5}-\d{3}$/', $value) === 1;
+            return preg_match('/^\d{5}-\d{3}$/', trim($value)) === 1;
         }
 
         return mb_strlen((string)$value) === 8;

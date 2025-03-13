@@ -9,14 +9,24 @@ use Iquety\Shield\Message;
 
 class IsHexadecimal extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
-        return preg_match('/^[0-9a-fA-F]+$/', $this->getValue()) === 1;
+        $value = $this->getValue();
+
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+        ) {
+            return false;
+        }
+
+        return preg_match('/^[0-9a-fA-F]+$/', (string)$value) === 1;
     }
 
     public function getDefaultMessage(): Message

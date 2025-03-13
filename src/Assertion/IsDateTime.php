@@ -11,13 +11,25 @@ use Iquety\Shield\Message;
 
 class IsDateTime extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
+        $value = $this->getValue();
+
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_null($value) === true
+            || is_array($value) === true
+            || empty(trim($value)) === true
+        ) {
+            return false;
+        }
+
         // European format : 31/12/2024 23:59:59
         //                   dd/mm/yyyy hh:mm:ss
         $regex = '/^'
@@ -28,7 +40,7 @@ class IsDateTime extends Assertion
             . '(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])'
             . '$/';
 
-        if (preg_match($regex, $this->getValue()) === 1) {
+        if (preg_match($regex, (string)$value) === 1) {
             return true;
         }
 
@@ -42,7 +54,7 @@ class IsDateTime extends Assertion
             . '(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])'
             . '$/';
 
-        if (preg_match($regex, $this->getValue()) === 1) {
+        if (preg_match($regex, (string)$value) === 1) {
             return true;
         }
 
@@ -51,7 +63,7 @@ class IsDateTime extends Assertion
         // Abbreviated month name = '31-Dec-2024 23:59:59'
         // Full month name = 'December 31, 2024 23:59:59'
         try {
-            new DateTime($this->getValue());
+            new DateTime((string)$value);
 
             return true;
         } catch (Exception) {

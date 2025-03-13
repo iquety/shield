@@ -22,7 +22,11 @@ class StartsWith extends Assertion
     {
         $value = $this->getValue();
 
-        if (is_object($value) === true) {
+        if (
+            is_object($value) === true
+            || is_bool($value) === true
+            || is_null($value) === true
+        ) {
             return false;
         }
 

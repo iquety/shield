@@ -11,7 +11,7 @@ use Tests\TestCase;
 class StartsWithTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -44,7 +44,7 @@ class StartsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
     public function valueStartsWithPartial(mixed $value, mixed $partial): void
     {
@@ -66,12 +66,16 @@ class StartsWithTest extends AssertionCase
     }
 
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string not start with $'] = $this->makeIncorrectItem('@Coração!#', '$');
+        $list['string not start with $']   = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string not start with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
+        $list['object not valid']          = $this->makeIncorrectItem(new stdClass(), '');
+        $list['null not valid']            = $this->makeIncorrectItem(null, '');
+        $list['true not valid']            = $this->makeIncorrectItem(true, '');
+        $list['false not valid']           = $this->makeIncorrectItem(false, '');
 
         $arrayValue = [
             null,
@@ -99,14 +103,12 @@ class StartsWithTest extends AssertionCase
         array_pop($arrayValue);
         $list['array not start with string ção!'] = $this->makeIncorrectItem($arrayValue, 'ção!');
 
-        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '');
-
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotStartsWithPartial(mixed $value, float|int|string $needle): void
     {
@@ -119,7 +121,7 @@ class StartsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotStartsWithPartial(mixed $value, float|int|string $needle): void
     {
@@ -137,7 +139,7 @@ class StartsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotStartsWithPartialAndCustomMessage(
         mixed $value,
@@ -157,7 +159,7 @@ class StartsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotStartsWithPartialAndCustomMessage(
         mixed $value,

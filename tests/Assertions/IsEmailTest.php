@@ -28,7 +28,7 @@ class IsEmailTest extends AssertionCase
         ];
     }
 
-    /** @return array<int,array<int,string>> */
+    /** @return array<string,array<int,string>> */
     public function invalidProvider(): array
     {
         $list = [];

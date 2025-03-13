@@ -44,6 +44,7 @@ class Contains extends Assertion
         return str_contains((string)$this->getValue(), (string)$this->getAssertValue()) === true;
     }
 
+    /** @param ArrayAccess<string,mixed> $list */
     private function isValidInAcessible(ArrayAccess $list, mixed $element): bool
     {
         $list = (array)$list;
@@ -62,6 +63,7 @@ class Contains extends Assertion
         return $this->isValidInArray($normalizedList, $element);
     }
 
+    /** @param array<string,mixed> $list */
     private function isValidInArray(array $list, mixed $element): bool
     {
         return array_search($element, $list, true) !== false;

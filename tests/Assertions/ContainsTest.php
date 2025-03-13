@@ -14,6 +14,7 @@ class ContainsTest extends AssertionCase
 {
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array<string,array<int,mixed>>
      */
     public function validProvider(): array
@@ -85,6 +86,7 @@ class ContainsTest extends AssertionCase
 
         foreach ($typeValues as $type => $value) {
             $arrayAccessObject = new class ($typeValues) implements ArrayAccess {
+                /** @param array<int|string,mixed> $values */
                 public function __construct(private array $values)
                 {
                 }
@@ -201,6 +203,7 @@ class ContainsTest extends AssertionCase
 
         foreach ($typeValues as $type => $value) {
             $arrayAccessObject = new class ($typeValues) implements ArrayAccess {
+                /** @param array<int|string,mixed> $values */
                 public function __construct(private array $values)
                 {
                 }

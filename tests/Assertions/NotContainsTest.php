@@ -68,6 +68,7 @@ class NotContainsTest extends AssertionCase
 
         foreach ($typeValues as $type => $value) {
             $arrayAccessObject = new class ($typeValues) implements ArrayAccess {
+                /** @param array<int|string,mixed> $values */
                 public function __construct(private array $values)
                 {
                 }
@@ -169,6 +170,7 @@ class NotContainsTest extends AssertionCase
 
         foreach ($typeValues as $type => $value) {
             $arrayAccessObject = new class ($typeValues) implements ArrayAccess {
+                /** @param array<int|string,mixed> $values */
                 public function __construct(private array $values)
                 {
                 }

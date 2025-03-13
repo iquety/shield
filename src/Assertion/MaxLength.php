@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
+use Countable;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
@@ -23,7 +24,14 @@ class MaxLength extends Assertion
     {
         $value = $this->getValue();
 
-        if (is_object($value) === true) {
+        if ($value instanceof Countable) {
+            return $this->isValidCountable($value, $this->getAssertValue());
+        }
+        
+        if (
+            is_object($value) === true
+            || is_null($value) === true
+        ) {
             return false;
         }
 
@@ -36,6 +44,11 @@ class MaxLength extends Assertion
         }
 
         return $this->isValidNumber($value, $this->getAssertValue());
+    }
+
+    private function isValidCountable(Countable $value, float|int $length): bool
+    {
+        return $value->count() <= (int)$length;
     }
 
     /** @param array<int|string,mixed> $value */

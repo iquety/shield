@@ -4,54 +4,75 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayObject;
 use Iquety\Shield\Assertion\IsEmpty;
-use Tests\TestCase;
+use stdClass;
 
-class IsEmptyTest extends TestCase
+class IsEmptyTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function emptyValuesProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
-        $list['string'] = [''];
-        $list['null'] = [null];
-        $list['int'] = [0];
-        $list['float'] = [0.0];
-        $list['array'] = [[]];
+        $list['empty string']      = [''];
+        $list['one space string']  = [' '];
+        $list['two spaces string'] = ['  '];
+        $list['null']              = [null];
+        $list['int']               = [0];
+        $list['float']             = [0.0];
+        $list['array']             = [[]];
+        $list['boolean'] = [false];
+        $list['empty countable']   = [new ArrayObject()];
+
+        // não contável é considerado vazio
+        $list['uncontable'] = [new stdClass()];
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider emptyValuesProvider
+     * @dataProvider validProvider
      */
-    public function assertedCase(mixed $value): void
+    public function valueIsEmpty(mixed $value): void
     {
         $assertion = new IsEmpty($value);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function notEmptyValuesProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['x', 'x'];
-        $list['int'] = [1, '1'];
-        $list['float'] = [1.0, '1'];
-        $list['array'] = [['x'], '["x"]'];
+        $list['string']    = $this->makeIncorrectItem('x');
+        $list['int']       = $this->makeIncorrectItem(1);
+        $list['float']     = $this->makeIncorrectItem(1.0);
+        $list['array']     = $this->makeIncorrectItem(['x']);
+        $list['boolean']   = $this->makeIncorrectItem(true);
+        $list['countable'] = $this->makeIncorrectItem(new ArrayObject(['value']));
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider notEmptyValuesProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCase(mixed $value): void
+    public function valueIsNotEmpty(mixed $value): void
     {
         $assertion = new IsEmpty($value);
 
@@ -65,9 +86,9 @@ class IsEmptyTest extends TestCase
 
     /**
      * @test
-     * @dataProvider notEmptyValuesProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value): void
+    public function namedValueIsNotEmpty(mixed $value): void
     {
         $assertion = new IsEmpty($value);
 
@@ -83,9 +104,9 @@ class IsEmptyTest extends TestCase
 
     /**
      * @test
-     * @dataProvider notEmptyValuesProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, string $valueString): void
+    public function namedValueIsNotEmptyWithCustomMessage(mixed $value, string $message): void
     {
         $assertion = new IsEmpty($value);
 
@@ -94,20 +115,20 @@ class IsEmptyTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $valueString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider notEmptyValuesProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, string $valueString): void
+    public function valueIsNotEmptyWithCustomMessage(mixed $value, string $message): void
     {
         $assertion = new IsEmpty($value);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $valueString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

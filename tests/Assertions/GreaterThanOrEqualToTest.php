@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayObject;
 use Iquety\Shield\Assertion\GreaterThanOrEqualTo;
 use stdClass;
-use Tests\TestCase;
 
-class GreaterThanOrEqualToTest extends TestCase
+class GreaterThanOrEqualToTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -35,12 +35,15 @@ class GreaterThanOrEqualToTest extends TestCase
         $list['array with 7 elements is greater than 7'] = [$arrayValue, 7];
         $list['array with 7 elements is greater than 6'] = [$arrayValue, 6];
 
+        $list['countable with 7 elements is greater than 7'] = [new ArrayObject($arrayValue), 7];
+        $list['countable with 7 elements is greater than 6'] = [new ArrayObject($arrayValue), 6];
+
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
     public function valueGreaterOrEqualTo(mixed $value, float|int $length): void
     {
@@ -49,29 +52,37 @@ class GreaterThanOrEqualToTest extends TestCase
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, float|int $length): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $length,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 10, "O valor Palavra está errado"];
-        $list['string utf8'] = ['coração', 10, "O valor coração está errado"]; // exatamente 7 caracteres
-        $list['int'] = [9, 10, "O valor 9 está errado"];
-        $list['float'] = [9.9, 10.0, "O valor 9.9 está errado"];
-        $list['float + int'] = [9.8, 10, "O valor 9.8 está errado"];
-
-        $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
-
-        $list['array less'] = [[1, 2, 3], 4, "O valor $value está errado"];
-
-        $list['object not valid'] = [new stdClass(), 0, 'O valor stdClass:[] está errado'];
+        $list['string']           = $this->makeIncorrectItem('Palavra', 10);
+        $list['string utf8']      = $this->makeIncorrectItem('coração', 10); // exatamente 7 caracteres
+        $list['int']              = $this->makeIncorrectItem(9, 10);
+        $list['float']            = $this->makeIncorrectItem(9.9, 10.0);
+        $list['float + int']      = $this->makeIncorrectItem(9.8, 10);
+        $list['array less']       = $this->makeIncorrectItem([1, 2, 3], 4);
+        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotGreaterOrEqualTo(mixed $value, float|int $length): void
     {
@@ -87,7 +98,7 @@ class GreaterThanOrEqualToTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotGreaterOrEqualTo(mixed $value, float|int $length): void
     {
@@ -105,7 +116,7 @@ class GreaterThanOrEqualToTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotGreaterOrEqualToWithCustomMessage(
         mixed $value,
@@ -125,7 +136,7 @@ class GreaterThanOrEqualToTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotGreaterOrEqualToWithCustomMessage(
         mixed $value,

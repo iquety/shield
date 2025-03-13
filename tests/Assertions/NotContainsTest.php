@@ -4,42 +4,101 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayAccess;
+use Exception;
 use Iquety\Shield\Assertion\NotContains;
 use stdClass;
+use Stringable;
 
 class NotContainsTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
         $list['string @Coração!# not contains $'] = ['@Coração!#', '$'];
         $list['string @Coração!# not contains @Cr'] = ['@Coração!#', '@Cr'];
 
-        $arrayValue = [
-            111,    // inteiro
-            '222',  // inteiro string
-            22.5,   // decimal
-            '11.5', // decimal string
-            'ção!#' // string
-        ];
-
-        $list['array not contains string 111'] = [$arrayValue, '111'];
-        $list['array not contains inteiro 222'] = [$arrayValue, 222];
-        $list['array not contains string 22.5'] = [$arrayValue, '22.5'];
-        $list['array not contains decimal 11.5'] = [$arrayValue, 11.5];
-        $list['array not contains string $'] = [$arrayValue, '$'];
-        $list['array not contains string @Cr'] = [$arrayValue, '@Cr'];
+        $list['stringable @Coração!# contains $']   = [new Exception('@Coração!#'), '$'];
+        $list['stringable @Coração!# contains @Cr'] = [new Exception('@Coração!#'), '@Cr'];
 
         $list['object not valid'] = [new stdClass(), ''];
+        $list['null not valid']   = [null, ''];
+        $list['true not valid']   = [true, ''];
+        $list['false not valid']  = [false, ''];
+
+        $typeValues = [
+            'integer 111'    => 111,      // inteiro
+            'string 222'     => '222',    // inteiro string
+            'decimal 22.5'   => 22.5,     // decimal
+            'string 11.5'    => '11.5',   // decimal string
+            'partial string' => 'ção!#'   // string
+        ];
+
+        $typeSearch = [
+            'integer 111'    => '111',     // inteiro
+            'string 222'     => 222,   // inteiro string
+            'decimal 22.5'   => '22.5',     // decimal
+            'string 11.5'    => 11.5,   // decimal string
+            'partial string' => '$'     // string
+        ];
+
+        $propertyValues = [];
+
+        foreach ($typeValues as $type => $value) {
+            $comparison = $typeSearch[$type];
+
+            $list["array not contains $type"] = [$typeValues, $comparison];
+
+            $normalizedProperty = preg_replace('/[^0-9a-z]/', '_', $type);
+            $propertyValues[$normalizedProperty] = $value;    
+        }
+
+        foreach ($propertyValues as $property => $value) {
+            $comparison = $typeSearch[$type];
+
+            $stdObject = (object)$propertyValues;
+
+            $list["stdClass not contains $property"] = [$stdObject, $comparison];
+        }
+
+        foreach ($typeValues as $type => $value) {
+            $arrayAccessObject = new class($typeValues) implements ArrayAccess {
+                public function __construct(private array $values) {}
+
+                public function offsetExists(mixed $offset): bool
+                {
+                    return isset($this->values[$offset]);
+                }
+
+                public function offsetGet(mixed $offset): mixed
+                {
+                    return $this->values[$offset] ?? null;
+                }
+
+                public function offsetSet(mixed $offset, mixed $value): void
+                {
+                    $this->values[$offset] = $value;
+                }
+
+                public function offsetUnset(mixed $offset): void
+                {
+                    unset($this->values[$offset]);
+                }
+            };
+
+            $comparison = $typeSearch[$type];
+
+            $list["accessible contains $type"] = [$arrayAccessObject, $comparison];
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
     public function valueNotContainsNeedle(mixed $value, float|int|string $needle): void
     {
@@ -51,6 +110,10 @@ class NotContainsTest extends AssertionCase
     /** @return array<int,mixed> */
     private function makeIncorrectItem(mixed $value, mixed $partial): array
     {
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
+        
         $messageValue = $this->makeMessageValue($value);
 
         return [
@@ -61,34 +124,75 @@ class NotContainsTest extends AssertionCase
     }
 
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string contains @Cora'] = $this->makeIncorrectItem('@Coração!#', '@Co');
-        $list['string contains ção'] = $this->makeIncorrectItem('@Coração!#', 'ra');
+        $list['string contains @Co'] = $this->makeIncorrectItem('@Coração!#', '@Co');
+        $list['string contains ra'] = $this->makeIncorrectItem('@Coração!#', 'ra');
         $list['string contains ção!#'] = $this->makeIncorrectItem('@Coração!#', 'ção!#');
 
-        $valueArray = [
-            111,    // inteiro
-            '222',  // inteiro string
-            22.5,   // decimal
-            '11.5', // decimal string
-            'ção!#' // string
+        $list['stringable @Coração!# contains @Co']   = $this->makeIncorrectItem(new Exception('@Coração!#'), '@Co');
+        $list['stringable @Coração!# contains ra']    = $this->makeIncorrectItem(new Exception('@Coração!#'), 'ra');
+        $list['stringable @Coração!# contains ção!#'] = $this->makeIncorrectItem(new Exception('@Coração!#'), 'ção!#');
+
+        $typeValues = [
+            'integer 111'    => 111,    // inteiro
+            'string 222'     => '222',  // inteiro string
+            'decimal 22.5'   => 22.5,   // decimal
+            'string 11.5'    => '11.5', // decimal string
+            'partial string' => 'ção!#' // string
         ];
 
-        $list['array contains integer 111'] = $this->makeIncorrectItem($valueArray, 111);
-        $list['array contains string 222'] = $this->makeIncorrectItem($valueArray, '222');
-        $list['array contains decimal 22.5'] = $this->makeIncorrectItem($valueArray, 22.5);
-        $list['array contains string 11.5'] = $this->makeIncorrectItem($valueArray, '11.5');
-        $list['array contains string'] = $this->makeIncorrectItem($valueArray, 'ção!#');
+        $propertyValues = [];
+
+        foreach ($typeValues as $type => $value) {
+            $list["array contains $type"] = $this->makeIncorrectItem($typeValues, $value);
+
+            $normalizedProperty = preg_replace('/[^0-9a-z]/', '_', $type);
+            $propertyValues[$normalizedProperty] = $value;    
+        }
+
+        foreach ($propertyValues as $property => $value) {
+            $stdObject = (object)$propertyValues;
+
+            $list["stdClass contains $property"] = $this->makeIncorrectItem($stdObject, $value);
+        }
+
+        foreach ($typeValues as $type => $value) {
+            $arrayAccessObject = new class($typeValues) implements ArrayAccess {
+                public function __construct(private array $values) {}
+
+                public function offsetExists(mixed $offset): bool
+                {
+                    return isset($this->values[$offset]);
+                }
+
+                public function offsetGet(mixed $offset): mixed
+                {
+                    return $this->values[$offset] ?? null;
+                }
+
+                public function offsetSet(mixed $offset, mixed $value): void
+                {
+                    $this->values[$offset] = $value;
+                }
+
+                public function offsetUnset(mixed $offset): void
+                {
+                    unset($this->values[$offset]);
+                }
+            };
+
+            $list["accessible contains $type"] = $this->makeIncorrectItem($arrayAccessObject, $value);
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueContainsNeedle(mixed $value, float|int|string $needle): void
     {
@@ -104,7 +208,7 @@ class NotContainsTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueContainsNeedle(mixed $value, float|int|string $needle): void
     {
@@ -121,7 +225,7 @@ class NotContainsTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueContainsNeedleAndCustomMessage(
         mixed $value,
@@ -140,7 +244,7 @@ class NotContainsTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueContainsNeedleWithCustomMessage(
         mixed $value,

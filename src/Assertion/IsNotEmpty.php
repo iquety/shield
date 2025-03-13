@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
+use Countable;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
@@ -16,7 +17,40 @@ class IsNotEmpty extends Assertion
 
     public function isValid(): bool
     {
-        return empty($this->getValue()) === false;
+        $value = $this->getValue();
+
+        if ($value instanceof Countable) {
+            return $value->count() > 0;
+        }
+
+        if (is_object($value) === true) {
+            return false;
+        }
+
+        if (is_array($value) === true) {
+            return count($value) > 0;
+        }
+
+        if (is_bool($value) === true) {
+            return $value === true;
+        }
+
+        if (is_string($value) === true) {
+            return $this->stringIsNotEmpty($value);
+        }
+
+        if (is_numeric($value) === true) {
+            return $value > 0;
+        }
+
+        return is_null($value) === false;
+    }
+
+    private function stringIsNotEmpty(string $value): bool
+    {
+        $value = trim($value);
+
+        return empty($value) === false;
     }
 
     public function getDefaultMessage(): Message

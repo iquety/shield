@@ -11,7 +11,7 @@ use ValueError;
 
 class IsCreditCard extends Assertion
 {
-    public function __construct(int|string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
@@ -19,10 +19,14 @@ class IsCreditCard extends Assertion
     /** @SuppressWarnings(PHPMD.StaticAccess) */
     public function isValid(): bool
     {
-        $value = (string)$this->getValue();
+        $value = $this->getValue();
+
+        if (is_object($value) === true || is_array($value) === true) {
+            return false;
+        }
 
         // Remove todos os caracteres não-numéricos
-        $value = (string)preg_replace('/\D/', '', $value);
+        $value = (string)preg_replace('/\D/', '', (string)$value);
 
         try {
             CreditCardBrand::fromNumber($value);

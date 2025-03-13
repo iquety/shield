@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsCreditCard;
-use Tests\TestCase;
+use stdClass;
 
-class IsCreditCardTest extends TestCase
+class IsCreditCardTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
@@ -45,11 +45,22 @@ class IsCreditCardTest extends TestCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function assertedCase(int|string $number): void
+    public function valueIsCreditCard(mixed $number): void
     {
         $assertion = new IsCreditCard($number);
 
         $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -57,11 +68,18 @@ class IsCreditCardTest extends TestCase
     {
         $list = [];
 
-        $list['Random number'] = [ '1234567890123456'];
-        $list['Too short'] = [ '4111111111111'];
-        $list['Too long'] = [ '55000000000000000000'];
-        $list['Non-numeric'] = [ 'abcdefg'];
-        $list['Empty string'] = [ '' ];
+        $list['random number']     = $this->makeIncorrectItem('1234567890123456');
+        $list['too short']         = $this->makeIncorrectItem('4111111111111');
+        $list['too long']          = $this->makeIncorrectItem('55000000000000000000');
+        $list['non-numeric']       = $this->makeIncorrectItem('abcdefg');
+        $list['empty string']      = $this->makeIncorrectItem('');
+        $list['one space string']  = $this->makeIncorrectItem(' ');
+        $list['two spaces string'] = $this->makeIncorrectItem('  ');
+        $list['array']             = $this->makeIncorrectItem(['a']);
+        $list['object']            = $this->makeIncorrectItem(new stdClass());
+        $list['false']             = $this->makeIncorrectItem(false);
+        $list['true']              = $this->makeIncorrectItem(true);
+        $list['null']              = $this->makeIncorrectItem(null);
 
         return $list;
     }
@@ -70,7 +88,7 @@ class IsCreditCardTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCase(string $number): void
+    public function valueIsNotCreditCard(mixed $number): void
     {
         $assertion = new IsCreditCard($number);
 
@@ -86,7 +104,7 @@ class IsCreditCardTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $number): void
+    public function namedValueIsNotCreditCard(mixed $number): void
     {
         $assertion = new IsCreditCard($number);
 
@@ -104,7 +122,7 @@ class IsCreditCardTest extends TestCase
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $number): void
+    public function namedValueIsNotCreditCardAndCustomMessage(mixed $number, string $message): void
     {
         $assertion = new IsCreditCard($number);
 
@@ -113,20 +131,20 @@ class IsCreditCardTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $number está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
      * @dataProvider incorrectValueProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $number): void
+    public function valueIsNotCreditCardAndCustomMessage(mixed $number, string $message): void
     {
         $assertion = new IsCreditCard($number);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $number está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

@@ -50,12 +50,17 @@ class IsAmountOfTimeTest extends AssertionCase
     {
         $list = [];
 
-        $list['in time']      = $this->makeIncorrectItem('23:62:62');
-        $list['greater time'] = $this->makeIncorrectItem('66:62:62');
-        $list['empty string'] = $this->makeIncorrectItem('');
-        $list['boolean']      = $this->makeIncorrectItem(false);
-        $list['array']        = $this->makeIncorrectItem(['a']);
-        $list['object']       = $this->makeIncorrectItem(new stdClass());
+        $list['in time']           = $this->makeIncorrectItem('23:62:62');
+        $list['greater time']      = $this->makeIncorrectItem('66:62:62');
+        $list['empty string']      = $this->makeIncorrectItem('');
+        $list['one space string']  = $this->makeIncorrectItem(' ');
+        $list['two spaces string'] = $this->makeIncorrectItem('  ');
+        $list['boolean']           = $this->makeIncorrectItem(false);
+        $list['array']             = $this->makeIncorrectItem(['a']);
+        $list['object']            = $this->makeIncorrectItem(new stdClass());
+        $list['false']             = $this->makeIncorrectItem(false);
+        $list['true']              = $this->makeIncorrectItem(true);
+        $list['null']              = $this->makeIncorrectItem(null);
 
         return $list;
     }

@@ -45,6 +45,10 @@ class AssertionCase extends TestCase
             return 'false';
         }
 
+        if ($value === null) {
+            return 'null';
+        }
+
         switch (gettype($value)) {
             case 'array':
                 $messageValue = $this->makeArrayMessage($value);

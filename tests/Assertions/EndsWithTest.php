@@ -10,7 +10,7 @@ use stdClass;
 class EndsWithTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -44,7 +44,7 @@ class EndsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
     public function valueEndsWithPartial(mixed $value, mixed $partial): void
     {
@@ -66,12 +66,16 @@ class EndsWithTest extends AssertionCase
     }
 
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string not end with $'] = $this->makeIncorrectItem('@Coração!#', '$');
+        $list['string not end with $']   = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string not end with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
+        $list['object not valid']        = $this->makeIncorrectItem(new stdClass(), '');
+        $list['null not valid']          = $this->makeIncorrectItem(null, '');
+        $list['true not valid']          = $this->makeIncorrectItem(true, '');
+        $list['false not valid']         = $this->makeIncorrectItem(false, '');
 
         $arrayValue = [
             null,
@@ -99,14 +103,12 @@ class EndsWithTest extends AssertionCase
         array_pop($arrayValue);
         $list['array not end with null string'] = $this->makeIncorrectItem($arrayValue, 'null');
 
-        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '');
-
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotEndsWithPartial(mixed $value, float|int|string $needle): void
     {
@@ -119,7 +121,7 @@ class EndsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotEndsWithPartial(mixed $value, float|int|string $needle): void
     {
@@ -137,7 +139,7 @@ class EndsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotEndsWithPartialWithCustomMessage(
         mixed $value,
@@ -157,7 +159,7 @@ class EndsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotEndsWithPartialAndCustomMessage(
         mixed $value,

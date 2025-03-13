@@ -67,12 +67,13 @@ class IsCvvTest extends AssertionCase
             $list[$brand . ' empty string']      = $this->makeIncorrectItem(CreditCardBrand::from($brand), '');
             $list[$brand . ' one space string']  = $this->makeIncorrectItem(CreditCardBrand::from($brand), ' ');
             $list[$brand . ' two spaces string'] = $this->makeIncorrectItem(CreditCardBrand::from($brand), '  ');
-            $list[$brand . ' boolean']           = $this->makeIncorrectItem(CreditCardBrand::from($brand), false);
-            $list[$brand . ' array']             = $this->makeIncorrectItem(CreditCardBrand::from($brand), ['a']);
-            $list[$brand . ' object']            = $this->makeIncorrectItem(CreditCardBrand::from($brand), new stdClass());
-            $list[$brand . ' false']             = $this->makeIncorrectItem(CreditCardBrand::from($brand), false);
-            $list[$brand . ' true']              = $this->makeIncorrectItem(CreditCardBrand::from($brand), true);
-            $list[$brand . ' null']              = $this->makeIncorrectItem(CreditCardBrand::from($brand), null);
+
+            $list[$brand . ' boolean'] = $this->makeIncorrectItem(CreditCardBrand::from($brand), false);
+            $list[$brand . ' array']   = $this->makeIncorrectItem(CreditCardBrand::from($brand), ['a']);
+            $list[$brand . ' object']  = $this->makeIncorrectItem(CreditCardBrand::from($brand), new stdClass());
+            $list[$brand . ' false']   = $this->makeIncorrectItem(CreditCardBrand::from($brand), false);
+            $list[$brand . ' true']    = $this->makeIncorrectItem(CreditCardBrand::from($brand), true);
+            $list[$brand . ' null']    = $this->makeIncorrectItem(CreditCardBrand::from($brand), null);
         }
 
         return $list;

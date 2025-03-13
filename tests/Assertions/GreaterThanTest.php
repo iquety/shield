@@ -75,8 +75,11 @@ class GreaterThanTest extends AssertionCase
         $list['array with 7 elements is not greater than 7'] = $this->makeIncorrectItem($arrayValue, 7);
         $list['array with 7 elements is not greater than 8'] = $this->makeIncorrectItem($arrayValue, 8);
 
-        $list['countable with 7 elements is not greater than 7'] = $this->makeIncorrectItem(new ArrayObject($arrayValue), 7);
-        $list['countable with 7 elements is not greater than 8'] = $this->makeIncorrectItem(new ArrayObject($arrayValue), 8);
+        $list['countable with 7 elements is not greater than 7']
+            = $this->makeIncorrectItem(new ArrayObject($arrayValue), 7);
+
+        $list['countable with 7 elements is not greater than 8']
+            = $this->makeIncorrectItem(new ArrayObject($arrayValue), 8);
 
         $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
 

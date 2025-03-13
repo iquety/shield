@@ -76,7 +76,8 @@ class LessThanOrEqualToTest extends AssertionCase
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements is not less than 6'] = $this->makeIncorrectItem($arrayValue, 6);
-        $list['countable with 7 elements is not less than 6'] = $this->makeIncorrectItem(new ArrayObject($arrayValue), 6);
+        $list['countable with 7 elements is not less than 6']
+            = $this->makeIncorrectItem(new ArrayObject($arrayValue), 6);
         $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
 
         return $list;

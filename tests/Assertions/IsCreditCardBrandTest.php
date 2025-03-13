@@ -83,14 +83,27 @@ class IsCreditCardBrandTest extends AssertionCase
             $list["Too short $brand 8 digits"]  = $this->makeIncorrectItem('41111111', CreditCardBrand::from($brand));
             $list["Too short $brand 9 digits"]  = $this->makeIncorrectItem('411111111', CreditCardBrand::from($brand));
             $list["Too short $brand 10 digits"] = $this->makeIncorrectItem('4111111111', CreditCardBrand::from($brand));
-            $list["Too short $brand 11 digits"] = $this->makeIncorrectItem('41111111111', CreditCardBrand::from($brand));
-            $list["Too short $brand 12 digits"] = $this->makeIncorrectItem('411111111111', CreditCardBrand::from($brand));
-            $list["Too short $brand 13 digits"] = $this->makeIncorrectItem('4111111111111', CreditCardBrand::from($brand));
 
-            $list["Too long $brand 17"] = $this->makeIncorrectItem('55000000000000000', CreditCardBrand::from($brand));
-            $list["Too long $brand 18"] = $this->makeIncorrectItem('550000000000000000', CreditCardBrand::from($brand));
-            $list["Too long $brand 19"] = $this->makeIncorrectItem('5500000000000000000', CreditCardBrand::from($brand));
-            $list["Too long $brand 20"] = $this->makeIncorrectItem('55000000000000000000', CreditCardBrand::from($brand));
+            $list["Too short $brand 11 digits"]
+                = $this->makeIncorrectItem('41111111111', CreditCardBrand::from($brand));
+
+            $list["Too short $brand 12 digits"]
+                = $this->makeIncorrectItem('411111111111', CreditCardBrand::from($brand));
+
+            $list["Too short $brand 13 digits"]
+                = $this->makeIncorrectItem('4111111111111', CreditCardBrand::from($brand));
+
+            $list["Too long $brand 17"]
+                = $this->makeIncorrectItem('55000000000000000', CreditCardBrand::from($brand));
+
+            $list["Too long $brand 18"]
+                = $this->makeIncorrectItem('550000000000000000', CreditCardBrand::from($brand));
+
+            $list["Too long $brand 19"]
+                = $this->makeIncorrectItem('5500000000000000000', CreditCardBrand::from($brand));
+
+            $list["Too long $brand 20"]
+                = $this->makeIncorrectItem('55000000000000000000', CreditCardBrand::from($brand));
 
             $list["Non-numeric $brand"]  = $this->makeIncorrectItem('abcdefg', CreditCardBrand::from($brand));
             $list["Empty string $brand"] = $this->makeIncorrectItem('', CreditCardBrand::from($brand));

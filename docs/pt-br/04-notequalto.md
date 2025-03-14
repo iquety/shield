@@ -1,6 +1,6 @@
 # EqualTo
 
-[◂ Contains](04-notcontains.md) | [Sumário da Documentação](indice.md) | [NotMatches ▸](04-notmatches.md)
+[◂ NotContains](04-notcontains.md) | [Sumário da Documentação](indice.md) | [NotMatches ▸](04-notmatches.md)
 -- | -- | --
 
 Verifica se ambos os valores são diferentes.
@@ -25,5 +25,5 @@ new EqualTo(true, null);
 new EqualTo(false, 'x');
 ```
 
-[◂ Contains](04-notcontains.md) | [Sumário da Documentação](indice.md) | [NotMatches ▸](04-notmatches.md)
+[◂ NotContains](04-notcontains.md) | [Sumário da Documentação](indice.md) | [NotMatches ▸](04-notmatches.md)
 -- | -- | --

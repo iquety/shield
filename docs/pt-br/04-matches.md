@@ -1,6 +1,6 @@
 # Matches
 
-[◂ EqualTo](04-equalto.md) | [Sumário da Documentação](indice.md) | [Contains ▸](04-notcontains.md)
+[◂ EqualTo](04-equalto.md) | [Sumário da Documentação](indice.md) | [NotContains ▸](04-notcontains.md)
 -- | -- | --
 
 O valor completo corresponde ou contém um trecho da expressão regular.
@@ -30,5 +30,5 @@ new Matches(null, '/null/');
 new Matches(null, '/nu/');
 ```
 
-[◂ EqualTo](04-equalto.md) | [Sumário da Documentação](indice.md) | [Contains ▸](04-notcontains.md)
+[◂ EqualTo](04-equalto.md) | [Sumário da Documentação](indice.md) | [NotContains ▸](04-notcontains.md)
 -- | -- | --

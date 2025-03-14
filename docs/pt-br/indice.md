@@ -18,7 +18,7 @@ disponíveis e usufruir ao máximo da biblioteca.
 - [EndsWith](04-endswith.md)
 - [EqualTo](04-equalto.md)
 - [Matches](04-matches.md)
-- [Contains](04-notcontains.md)
+- [NotContains](04-notcontains.md)
 - [EqualTo](04-notequalto.md)
 - [NotMatches](04-notmatches.md)
 - [StartsWith](04-startswith.md)

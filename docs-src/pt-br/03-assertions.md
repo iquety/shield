@@ -4,6 +4,49 @@
 
 As seguintes asserções são usadas para validar o valor de uma variável:
 
+## Contains
+
+O valor completo contém o valor parcial.
+
+```php
+// string contém a palavra 'texto'
+new Contains('Meu texto', 'texto');
+
+// string contém o número 123
+new Contains('123456', 123);
+
+// número contém a string 12.3
+new Contains(12.3456, '12.3');
+
+// número contém o número 123
+new Contains(123456, 123);
+
+// Objetos do tipo \Stringable contém a palavra 'texto'
+new Contains(new Exception('Meu texto'), 'texto');
+
+// Array contém o elemento 'texto'
+new Contains(['Meu', 'texto'], 'texto');
+
+// Objetos do tipo \ArrayAccess contém o elemento 'texto'
+new Contains(new ArrayObject(['Meu', 'texto']), 'texto');
+
+// Objetos do tipo \stdClass contém a propriedade pública 'texto'
+$stdObject = new stdClass();
+$stdObject->one = 'Meu';
+$stdObject->two = 'Texto';
+new Contains($stdObject, 'texto');
+```
+
+## EndsWith
+
+O valor completo termina com o valor parcial.
+
+```php
+new EndsWith($stdObject);
+```
+
+
+
 | Asserção             | Descrição                                           |
 | :--                  | :--                                                 |
 | Contains             | O valor contém o valor esperado                     |
@@ -13,9 +56,14 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 | GreaterThanOrEqualTo | O valor é maior ou igual ao esperado                |
 | IsAlpha              | O valor contém apenas letras                        |
 | IsAlphaNumeric       | O valor contém apenas letras e números              |
-| IsBase32             | O valor é uma string codificada em base32           |
+| IsAmountOfTime       | O valor é uma hora sem limite (ex.: 99:59:59)       |
 | IsBase64             | O valor é uma string codificada em base64           |
-| IsCreditCard         | O valor é um cartão de crédito válido               |
+| IsBrPhoneNumber      | O valor é um telefone brasileiro                    |
+| IsCep                | O valor é um CEP                                    |
+| IsCpf                | O valor é um CPF                                    |
+| IsCreditCard         | O valor é um cartão de crédito                      |
+| IsCreditCardBrand    | O valor é uma banderia de cartão de crédito         |
+| IsCvv                | O valor é um código de verificação de cartão de crédito |
 | IsDate               | O valor é uma data válida                           |
 | IsDateTime           | O valor é uma data e hora válida                    |
 | IsEmail              | O valor é um e-mail válido                          |
@@ -28,9 +76,7 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 | IsNotEmpty           | O valor não é vazio                                 |
 | IsNotNull            | O valor não é nulo                                  |
 | IsNull               | O valor é nulo                                      |
-| IsPhoneNumber        | O valor é um número de telefone válido              |
-| IsPostalCode         | O valor é um código postal válido                   |
-| IsTime               | O valor é uma hora válida                           |
+| IsTime               | O valor é uma hora válida (ex.: 23:59:59)           |
 | IsTrue               | O valor é verdadeiro                                |
 | IsUrl                | O valor é uma URL válida                            |
 | IsUuid               | O valor é um UUID válido                            |

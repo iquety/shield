@@ -11,7 +11,7 @@ use Iquety\Shield\Message;
 class NotContains extends Assertion
 {
     use HasValueNormalizer;
-    
+
     /** @param array<mixed>|string $value */
     public function __construct(
         mixed $value,

@@ -93,7 +93,10 @@ class StartsWithTest extends AssertionSearchCase
         ];
     }
 
-    /** @return array<string,array<int,mixed>> */
+    /**
+     * @SuppressWarnings("PHPMD.LongVariable")
+     * @return array<string,array<int,mixed>>
+     */
     public function invalidProvider(): array
     {
         $list = [];

@@ -20,13 +20,13 @@ trait HasValueNormalizer
         if ($value instanceof IteratorAggregate) {
             return iterator_to_array($value->getIterator());
         }
-        
+
         if ($value instanceof Iterator) {
             return iterator_to_array($value);
         }
 
         if ($value instanceof ArrayAccess) {
-            $list = (array)$value;    
+            $list = (array)$value;
 
             // o primeiro nível é o nome da classe serializada
             // "ArrayAccess@anonymous/application/tests/Assertions/ContainsTest.php:84$21values"

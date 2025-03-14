@@ -42,7 +42,7 @@ class EndsWith extends Assertion
         if ($list === []) {
             return false;
         }
-        
+
         return $element === $list[array_key_last($list)];
     }
 

@@ -58,7 +58,7 @@ class StartsWith extends Assertion
         if ($list === []) {
             return false;
         }
-        
+
         return $element === $list[array_key_first($list)];
     }
 

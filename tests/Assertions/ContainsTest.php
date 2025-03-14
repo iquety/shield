@@ -139,11 +139,17 @@ class ContainsTest extends AssertionSearchCase
         $list['string @Coração!# not contains $']   = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string @Coração!# not contains @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
 
-        $list['stringable Exception @Coração!# contains $']   = $this->makeIncorrectItem(new Exception('@Coração!#'), '$');
-        $list['stringable Exception @Coração!# contains @Cr'] = $this->makeIncorrectItem(new Exception('@Coração!#'), '@Cr');
+        $list['stringable Exception @Coração!# contains $']
+            = $this->makeIncorrectItem(new Exception('@Coração!#'), '$');
 
-        $list['stringable @Coração!# contains $']   = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '$');
-        $list['stringable @Coração!# contains @Cr'] = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '@Cr');
+        $list['stringable Exception @Coração!# contains @Cr']
+            = $this->makeIncorrectItem(new Exception('@Coração!#'), '@Cr');
+
+        $list['stringable @Coração!# contains $']
+            = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '$');
+
+        $list['stringable @Coração!# contains @Cr']
+            = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '@Cr');
 
         $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '');
         $list['null not valid']   = $this->makeIncorrectItem(null, '');

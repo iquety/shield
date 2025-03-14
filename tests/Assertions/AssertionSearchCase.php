@@ -47,6 +47,10 @@ class AssertionSearchCase extends AssertionCase
         ];
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @return array<string,mixed>
+     */
     protected function normalizeProperties(array $values): array
     {
         $normalizedValues = [];
@@ -63,6 +67,10 @@ class AssertionSearchCase extends AssertionCase
         return 'prop_' . preg_replace('/[^0-9a-z]/', '_', $key);
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function popArrayValue(array &$values, array &$comparison = []): mixed
     {
         $lastValue = $comparison !== []
@@ -74,6 +82,10 @@ class AssertionSearchCase extends AssertionCase
         return $lastValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function popStdValue(array &$values, array &$comparison = []): mixed
     {
         $lastValue = $comparison !== []
@@ -85,6 +97,10 @@ class AssertionSearchCase extends AssertionCase
         return $lastValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function popArrayAccessValue(array &$values, array &$comparison = []): mixed
     {
         $lastValue = $comparison !== []
@@ -96,6 +112,10 @@ class AssertionSearchCase extends AssertionCase
         return $lastValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function popIteratorAggrValue(array &$values, array &$comparison = []): mixed
     {
         $lastValue = $comparison !== []
@@ -107,6 +127,10 @@ class AssertionSearchCase extends AssertionCase
         return $lastValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function popIteratorValue(array &$values, array &$comparison = []): mixed
     {
         $lastValue = $comparison !== []
@@ -118,6 +142,10 @@ class AssertionSearchCase extends AssertionCase
         return $lastValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function shiftArrayValue(array &$values, array &$comparison = []): mixed
     {
         $firstValue = $comparison !== []
@@ -129,6 +157,10 @@ class AssertionSearchCase extends AssertionCase
         return $firstValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function shiftStdValue(array &$values, array &$comparison = []): mixed
     {
         $firstValue = $comparison !== []
@@ -140,6 +172,10 @@ class AssertionSearchCase extends AssertionCase
         return $firstValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function shiftArrayAccessValue(array &$values, array &$comparison = []): mixed
     {
         $firstValue = $comparison !== []
@@ -151,6 +187,10 @@ class AssertionSearchCase extends AssertionCase
         return $firstValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function shiftIteratorAggrValue(array &$values, array &$comparison = []): mixed
     {
         $firstValue = $comparison !== []
@@ -162,6 +202,10 @@ class AssertionSearchCase extends AssertionCase
         return $firstValue;
     }
 
+    /**
+     * @param array<string,mixed> $values
+     * @param array<string,mixed> $comparison
+     */
     protected function shiftIteratorValue(array &$values, array &$comparison = []): mixed
     {
         $firstValue = $comparison !== []
@@ -175,8 +219,10 @@ class AssertionSearchCase extends AssertionCase
 
     protected function makeStringableObject(string $value): Stringable
     {
-        return new class($value) implements Stringable {
-            public function __construct(protected string $value) { }
+        return new class ($value) implements Stringable {
+            public function __construct(protected string $value)
+            {
+            }
 
             public function __toString(): string
             {

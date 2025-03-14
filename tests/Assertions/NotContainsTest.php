@@ -122,13 +122,23 @@ class NotContainsTest extends AssertionSearchCase
         $list['string contains ra'] = $this->makeIncorrectItem('@Coração!#', 'ra');
         $list['string contains ção!#'] = $this->makeIncorrectItem('@Coração!#', 'ção!#');
 
-        $list['stringable Exception  @Coração!# contains @Co']   = $this->makeIncorrectItem(new Exception('@Coração!#'), '@Co');
-        $list['stringable Exception  @Coração!# contains ra']    = $this->makeIncorrectItem(new Exception('@Coração!#'), 'ra');
-        $list['stringable Exception  @Coração!# contains ção!#'] = $this->makeIncorrectItem(new Exception('@Coração!#'), 'ção!#');
+        $list['stringable Exception  @Coração!# contains @Co']
+            = $this->makeIncorrectItem(new Exception('@Coração!#'), '@Co');
 
-        $list['stringable @Coração!# contains @Co']   = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '@Co');
-        $list['stringable @Coração!# contains ra']    = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), 'ra');
-        $list['stringable @Coração!# contains ção!#'] = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), 'ção!#');
+        $list['stringable Exception  @Coração!# contains ra']
+            = $this->makeIncorrectItem(new Exception('@Coração!#'), 'ra');
+
+        $list['stringable Exception  @Coração!# contains ção!#']
+            = $this->makeIncorrectItem(new Exception('@Coração!#'), 'ção!#');
+
+        $list['stringable @Coração!# contains @Co']
+            = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '@Co');
+
+        $list['stringable @Coração!# contains ra']
+            = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), 'ra');
+
+        $list['stringable @Coração!# contains ção!#']
+            = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), 'ção!#');
 
         $valueTypes = $this->makeValueTypeList();
 

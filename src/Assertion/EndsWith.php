@@ -5,13 +5,16 @@ declare(strict_types=1);
 namespace Iquety\Shield\Assertion;
 
 use Iquety\Shield\Assertion;
+use Iquety\Shield\HasValueNormalizer;
 use Iquety\Shield\Message;
 
 class EndsWith extends Assertion
 {
+    use HasValueNormalizer;
+
     public function __construct(
         mixed $value,
-        float|int|string $needle,
+        null|bool|float|int|string $needle
     ) {
         $this->setValue($value);
 
@@ -20,28 +23,27 @@ class EndsWith extends Assertion
 
     public function isValid(): bool
     {
-        $value = $this->getValue();
+        $value = $this->normalize($this->getValue());
 
-        if (
-            is_object($value) === true
-            || is_bool($value) === true
-            || is_null($value) === true
-        ) {
+        if (is_array($value) === true) {
+            return $this->isValidInArray($value, $this->getAssertValue());
+        }
+
+        if (is_bool($value) === true || is_null($value) === true) {
             return false;
         }
 
-        if (is_array($value) === true) {
-            return $this->isValidInArray();
-        }
-
-        return str_ends_with($value, (string)$this->getAssertValue());
+        return str_ends_with((string)$value, (string)$this->getAssertValue());
     }
 
-    private function isValidInArray(): bool
+    /** @param array<string,mixed> $list */
+    private function isValidInArray(array $list, mixed $element): bool
     {
-        $array = $this->getValue();
-
-        return $this->getAssertValue() === array_pop($array);
+        if ($list === []) {
+            return false;
+        }
+        
+        return $element === $list[array_key_last($list)];
     }
 
     public function getDefaultMessage(): Message

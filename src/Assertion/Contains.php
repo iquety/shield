@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
-use ArrayAccess;
 use Iquety\Shield\Assertion;
+use Iquety\Shield\HasValueNormalizer;
 use Iquety\Shield\Message;
-use Stringable;
 
 class Contains extends Assertion
 {
+    use HasValueNormalizer;
+
     /** @param array<int|string,mixed>|string $value */
     public function __construct(
         mixed $value,
-        float|int|string $needle,
+        null|bool|float|int|string $needle
     ) {
         $this->setValue($value);
 
@@ -23,44 +24,17 @@ class Contains extends Assertion
 
     public function isValid(): bool
     {
-        $value = $this->getValue();
+        $value = $this->normalize($this->getValue());
 
-        if ($value instanceof ArrayAccess) {
-            return $this->isValidInAcessible($value, $this->getAssertValue());
-        }
-
-        if (is_object($value) === true && ! $value instanceof Stringable) {
-            return $this->isValidInStdClass($value, $this->getAssertValue());
+        if (is_array($value) === true) {
+            return $this->isValidInArray($value, $this->getAssertValue());
         }
 
         if (is_bool($value) === true || is_null($value) === true) {
             return false;
         }
 
-        if (is_array($this->getValue()) === true) {
-            return $this->isValidInArray($this->getValue(), $this->getAssertValue());
-        }
-
-        return str_contains((string)$this->getValue(), (string)$this->getAssertValue()) === true;
-    }
-
-    /** @param ArrayAccess<string,mixed> $list */
-    private function isValidInAcessible(ArrayAccess $list, mixed $element): bool
-    {
-        $list = (array)$list;
-
-        // o primeiro nível é o nome da classe serializada
-        // "ArrayAccess@anonymous/application/tests/Assertions/ContainsTest.php:84$21values"
-        $normalizedList = current($list);
-
-        return $this->isValidInArray($normalizedList, $element);
-    }
-
-    private function isValidInStdClass(object $list, mixed $element): bool
-    {
-        $normalizedList = (array)$list;
-
-        return $this->isValidInArray($normalizedList, $element);
+        return str_contains((string)$value, (string)$this->getAssertValue()) === true;
     }
 
     /** @param array<string,mixed> $list */

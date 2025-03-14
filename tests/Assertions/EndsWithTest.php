@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayIterator;
+use ArrayObject;
 use Iquety\Shield\Assertion\EndsWith;
-use stdClass;
 
-class EndsWithTest extends AssertionCase
+class EndsWithTest extends AssertionSearchCase
 {
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
@@ -16,28 +17,54 @@ class EndsWithTest extends AssertionCase
 
         $list['string ends with !#'] = ['@Coração!#', '!#'];
 
-        $arrayValue = [
-            null,
-            111,    // inteiro
-            '222',  // inteiro string
-            22.5,   // decimal
-            '11.5', // decimal string
-            'ção!#' // string
+        $list['stringable @Coração!# ends with o!#'] = [
+            $this->makeStringableObject('@Coração!#'),
+            'o!#'
         ];
 
-        $list['array ends with string'] = [$arrayValue, 'ção!#'];
+        $valueTypes = $this->makeValueTypeList();
 
-        array_pop($arrayValue);
-        $list['array ends with decimal string'] = [$arrayValue, '11.5'];
+        $arrayValues = $valueTypes;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["array ends with $label"] = [
+                $arrayValues,
+                $this->popArrayValue($arrayValues)
+            ];
+        }
 
-        array_pop($arrayValue);
-        $list['array ends with decimal'] = [$arrayValue, 22.5];
+        $stdValues = $valueTypes;
+        foreach (array_keys($stdValues) as $label) {
+            $label = $this->makeStdProperty($label);
 
-        array_pop($arrayValue);
-        $list['array ends with integer string'] = [$arrayValue, '222'];
+            $list["stdClass ends with value of property $label"] = [
+                $stdValues,
+                $this->popStdValue($stdValues)
+            ];
+        }
 
-        array_pop($arrayValue);
-        $list['array ends with integer'] = [$arrayValue, 111];
+        $arrayAccessValues = $valueTypes;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["ArrayAccess ends with $label"] = [
+                $arrayAccessValues,
+                $this->popArrayAccessValue($arrayAccessValues)
+            ];
+        }
+
+        $iteratorAggrValues = $valueTypes;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["IteratorAggregate ends with $label"] = [
+                new ArrayObject($iteratorAggrValues),
+                $this->popIteratorAggrValue($iteratorAggrValues)
+            ];
+        }
+
+        $iteratorValues = $valueTypes;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["Iterator ends with $label"] = [
+                new ArrayIterator($iteratorValues),
+                $this->popIteratorValue($iteratorValues)
+            ];
+        }
 
         return $list;
     }
@@ -46,21 +73,21 @@ class EndsWithTest extends AssertionCase
      * @test
      * @dataProvider validProvider
      */
-    public function valueEndsWithPartial(mixed $value, mixed $partial): void
+    public function valueEndsWithPartial(mixed $value, mixed $needle): void
     {
-        $assertion = new EndsWith($value, $partial);
+        $assertion = new EndsWith($value, $needle);
 
         $this->assertTrue($assertion->isValid());
     }
 
     /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, mixed $partial): array
+    private function makeIncorrectItem(mixed $value, mixed $needle): array
     {
         $messageValue = $this->makeMessageValue($value);
 
         return [
             $value,
-            $partial,
+            $needle,
             "O valor $messageValue está errado" // mensagem personalizada
         ];
     }
@@ -72,36 +99,60 @@ class EndsWithTest extends AssertionCase
 
         $list['string not end with $']   = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string not end with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
-        $list['object not valid']        = $this->makeIncorrectItem(new stdClass(), '');
         $list['null not valid']          = $this->makeIncorrectItem(null, '');
         $list['true not valid']          = $this->makeIncorrectItem(true, '');
         $list['false not valid']         = $this->makeIncorrectItem(false, '');
 
-        $arrayValue = [
-            null,
-            111,    // inteiro
-            '222',  // inteiro string
-            22.5,   // decimal
-            '11.5', // decimal string
-            'ção!#' // string
-        ];
+        $valueTypes = $this->makeValueTypeList();
 
-        $list['array not end with string ção!'] = $this->makeIncorrectItem($arrayValue, 'ção');
+        $valueTypesComparison = $this->makeValueComparisonList();
 
-        array_pop($arrayValue);
-        $list['array not end with decimal 11.5'] = $this->makeIncorrectItem($arrayValue, 11.5);
+        $arrayValues = $valueTypes;
+        $arrayComparison = $valueTypesComparison;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["array not ends with $label"] = $this->makeIncorrectItem(
+                $arrayValues,
+                $this->popArrayValue($arrayComparison)
+            );
+        }
 
-        array_pop($arrayValue);
-        $list['array not end with decimal string 22.5'] = $this->makeIncorrectItem($arrayValue, '22.5');
+        $stdValues = $valueTypes;
+        $stdComparison = $valueTypesComparison;
+        foreach (array_keys($stdValues) as $label) {
+            $label = $this->makeStdProperty($label);
 
-        array_pop($arrayValue);
-        $list['array not end with integer 222'] = $this->makeIncorrectItem($arrayValue, 222);
+            $list["stdClass not ends with value of property $label"] = $this->makeIncorrectItem(
+                $stdValues,
+                $this->popStdValue($stdComparison)
+            );
+        }
 
-        array_pop($arrayValue);
-        $list['array not end with integer string 111'] = $this->makeIncorrectItem($arrayValue, '111');
+        $arrayAccessValues = $valueTypes;
+        $arrayAccessComparison = $valueTypesComparison;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["ArrayAccess not ends with $label"] = $this->makeIncorrectItem(
+                $arrayAccessValues,
+                $this->popArrayAccessValue($arrayAccessComparison)
+            );
+        }
 
-        array_pop($arrayValue);
-        $list['array not end with null string'] = $this->makeIncorrectItem($arrayValue, 'null');
+        $iteratorAggrValues = $valueTypes;
+        $iteratorAggrComparison = $valueTypesComparison;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["IteratorAggregate not ends with $label"] = $this->makeIncorrectItem(
+                new ArrayObject($iteratorAggrValues),
+                $this->popIteratorAggrValue($iteratorAggrComparison)
+            );
+        }
+
+        $iteratorValues = $valueTypes;
+        $iteratorComparison = $valueTypesComparison;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["Iterator not ends with $label"] = $this->makeIncorrectItem(
+                new ArrayIterator($iteratorValues),
+                $this->popIteratorValue($iteratorComparison)
+            );
+        }
 
         return $list;
     }
@@ -110,7 +161,7 @@ class EndsWithTest extends AssertionCase
      * @test
      * @dataProvider invalidProvider
      */
-    public function valueNotEndsWithPartial(mixed $value, float|int|string $needle): void
+    public function valueNotEndsWithPartial(mixed $value, mixed $needle): void
     {
         $assertion = new EndsWith($value, $needle);
 
@@ -123,7 +174,7 @@ class EndsWithTest extends AssertionCase
      * @test
      * @dataProvider invalidProvider
      */
-    public function namedValueNotEndsWithPartial(mixed $value, float|int|string $needle): void
+    public function namedValueNotEndsWithPartial(mixed $value, mixed $needle): void
     {
         $assertion = new EndsWith($value, $needle);
 
@@ -143,7 +194,7 @@ class EndsWithTest extends AssertionCase
      */
     public function namedValueNotEndsWithPartialWithCustomMessage(
         mixed $value,
-        float|int|string $needle,
+        mixed $needle,
         string $message
     ): void {
         $assertion = new EndsWith($value, $needle);
@@ -163,7 +214,7 @@ class EndsWithTest extends AssertionCase
      */
     public function valueNotEndsWithPartialAndCustomMessage(
         mixed $value,
-        float|int|string $needle,
+        mixed $needle,
         string $message
     ): void {
         $assertion = new EndsWith($value, $needle);

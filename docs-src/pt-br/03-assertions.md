@@ -22,37 +22,6 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 | [NotMatches](04-notmatches.md)   | O valor não corresponde ao padrão |
 | [StartsWith](04-startswith.md)   | O valor começa com o outro valor  |
 
-## Formatos
-
-| Asserção                                     | Descrição                             |
-| :--                                          | :--                                   |
-| [IsAlpha](04-isalpha.md)                     | O valor contém apenas letras          |
-| [IsAlphaNumeric](04-isalphanumeric.md)       | Contém apenas letras e números        |
-| [IsAmountOfTime](04-isamountoftime.md)       | É uma hora sem limite (ex.: 99:59:59) |
-| [IsBase64](04-isbase64.md)                   | É uma string codificada em base64     |
-| [IsBrPhoneNumber](04-isbrphonenumber.md)     | O valor é um telefone brasileiro      |
-| [IsCep](04-iscep.md)                         | O valor é um CEP                      |
-| [IsCpf](04-iscpf.md)                         | O valor é um CPF                      |
-| [IsCreditCard](04-iscreditcard.md)           | É um cartão de crédito                |
-| [IsCreditCardBrand](04-iscreditcardbrand.md) | É uma banderia de cartão de crédito   |
-| [IsCvv](04-iscvv.md)                         | Código verificador de cartão de crédito |
-| [IsDate](04-isdate.md)                       | É uma data (ex.: 10/10/2025)          |
-| [IsDateTime](04-isdatetime.md)            | É data e hora (ex.: 10/10/2025 10:10:10) |
-| [IsEmail](04-isemail.md)                     | O valor é um e-mail                   |
-| [IsEmpty](04-isempty.md)                     | O valor é vazio                       |
-| [IsFalse](04-isfalse.md)                     | O valor é falso                       |
-| [IsHexadecimal](04-ishexadecimal.md)         | É um número hexadecimal               |
-| [IsHexColor](04-ishexcolor.md)               | O valor é uma cor hexadecimal         |
-| [IsIp](04-isip.md)                           | O valor é um endereço IP              |
-| [IsMacAddress](04-ismacaddress.md)           | O valor é um endereço MAC             |
-| [IsNotEmpty](04-isnotempty.md)               | O valor não é vazio                   |
-| [IsNotNull](04-isnotnull.md)                 | O valor não é nulo                    |
-| [IsNull](04-isnull.md)                       | O valor é nulo                        |
-| [IsTime](04-istime.md)                       | É uma hora válida (ex.: 23:59:59)     |
-| [IsTrue](04-istrue.md)                       | O valor é verdadeiro                  |
-| [IsUrl](04-isurl.md)                         | O valor é uma URL                     |
-| [IsUuid](04-isuuid.md)                       | O valor é um UUID                     |
-
 ## Contagem
 
 | Asserção                                     | Descrição                               |
@@ -64,5 +33,41 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 | [LessThanOrEqualTo](04-lessthanorequalto.md) | O valor é menor ou igual ao outro valor |
 | [MaxLength](04-maxlength.md)                 | O valor possui o tamanho máximo         |
 | [MinLength](04-minlength.md)                 | O valor possui o tamanho mínimo         |
+
+## Datas e tempo
+
+| Asserção                               | Descrição                               |
+| :--                                    | :--                                     |
+| [IsDate](04-isdate.md)                 | Formatos de data                        |
+| [IsDateTime](04-isdatetime.md)         | Formatos de data + hora                 |
+| [IsTime](04-istime.md)                 | Formato de hora com limite de 24 horas) |
+| [IsAmountTime](04-isamounttime.md) | Formato de hora sem limite de horas     |
+
+## Outros formatos
+
+| Asserção           | Descrição                                                  |
+| :--                | :--                                                        |
+| IsAlpha            | Aceita os caracteres: abcdefghijklmnopqrstuvwxyz           |
+| IsAlphaNumeric     | Aceita os caracteres: abcdefghijklmnopqrstuvwxyz1234567890 |
+| IsBase64           | É uma string codificada em base64  YcOnw6NvdmFsZW50ZQ==                        |
+| IsBrPhoneNumber    | O valor é um telefone brasileiro      |
+| IsCep              | 99.999-999                      |
+| IsCpf              | 999.999.999-99                      |
+| IsCreditCard       | 9999-É um cartão de crédito                |
+| IsCreditCardBrand  | É uma banderia de cartão de crédito   |
+| IsCvv              | 999                                   |
+| IsEmail            | O valor é um e-mail                   |
+| IsEmpty            | O valor é vazio                       |
+| IsFalse            | O valor é falso                       |
+| IsHexadecimal      | É um número hexadecimal               |
+| IsHexColor         | O valor é uma cor hexadecimal         |
+| IsIp               | O valor é um endereço IP              |
+| IsMacAddress       | O valor é um endereço MAC             |
+| IsNotEmpty         | O valor não é vazio                   |
+| IsNotNull          | O valor não é nulo                    |
+| IsNull             | O valor é nulo                        |
+| IsTrue             | O valor é verdadeiro                  |
+| IsUrl              | O valor é uma URL                     |
+| IsUuid             | O valor é um UUID                     |
 
 --page-nav--

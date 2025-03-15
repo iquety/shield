@@ -28,11 +28,10 @@ new Matches(null, '/nu/');
 
 ## Limitations
 
-**Warning**: decimal numbers with a trailing zero will not work due to a limitation of PHP's type correction, which will remove the trailing zeros 
+**Warning**: decimal numbers with a trailing zero will not work due to a limitation of PHP's type correction, which will remove the trailing zeros
 
 ```php
 new Matches(123456.7890, '/(\d{6})\.(\d{4})/');
 ```
-
 
 --page-nav--

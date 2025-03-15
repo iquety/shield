@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayIterator;
 use ArrayObject;
 use Iquety\Shield\Assertion\GreaterThan;
 use stdClass;
@@ -25,7 +26,16 @@ class GreaterThanTest extends AssertionCase
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements is greater than 6'] = [$arrayValue, 6];
+
         $list['countable with 7 elements is greater than 6'] = [new ArrayObject($arrayValue), 6];
+
+        $list['countable with 7 elements is greater than 5'] = [new ArrayIterator($arrayValue), 5];
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is greater than 2'] = [$stdObject, 2];
 
         return $list;
     }
@@ -81,7 +91,28 @@ class GreaterThanTest extends AssertionCase
         $list['countable with 7 elements is not greater than 8']
             = $this->makeIncorrectItem(new ArrayObject($arrayValue), 8);
 
-        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
+        $list['countable iterator with 7 elements is not greater than 7']
+            = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 7);
+
+        $list['countable iterator with 7 elements is not greater than 8']
+            = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 8);
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+
+        $list['stdClass with 3 public properties is not greater than 3'] 
+            = $this->makeIncorrectItem($stdObject, 3);
+
+        $list['stdClass with 3 public properties is not greater than 4'] 
+            = $this->makeIncorrectItem($stdObject, 4);
+
+        $list['stdClass is not greater than 0'] = $this->makeIncorrectItem(new stdClass(), 0);
+
+        $list['null is invalid']  = $this->makeIncorrectItem(null, 0);
+        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
+        $list['true is invalid']  = $this->makeIncorrectItem(true, 0);
 
         return $list;
     }

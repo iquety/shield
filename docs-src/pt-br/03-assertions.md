@@ -15,59 +15,69 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 
 | Asserção                         | Descrição                         |
 | :--                              | :--                               |
-| [Contains](04-contains.md)       | O valor contém o outro valor      |
-| [EndsWith](04-endswith.md)       | O valor termina com o outro valor |
-| [Matches](04-matches.md)         | O valor corresponde ao padrão     |
-| [NotContains](04-notcontains.md) | O valor não contém o outro valor  |
-| [NotMatches](04-notmatches.md)   | O valor não corresponde ao padrão |
-| [StartsWith](04-startswith.md)   | O valor começa com o outro valor  |
+| [Contains](05-contains.md)       | O valor contém o outro valor      |
+| [EndsWith](05-endswith.md)       | O valor termina com o outro valor |
+| [Matches](05-matches.md)         | O valor corresponde ao padrão     |
+| [NotContains](05-notcontains.md) | O valor não contém o outro valor  |
+| [NotMatches](05-notmatches.md)   | O valor não corresponde ao padrão |
+| [StartsWith](05-startswith.md)   | O valor começa com o outro valor  |
 
 ## Contagem
 
-| Asserção                                     | Descrição                               |
-| :--                                          | :--                                     |
-| [GreaterThan](04-greaterthan.md)             | O valor é maior do que o esperado       |
-| [GreaterThanOrEqualTo](04-greaterthanorequalto.md) | O valor é maior ou igual ao esperado |
-| [Length](04-length.md)                       | O valor possui o tamanho esperado       |
-| [LessThan](04-lessthan.md)                   | O valor é menor do que o esperado       |
-| [LessThanOrEqualTo](04-lessthanorequalto.md) | O valor é menor ou igual ao outro valor |
-| [MaxLength](04-maxlength.md)                 | O valor possui o tamanho máximo         |
-| [MinLength](04-minlength.md)                 | O valor possui o tamanho mínimo         |
+| Asserção                                     | Descrição                                  |
+| :--                                          | :--                                        |
+| [GreaterThan](06-greaterthan.md)             | O valor é maior do que o esperado          |
+| [GreaterThanOrEqualTo](06-greaterthanorequalto.md) | O valor é maior ou igual ao esperado |
+| [Length](06-length.md)                       | O valor possui o tamanho esperado          |
+| [LessThan](06-lessthan.md)                   | O valor é menor do que o esperado          |
+| [LessThanOrEqualTo](06-lessthanorequalto.md) | O valor é menor ou igual ao outro valor    |
+| [MaxLength](06-maxlength.md)                 | O valor possui o tamanho máximo            |
+| [MinLength](06-minlength.md)                 | O valor possui o tamanho mínimo            |
 
 ## Datas e tempo
 
-| Asserção                               | Descrição                               |
-| :--                                    | :--                                     |
-| [IsDate](04-isdate.md)                 | Formatos de data                        |
-| [IsDateTime](04-isdatetime.md)         | Formatos de data + hora                 |
-| [IsTime](04-istime.md)                 | Formato de hora com limite de 24 horas) |
-| [IsAmountTime](04-isamounttime.md) | Formato de hora sem limite de horas     |
+| Asserção                           | Descrição                               |
+| :--                                | :--                                     |
+| [IsDate](07-isdate.md)             | Formatos de data                        |
+| [IsDateTime](07-isdatetime.md)     | Formatos de data + hora                 |
+| [IsTime](07-istime.md)             | Formato de hora com limite de 24 horas) |
+| [IsAmountTime](07-isamounttime.md) | Formato de hora sem limite de horas     |
+
+## Internet
+
+| Asserção                           | Descrição                                        |
+| :--                                | :--                                              |
+| IsEmail                            | Endereço eletrônico (ex.: **fulano@gmail.com**)  |
+| [IsIp](08-isip.md)                 | É um endereço IP                                 |
+| [IsMacAddress](08-ismacaddress.md) | É um endereço MAC                                |
+| [IsUrl](08-isurl.md)               | É uma URL                                        |
+
+## Formatos brasileiros
+
+| Asserção           | Descrição                                              |
+| :--                | :--                                                    |
+| [IsBrPhoneNumber](09-isbrphonenumber.md) | O valor é um telefone brasileiro |
+| IsCep              | Código de endereçamento postal (ex.: **12.380-315**)   |
+| IsCpf              | Cadastro de pessoa física (ex.: **742.143.120-90**)    |
 
 ## Outros formatos
 
-| Asserção           | Descrição                                                  |
-| :--                | :--                                                        |
-| IsAlpha            | Aceita os caracteres: abcdefghijklmnopqrstuvwxyz           |
-| IsAlphaNumeric     | Aceita os caracteres: abcdefghijklmnopqrstuvwxyz1234567890 |
-| IsBase64           | É uma string codificada em base64  YcOnw6NvdmFsZW50ZQ==                        |
-| IsBrPhoneNumber    | O valor é um telefone brasileiro      |
-| IsCep              | 99.999-999                      |
-| IsCpf              | 999.999.999-99                      |
-| IsCreditCard       | 9999-É um cartão de crédito                |
-| IsCreditCardBrand  | É uma banderia de cartão de crédito   |
-| IsCvv              | 999                                   |
-| IsEmail            | O valor é um e-mail                   |
-| IsEmpty            | O valor é vazio                       |
-| IsFalse            | O valor é falso                       |
-| IsHexadecimal      | É um número hexadecimal               |
-| IsHexColor         | O valor é uma cor hexadecimal         |
-| IsIp               | O valor é um endereço IP              |
-| IsMacAddress       | O valor é um endereço MAC             |
-| IsNotEmpty         | O valor não é vazio                   |
-| IsNotNull          | O valor não é nulo                    |
-| IsNull             | O valor é nulo                        |
-| IsTrue             | O valor é verdadeiro                  |
-| IsUrl              | O valor é uma URL                     |
-| IsUuid             | O valor é um UUID                     |
+| Asserção           | Descrição                                                                |
+| :--                | :--                                                                      |
+| IsAlpha            | Caracteres alfabéticos (ex.: **abcdefghijklmnopqrstuvwxyz**)             |
+| IsAlphaNumeric     | Caracteres alfanuméricos (ex.: **abcdefghijklmnopqrstuvwxyz1234567890**) |
+| IsBase64           | Texto codificado em base64: (ex.: **YcOnw6NvdmFsZW50ZQ==**)              |
+| IsCreditCard       | Número de cartão de crédito: (ex.: **5279 6901 2297 4109** ou **5279-6901-2297-4109**) |
+| IsCreditCardBrand  | Uma bandeira de cartão de crédito                                        |
+| IsCvv              | Código de segurança de cartão de crédito (ex.: **345**)                  |
+| IsEmpty            | O valor é vazio                                                          |
+| IsFalse            | O valor é falso                                                          |
+| IsHexadecimal      | Caracteres hexadecimais (ex.: **1234567890abcdef**)                      |
+| IsHexColor         | É uma cor hexadecimal (ex.: **#ff00ee** ou **#FF00EE**)                  |
+| IsNotEmpty         | O valor não é vazio                                                      |
+| IsNotNull          | O valor não é nulo                                                       |
+| IsNull             | O valor é nulo                                                           |
+| IsTrue             | O valor é verdadeiro                                                     |
+| IsUuid             | É um UUID (ex.: **3f2504e0-4f89-41d3-9a0c-0305e82c3301**)                |
 
 --page-nav--

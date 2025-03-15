@@ -31,6 +31,11 @@ class Matches extends Assertion
             return $this->isValidInArray();
         }
 
+        if (is_null($this->getValue()) === true) {
+            return $this->isMatches('null', $this->getAssertValue())
+                || $this->isMatches('NULL', $this->getAssertValue());
+        }
+
         return $this->isMatches((string)$this->getValue(), $this->getAssertValue());
     }
 

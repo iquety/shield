@@ -6,12 +6,12 @@ namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsCreditCardBrand;
 use Iquety\Shield\CreditCardBrand;
-use Tests\TestCase;
+use stdClass;
 
-class IsCreditCardBrandTest extends TestCase
+class IsCreditCardBrandTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -41,47 +41,81 @@ class IsCreditCardBrandTest extends TestCase
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function assertedCase(int|string $number, CreditCardBrand $brand): void
+    public function valueIsCreditCardBrand(mixed $number, CreditCardBrand $brand): void
     {
         $assertion = new IsCreditCardBrand($number, $brand);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, CreditCardBrand $creditCardBrand): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $creditCardBrand,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /**
      * @return array<string,array<int,mixed>>
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
         foreach (CreditCardBrand::all() as $brand) {
-            $list["Random number $brand"] = ['1234567890123456', CreditCardBrand::from($brand)];
+            $list["Random number $brand"] = $this->makeIncorrectItem('1234567890123456', CreditCardBrand::from($brand));
 
-            $list["Too short $brand 1 digit"] = ['4', CreditCardBrand::from($brand)];
-            $list["Too short $brand 2 digits"] = ['41', CreditCardBrand::from($brand)];
-            $list["Too short $brand 3 digits"] = ['411', CreditCardBrand::from($brand)];
-            $list["Too short $brand 4 digits"] = ['4111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 5 digits"] = ['41111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 6 digits"] = ['411111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 7 digits"] = ['4111111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 8 digits"] = ['41111111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 9 digits"] = ['411111111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 10 digits"] = ['4111111111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 11 digits"] = ['41111111111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 12 digits"] = ['411111111111', CreditCardBrand::from($brand)];
-            $list["Too short $brand 13 digits"] = ['4111111111111', CreditCardBrand::from($brand)];
+            $list["Too short $brand 1 digit"]   = $this->makeIncorrectItem('4', CreditCardBrand::from($brand));
+            $list["Too short $brand 2 digits"]  = $this->makeIncorrectItem('41', CreditCardBrand::from($brand));
+            $list["Too short $brand 3 digits"]  = $this->makeIncorrectItem('411', CreditCardBrand::from($brand));
+            $list["Too short $brand 4 digits"]  = $this->makeIncorrectItem('4111', CreditCardBrand::from($brand));
+            $list["Too short $brand 5 digits"]  = $this->makeIncorrectItem('41111', CreditCardBrand::from($brand));
+            $list["Too short $brand 6 digits"]  = $this->makeIncorrectItem('411111', CreditCardBrand::from($brand));
+            $list["Too short $brand 7 digits"]  = $this->makeIncorrectItem('4111111', CreditCardBrand::from($brand));
+            $list["Too short $brand 8 digits"]  = $this->makeIncorrectItem('41111111', CreditCardBrand::from($brand));
+            $list["Too short $brand 9 digits"]  = $this->makeIncorrectItem('411111111', CreditCardBrand::from($brand));
+            $list["Too short $brand 10 digits"] = $this->makeIncorrectItem('4111111111', CreditCardBrand::from($brand));
 
-            $list["Too long $brand 17"] = ['55000000000000000', CreditCardBrand::from($brand)];
-            $list["Too long $brand 18"] = ['550000000000000000', CreditCardBrand::from($brand)];
-            $list["Too long $brand 19"] = ['5500000000000000000', CreditCardBrand::from($brand)];
-            $list["Too long $brand 20"] = ['55000000000000000000', CreditCardBrand::from($brand)];
+            $list["Too short $brand 11 digits"]
+                = $this->makeIncorrectItem('41111111111', CreditCardBrand::from($brand));
 
-            $list["Non-numeric $brand"] = ['abcdefg', CreditCardBrand::from($brand)];
-            $list["Empty string $brand"] = ['', CreditCardBrand::from($brand)];
+            $list["Too short $brand 12 digits"]
+                = $this->makeIncorrectItem('411111111111', CreditCardBrand::from($brand));
+
+            $list["Too short $brand 13 digits"]
+                = $this->makeIncorrectItem('4111111111111', CreditCardBrand::from($brand));
+
+            $list["Too long $brand 17"]
+                = $this->makeIncorrectItem('55000000000000000', CreditCardBrand::from($brand));
+
+            $list["Too long $brand 18"]
+                = $this->makeIncorrectItem('550000000000000000', CreditCardBrand::from($brand));
+
+            $list["Too long $brand 19"]
+                = $this->makeIncorrectItem('5500000000000000000', CreditCardBrand::from($brand));
+
+            $list["Too long $brand 20"]
+                = $this->makeIncorrectItem('55000000000000000000', CreditCardBrand::from($brand));
+
+            $list["Non-numeric $brand"]  = $this->makeIncorrectItem('abcdefg', CreditCardBrand::from($brand));
+            $list["Empty string $brand"] = $this->makeIncorrectItem('', CreditCardBrand::from($brand));
+
+            $list['empty string']      = $this->makeIncorrectItem('', CreditCardBrand::from($brand));
+            $list['one space string']  = $this->makeIncorrectItem(' ', CreditCardBrand::from($brand));
+            $list['two spaces string'] = $this->makeIncorrectItem('  ', CreditCardBrand::from($brand));
+            $list['array']             = $this->makeIncorrectItem(['a'], CreditCardBrand::from($brand));
+            $list['object']            = $this->makeIncorrectItem(new stdClass(), CreditCardBrand::from($brand));
+            $list['false']             = $this->makeIncorrectItem(false, CreditCardBrand::from($brand));
+            $list['true']              = $this->makeIncorrectItem(true, CreditCardBrand::from($brand));
+            $list['null']              = $this->makeIncorrectItem(null, CreditCardBrand::from($brand));
         }
 
         return $list;
@@ -89,9 +123,9 @@ class IsCreditCardBrandTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCase(int|string $number, CreditCardBrand $brand): void
+    public function valueIsNotCreditCardBrand(mixed $number, CreditCardBrand $brand): void
     {
         $assertion = new IsCreditCardBrand($number, $brand);
 
@@ -105,9 +139,9 @@ class IsCreditCardBrandTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertion(int|string $number, CreditCardBrand $brand): void
+    public function namedValueIsNotCreditCardBrand(mixed $number, CreditCardBrand $brand): void
     {
         $assertion = new IsCreditCardBrand($number, $brand);
 
@@ -123,10 +157,13 @@ class IsCreditCardBrandTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(int|string $number, CreditCardBrand $brand): void
-    {
+    public function namedValueIsNotCreditCardBrandWithCustomMessage(
+        mixed $number,
+        CreditCardBrand $brand,
+        string $message
+    ): void {
         $assertion = new IsCreditCardBrand($number, $brand);
 
         $assertion->setFieldName('name');
@@ -134,29 +171,32 @@ class IsCreditCardBrandTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $number está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(int|string $number, CreditCardBrand $brand): void
-    {
+    public function valueIsNotCreditCardBrandWithCustomMessage(
+        mixed $number,
+        CreditCardBrand $brand,
+        string $message
+    ): void {
         $assertion = new IsCreditCardBrand($number, $brand);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $number está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function fromNumber(int|string $number, CreditCardBrand $brand): void
+    public function fromNumber(mixed $number, CreditCardBrand $brand): void
     {
         $this->assertEquals(
             $brand,

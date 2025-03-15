@@ -10,7 +10,7 @@ use Tests\Stubs\ObjectOne;
 class EqualToTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -32,14 +32,16 @@ class EqualToTest extends AssertionCase
             ['one', 'two', 'three']
         ];
 
+        $list['null'] = [null, null];
+
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function valueOneEqualToTwo(mixed $valueOne, mixed $valueTwo): void
+    public function valuesAreEquals(mixed $valueOne, mixed $valueTwo): void
     {
         $assertion = new EqualTo($valueOne, $valueTwo);
 
@@ -58,29 +60,36 @@ class EqualToTest extends AssertionCase
     }
 
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string'] = $this->makeIncorrectItem('Palavra', 'Palavra Diferente');
+        $typeValues = [
+            'string'     => 'Palavra Diferente',
+            'object'     => new ObjectOne('x'),
+            'integer'    => 45,
+            'float'      => 44.1,
+            'float zero' => 44.1,
+        ];
 
-        $list['object'] = $this->makeIncorrectItem(new ObjectOne(''), new ObjectOne('x'));
-
-        $list['integer'] = $this->makeIncorrectItem(44, 45);
-
-        $list['float'] = $this->makeIncorrectItem(44.4, 44.1);
-
-        $list['float zero'] = $this->makeIncorrectItem(44.0, 44.1);
+        foreach ($typeValues as $type => $value) {
+            $list["string != $type"]     = $this->makeIncorrectItem("Palavra", $value);
+            $list["object != $type"]     = $this->makeIncorrectItem(new ObjectOne(''), $value);
+            $list["integer != $type"]    = $this->makeIncorrectItem(44, $value);
+            $list["float != $type"]      = $this->makeIncorrectItem(44.4, $value);
+            $list["float zero != $type"] = $this->makeIncorrectItem(44.0, $value);
+            $list["null != $type"]       = $this->makeIncorrectItem(null, $value);
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function valueOneNotEqualToTwo(
+    public function valuesAreNotEquals(
         mixed $one,
         mixed $two,
         string $oneString,
@@ -98,10 +107,10 @@ class EqualToTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function namedValueOneNotEqualToTwo(
+    public function namedValuesAreNotEquals(
         mixed $one,
         mixed $two,
         string $oneString,
@@ -120,9 +129,9 @@ class EqualToTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function namedValueOneNotEqualToTwoWithCustomMessageCase(
+    public function namedValuesAreNotEqualsWithCustomMessageCase(
         mixed $one,
         mixed $two,
         string $oneString,
@@ -140,9 +149,9 @@ class EqualToTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function valueOneNotEqualToTwoWithCustomMessage(
+    public function valuesAreNotEqualsWithCustomMessage(
         mixed $one,
         mixed $two,
         string $oneString,

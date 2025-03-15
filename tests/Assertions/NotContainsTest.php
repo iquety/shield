@@ -4,44 +4,90 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayAccess;
+use ArrayIterator;
+use ArrayObject;
+use Exception;
 use Iquety\Shield\Assertion\NotContains;
 use stdClass;
+use Stringable;
 
-class NotContainsTest extends AssertionCase
+class NotContainsTest extends AssertionSearchCase
 {
-    /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return array<string,array<int,mixed>>
+     */
+    public function validProvider(): array
     {
         $list = [];
 
         $list['string @Coração!# not contains $'] = ['@Coração!#', '$'];
         $list['string @Coração!# not contains @Cr'] = ['@Coração!#', '@Cr'];
 
-        $arrayValue = [
-            111,    // inteiro
-            '222',  // inteiro string
-            22.5,   // decimal
-            '11.5', // decimal string
-            'ção!#' // string
-        ];
+        $list['stringable @Coração!# contains $']   = [new Exception('@Coração!#'), '$'];
+        $list['stringable @Coração!# contains @Cr'] = [new Exception('@Coração!#'), '@Cr'];
 
-        $list['array not contains string 111'] = [$arrayValue, '111'];
-        $list['array not contains inteiro 222'] = [$arrayValue, 222];
-        $list['array not contains string 22.5'] = [$arrayValue, '22.5'];
-        $list['array not contains decimal 11.5'] = [$arrayValue, 11.5];
-        $list['array not contains string $'] = [$arrayValue, '$'];
-        $list['array not contains string @Cr'] = [$arrayValue, '@Cr'];
+        $list['stringable Exception @Coração!# contains $']   = [new Exception('@Coração!#'), '$'];
+        $list['stringable Exception @Coração!# contains @Cr'] = [new Exception('@Coração!#'), '@Cr'];
+
+        $list['stringable @Coração!# contains $']   = [$this->makeStringableObject('@Coração!#'), '$'];
+        $list['stringable @Coração!# contains @Cr'] = [$this->makeStringableObject('@Coração!#'), '@Cr'];
 
         $list['object not valid'] = [new stdClass(), ''];
+        $list['null not valid']   = [null, ''];
+        $list['true not valid']   = [true, ''];
+        $list['false not valid']  = [false, ''];
+
+        $valueTypes = $this->makeValueTypeList();
+
+        $valueTypesComparison = $this->makeValueComparisonList();
+
+        foreach ($valueTypesComparison as $label => $value) {
+            $list["array not contains $label"] = [
+                $valueTypes,
+                $value
+            ];
+        }
+
+        foreach ($valueTypesComparison as $label => $value) {
+            $label = $this->makeStdProperty($label);
+
+            $list["stdClass not contains value of property $label"] = [
+                $valueTypes,
+                $value
+            ];
+        }
+
+        foreach ($valueTypesComparison as $label => $value) {
+            $list["ArrayAccess not contains $label"] = [
+                $valueTypes,
+                $value
+            ];
+        }
+
+        foreach ($valueTypesComparison as $label => $value) {
+            $list["IteratorAggregate not contains $label"] = [
+                new ArrayObject($valueTypes),
+                $value
+            ];
+        }
+
+        foreach ($valueTypesComparison as $label => $value) {
+            $list["Iterator not contains $label"] = [
+                new ArrayIterator($valueTypes),
+                $value
+            ];
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function valueNotContainsNeedle(mixed $value, float|int|string $needle): void
+    public function valueNotContainsNeedle(mixed $value, mixed $needle): void
     {
         $assertion = new NotContains($value, $needle);
 
@@ -51,6 +97,10 @@ class NotContainsTest extends AssertionCase
     /** @return array<int,mixed> */
     private function makeIncorrectItem(mixed $value, mixed $partial): array
     {
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
+
         $messageValue = $this->makeMessageValue($value);
 
         return [
@@ -60,37 +110,74 @@ class NotContainsTest extends AssertionCase
         ];
     }
 
-    /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    /**
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return array<string,array<int,mixed>>
+     */
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string contains @Cora'] = $this->makeIncorrectItem('@Coração!#', '@Co');
-        $list['string contains ção'] = $this->makeIncorrectItem('@Coração!#', 'ra');
+        $list['string contains @Co'] = $this->makeIncorrectItem('@Coração!#', '@Co');
+        $list['string contains ra'] = $this->makeIncorrectItem('@Coração!#', 'ra');
         $list['string contains ção!#'] = $this->makeIncorrectItem('@Coração!#', 'ção!#');
 
-        $valueArray = [
-            111,    // inteiro
-            '222',  // inteiro string
-            22.5,   // decimal
-            '11.5', // decimal string
-            'ção!#' // string
-        ];
+        $list['stringable Exception  @Coração!# contains @Co']
+            = $this->makeIncorrectItem(new Exception('@Coração!#'), '@Co');
 
-        $list['array contains integer 111'] = $this->makeIncorrectItem($valueArray, 111);
-        $list['array contains string 222'] = $this->makeIncorrectItem($valueArray, '222');
-        $list['array contains decimal 22.5'] = $this->makeIncorrectItem($valueArray, 22.5);
-        $list['array contains string 11.5'] = $this->makeIncorrectItem($valueArray, '11.5');
-        $list['array contains string'] = $this->makeIncorrectItem($valueArray, 'ção!#');
+        $list['stringable Exception  @Coração!# contains ra']
+            = $this->makeIncorrectItem(new Exception('@Coração!#'), 'ra');
+
+        $list['stringable Exception  @Coração!# contains ção!#']
+            = $this->makeIncorrectItem(new Exception('@Coração!#'), 'ção!#');
+
+        $list['stringable @Coração!# contains @Co']
+            = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '@Co');
+
+        $list['stringable @Coração!# contains ra']
+            = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), 'ra');
+
+        $list['stringable @Coração!# contains ção!#']
+            = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), 'ção!#');
+
+        $valueTypes = $this->makeValueTypeList();
+
+        foreach ($valueTypes as $label => $value) {
+            $list["array contains $label"] = $this->makeIncorrectItem($valueTypes, $value);
+        }
+
+        foreach ($valueTypes as $label => $value) {
+            $label = $this->makeStdProperty($label);
+
+            $list["stdClass contains value of property $label"] = $this->makeIncorrectItem($valueTypes, $value);
+        }
+
+        foreach ($valueTypes as $label => $value) {
+            $list["ArrayAccess contains $label"] = $this->makeIncorrectItem($valueTypes, $value);
+        }
+
+        foreach ($valueTypes as $label => $value) {
+            $list["IteratorAggregate contains $label"] = $this->makeIncorrectItem(
+                new ArrayObject($valueTypes),
+                $value
+            );
+        }
+
+        foreach ($valueTypes as $label => $value) {
+            $list["Iterator contains $label"] = $this->makeIncorrectItem(
+                new ArrayIterator($valueTypes),
+                $value
+            );
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function valueContainsNeedle(mixed $value, float|int|string $needle): void
+    public function valueContainsNeedle(mixed $value, mixed $needle): void
     {
         $assertion = new NotContains($value, $needle);
 
@@ -104,9 +191,9 @@ class NotContainsTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function namedValueContainsNeedle(mixed $value, float|int|string $needle): void
+    public function namedValueContainsNeedle(mixed $value, mixed $needle): void
     {
         $assertion = new NotContains($value, $needle);
 
@@ -121,11 +208,11 @@ class NotContainsTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueContainsNeedleAndCustomMessage(
         mixed $value,
-        float|int|string $needle,
+        mixed $needle,
         string $message
     ): void {
         $assertion = new NotContains($value, $needle);
@@ -140,11 +227,11 @@ class NotContainsTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueContainsNeedleWithCustomMessage(
         mixed $value,
-        float|int|string $needle,
+        mixed $needle,
         string $message
     ): void {
         $assertion = new NotContains($value, $needle);

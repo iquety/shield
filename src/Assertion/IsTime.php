@@ -11,13 +11,25 @@ use Iquety\Shield\Message;
 
 class IsTime extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
+        $value = $this->getValue();
+
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+            || is_null($value) === true
+            || empty(trim($value)) === true
+        ) {
+            return false;
+        }
+
         // ISO 8601 format : 23:59:59
         //                   hh:mm:ss
         $regex = '/^'

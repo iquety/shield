@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsUuid;
-use Tests\TestCase;
+use stdClass;
 
-class IsUuidTest extends TestCase
+class IsUuidTest extends AssertionCase
 {
     /** @return array<string, array<int, mixed>> */
-    public function correctValueProvider(): array
+    public function valueProvider(): array
     {
         return [
             'uuid_1' => ['3f2504e0-4f89-41d3-9a0c-0305e82c3301'],
@@ -21,35 +21,54 @@ class IsUuidTest extends TestCase
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider valueProvider
      */
-    public function assertedCase(string $uuidString): void
+    public function valueIsUuid(mixed $uuidString): void
     {
         $assertion = new IsUuid($uuidString);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string, array<int, mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalueProvider(): array
     {
         return [
-            'Invalid UUID - missing segments' => ['12345678-9012-3456'],
-            'Invalid UUID - too short' => ['1234567890123456789012345'],
-            'Invalid UUID - too long' => ['12345678-9012-3456-7890-123456789012345678901234567890'],
-            'Invalid UUID - invalid characters' => ['12345678-ABCD-WXYZ-9012-345678901234'],
-            'Invalid UUID - missing dashes' => ['1234567890123456789012345'],
-            'Invalid UUID - empty string' => [''],
-            'Invalid UUID - spaces' => ['   '],
-            'Invalid UUID - special characters' => ['1234*&^%$#@!~-9012-456-7890-123456789012'],
+            'missing segments'   => $this->makeIncorrectItem('12345678-9012-3456'),
+            'too short'          => $this->makeIncorrectItem('1234567890123456789012345'),
+            'too long'           => $this->makeIncorrectItem('12345678-9012-3456-7890-123456789012345678901234567890'),
+            'invalid characters' => $this->makeIncorrectItem('12345678-ABCD-WXYZ-9012-345678901234'),
+            'missing dashes'     => $this->makeIncorrectItem('1234567890123456789012345'),
+            'special characters' => $this->makeIncorrectItem('1234*&^%$#@!~-9012-456-7890-123456789012'),
+            'empty string'       => $this->makeIncorrectItem(''),
+            'one space string'   => $this->makeIncorrectItem(' '),
+            'two spaces string'  => $this->makeIncorrectItem('  '),
+            'spaces'             => $this->makeIncorrectItem('   '),
+            'integer'            => $this->makeIncorrectItem(123456),
+            'decimal'            => $this->makeIncorrectItem(123.456),
+            'boolen'             => $this->makeIncorrectItem(false),
+            'array'              => $this->makeIncorrectItem(['a']),
+            'object'             => $this->makeIncorrectItem(new stdClass()),
+            'null'               => $this->makeIncorrectItem(null),
         ];
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalueProvider
      */
-    public function notAssertedCase(string $uuidString): void
+    public function valueIsNotUuid(mixed $uuidString): void
     {
         $assertion = new IsUuid($uuidString);
 
@@ -63,9 +82,9 @@ class IsUuidTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalueProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $uuidString): void
+    public function namedValueIsNotUuid(mixed $uuidString): void
     {
         $assertion = new IsUuid($uuidString);
 
@@ -81,10 +100,12 @@ class IsUuidTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalueProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $uuidString): void
-    {
+    public function namedValueIsNotUuidAndCustomMessage(
+        mixed $uuidString,
+        string $message
+    ): void {
         $assertion = new IsUuid($uuidString);
 
         $assertion->setFieldName('name');
@@ -92,20 +113,22 @@ class IsUuidTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $uuidString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalueProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $uuidString): void
-    {
+    public function valueIsNotUuidWithCustomMessage(
+        mixed $uuidString,
+        string $message
+    ): void {
         $assertion = new IsUuid($uuidString);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $uuidString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

@@ -4,111 +4,169 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayIterator;
+use ArrayObject;
 use Iquety\Shield\Assertion\StartsWith;
 use stdClass;
-use Tests\TestCase;
 
-class StartsWithTest extends AssertionCase
+class StartsWithTest extends AssertionSearchCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
         $list['string starts with @'] = ['@Coração!#', '@Co'];
 
-        $arrayValue = [
-            111,    // inteiro
-            '222',  // inteiro string
-            22.5,   // decimal
-            '11.5', // decimal string
-            'ção!#' // string
+        $list['stringable @Coração!# starts with @Cor'] = [
+            $this->makeStringableObject('@Coração!#'),
+            '@Cor'
         ];
 
-        $list['array starts with integer 111'] = [$arrayValue, 111];
+        $valueTypes = $this->makeValueTypeList();
 
-        array_shift($arrayValue);
-        $list['array starts with integer string 222'] = [$arrayValue, '222'];
+        $arrayValues = $valueTypes;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["array starts with $label"] = [
+                $arrayValues,
+                $this->shiftArrayValue($arrayValues)
+            ];
+        }
 
-        array_shift($arrayValue);
-        $list['array starts with decimal 22.5'] = [$arrayValue, 22.5];
+        $stdValues = $valueTypes;
+        foreach (array_keys($stdValues) as $label) {
+            $label = $this->makeStdProperty($label);
 
-        array_shift($arrayValue);
-        $list['array starts with decimal string 11.5'] = [$arrayValue, '11.5'];
+            $list["stdClass starts with value of property $label"] = [
+                $stdValues,
+                $this->shiftStdValue($stdValues)
+            ];
+        }
 
-        array_shift($arrayValue);
-        $list['array starts with string ção!#'] = [$arrayValue, 'ção!#'];
+        $arrayAccessValues = $valueTypes;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["ArrayAccess starts with $label"] = [
+                $arrayAccessValues,
+                $this->shiftArrayAccessValue($arrayAccessValues)
+            ];
+        }
+
+        $iteratorAggrValues = $valueTypes;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["IteratorAggregate starts with $label"] = [
+                new ArrayObject($iteratorAggrValues),
+                $this->shiftIteratorAggrValue($iteratorAggrValues)
+            ];
+        }
+
+        $iteratorValues = $valueTypes;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["Iterator starts with $label"] = [
+                new ArrayIterator($iteratorValues),
+                $this->shiftIteratorValue($iteratorValues)
+            ];
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function valueStartsWithPartial(mixed $value, mixed $partial): void
+    public function valueStartsWithPartial(mixed $value, mixed $needle): void
     {
-        $assertion = new StartsWith($value, $partial);
+        $assertion = new StartsWith($value, $needle);
 
         $this->assertTrue($assertion->isValid());
     }
 
     /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, mixed $partial): array
+    private function makeIncorrectItem(mixed $value, mixed $needle): array
     {
         $messageValue = $this->makeMessageValue($value);
 
         return [
             $value,
-            $partial,
+            $needle,
             "O valor $messageValue está errado" // mensagem personalizada
         ];
     }
 
-    /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    /**
+     * @SuppressWarnings("PHPMD.LongVariable")
+     * @return array<string,array<int,mixed>>
+     */
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string not start with $'] = $this->makeIncorrectItem('@Coração!#', '$');
+        $list['string not start with $']   = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string not start with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
+        $list['object not valid']          = $this->makeIncorrectItem(new stdClass(), '');
+        $list['null not valid']            = $this->makeIncorrectItem(null, '');
+        $list['true not valid']            = $this->makeIncorrectItem(true, '');
+        $list['false not valid']           = $this->makeIncorrectItem(false, '');
 
-        $arrayValue = [
-            null,
-            111,    // inteiro
-            '222',  // inteiro string
-            22.5,   // decimal
-            '11.5', // decimal string
-            'ção!#' // string
-        ];
+        $valueTypes = $this->makeValueTypeList();
 
-        $list['array not start with null string'] = $this->makeIncorrectItem($arrayValue, 'null');
+        $valueTypesComparison = $this->makeValueComparisonList();
 
-        array_pop($arrayValue);
-        $list['array not start with integer string 111'] = $this->makeIncorrectItem($arrayValue, '111');
+        $arrayValues = $valueTypes;
+        $arrayComparison = $valueTypesComparison;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["array not starts with $label"] = $this->makeIncorrectItem(
+                $arrayValues,
+                $this->shiftArrayValue($arrayComparison)
+            );
+        }
 
-        array_pop($arrayValue);
-        $list['array not start with integer 222'] = $this->makeIncorrectItem($arrayValue, 222);
+        $stdValues = $valueTypes;
+        $stdComparison = $valueTypesComparison;
+        foreach (array_keys($stdValues) as $label) {
+            $label = $this->makeStdProperty($label);
 
-        array_pop($arrayValue);
-        $list['array not start with decimal string 22.5'] = $this->makeIncorrectItem($arrayValue, '22.5');
+            $list["stdClass not starts with value of property $label"] = $this->makeIncorrectItem(
+                $stdValues,
+                $this->shiftStdValue($stdComparison)
+            );
+        }
 
-        array_pop($arrayValue);
-        $list['array not start with decimal 11.5'] = $this->makeIncorrectItem($arrayValue, 11.5);
+        $arrayAccessValues = $valueTypes;
+        $arrayAccessComparison = $valueTypesComparison;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["ArrayAccess not starts with $label"] = $this->makeIncorrectItem(
+                $arrayAccessValues,
+                $this->shiftArrayAccessValue($arrayAccessComparison)
+            );
+        }
 
-        array_pop($arrayValue);
-        $list['array not start with string ção!'] = $this->makeIncorrectItem($arrayValue, 'ção!');
+        $iteratorAggrValues = $valueTypes;
+        $iteratorAggrComparison = $valueTypesComparison;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["IteratorAggregate not starts with $label"] = $this->makeIncorrectItem(
+                new ArrayObject($iteratorAggrValues),
+                $this->shiftIteratorAggrValue($iteratorAggrComparison)
+            );
+        }
 
-        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '');
+        $iteratorValues = $valueTypes;
+        $iteratorComparison = $valueTypesComparison;
+        foreach (array_keys($valueTypes) as $label) {
+            $list["Iterator not starts with $label"] = $this->makeIncorrectItem(
+                new ArrayIterator($iteratorValues),
+                $this->shiftIteratorValue($iteratorComparison)
+            );
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function valueNotStartsWithPartial(mixed $value, float|int|string $needle): void
+    public function valueNotStartsWithPartial(mixed $value, mixed $needle): void
     {
         $assertion = new StartsWith($value, $needle);
 
@@ -119,9 +177,9 @@ class StartsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function namedValueNotStartsWithPartial(mixed $value, float|int|string $needle): void
+    public function namedValueNotStartsWithPartial(mixed $value, mixed $needle): void
     {
         $assertion = new StartsWith($value, $needle);
 
@@ -137,11 +195,11 @@ class StartsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotStartsWithPartialAndCustomMessage(
         mixed $value,
-        float|int|string $needle,
+        mixed $needle,
         string $message
     ): void {
         $assertion = new StartsWith($value, $needle);
@@ -157,11 +215,11 @@ class StartsWithTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotStartsWithPartialAndCustomMessage(
         mixed $value,
-        float|int|string $needle,
+        mixed $needle,
         string $message
     ): void {
         $assertion = new StartsWith($value, $needle);

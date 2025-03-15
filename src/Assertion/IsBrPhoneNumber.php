@@ -22,15 +22,26 @@ use Iquety\Shield\Message;
  */
 class IsBrPhoneNumber extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
+        $value = $this->getValue();
+
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+            || is_null($value) === true
+        ) {
+            return false;
+        }
+
         // retira todos os separadores, espaços e parêntesis
-        $number = str_replace(['-', ' ', '(', ')'], '', $this->getValue());
+        $number = str_replace(['-', ' ', '(', ')'], '', $value);
 
         $length = strlen($number);
 

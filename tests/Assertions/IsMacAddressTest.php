@@ -5,51 +5,70 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsMacAddress;
-use Tests\TestCase;
+use stdClass;
 
-class IsMacAddressTest extends TestCase
+class IsMacAddressTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         return [
-            'Valid MAC - colon separated' => ['00:1A:2B:3C:4D:5E'],
-            'Valid MAC - hyphen separated' => ['00-1A-2B-3C-4D-5E'],
-            'Valid MAC - uppercase' => ['00:1A:2B:3C:4D:5E'],
-            'Valid MAC - lowercase' => ['00:1a:2b:3c:4d:5e'],
+            'valid mac - colon separated' => ['00:1A:2B:3C:4D:5E'],
+            'valid mac - hyphen separated' => ['00-1A-2B-3C-4D-5E'],
+            'valid mac - uppercase' => ['00:1A:2B:3C:4D:5E'],
+            'valid mac - lowercase' => ['00:1a:2b:3c:4d:5e'],
         ];
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function assertedCase(string $macAddress): void
+    public function valueIsMacAddress(mixed $macAddress): void
     {
         $assertion = new IsMacAddress($macAddress);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         return [
-            'Invalid MAC - too short' => ['00:1A:2B:3C:4D'],
-            'Invalid MAC - too long' => ['00:1A:2B:3C:4D:5E:6F'],
-            'Invalid MAC - invalid characters' => ['00:1G:2B:3C:4D:5E'],
-            'Invalid MAC - missing separators' => ['001A2B3C4D5E'],
-            'Invalid MAC - mixed separators' => ['00:1A-2B:3C-4D:5E'],
-            'Invalid MAC - empty string' => [''],
-            'Invalid MAC - spaces' => ['00:1A: 2B:3C:4D:5E'],
+            'invalid mac - too short'          => $this->makeIncorrectItem('00:1A:2B:3C:4D'),
+            'invalid mac - too long'           => $this->makeIncorrectItem('00:1A:2B:3C:4D:5E:6F'),
+            'invalid mac - invalid characters' => $this->makeIncorrectItem('00:1G:2B:3C:4D:5E'),
+            'invalid mac - missing separators' => $this->makeIncorrectItem('001A2B3C4D5E'),
+            'invalid mac - mixed separators'   => $this->makeIncorrectItem('00:1A-2B:3C-4D:5E'),
+            'invalid mac - empty string'       => $this->makeIncorrectItem(''),
+            'invalid mac - spaces'             => $this->makeIncorrectItem('00:1A: 2B:3C:4D:5E'),
+            'empty string'                     => $this->makeIncorrectItem(''),
+            'one space string'                 => $this->makeIncorrectItem(' '),
+            'two spaces string'                => $this->makeIncorrectItem('  '),
+            'array'                            => $this->makeIncorrectItem(['a']),
+            'object'                           => $this->makeIncorrectItem(new stdClass()),
+            'false'                            => $this->makeIncorrectItem(false),
+            'true'                             => $this->makeIncorrectItem(true),
+            'null'                             => $this->makeIncorrectItem(null),
         ];
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCase(string $macAddress): void
+    public function valueIsNotMacAddress(mixed $macAddress): void
     {
         $assertion = new IsMacAddress($macAddress);
 
@@ -63,9 +82,9 @@ class IsMacAddressTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $macAddress): void
+    public function namedValueIsNotMacAddress(mixed $macAddress): void
     {
         $assertion = new IsMacAddress($macAddress);
 
@@ -81,10 +100,12 @@ class IsMacAddressTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $macAddress): void
-    {
+    public function namedValueIsNotMacAddressWithCustomMessage(
+        mixed $macAddress,
+        string $message
+    ): void {
         $assertion = new IsMacAddress($macAddress);
 
         $assertion->setFieldName('name');
@@ -92,20 +113,22 @@ class IsMacAddressTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $macAddress está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $macAddress): void
-    {
+    public function valueIsNotMacAddressWithCustomMessage(
+        mixed $macAddress,
+        string $message
+    ): void {
         $assertion = new IsMacAddress($macAddress);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $macAddress está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

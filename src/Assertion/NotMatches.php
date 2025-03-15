@@ -31,6 +31,11 @@ class NotMatches extends Assertion
             return $this->isValidInArray();
         }
 
+        if (is_null($this->getValue()) === true) {
+            return $this->isMatches('null', $this->getAssertValue()) === false
+                && $this->isMatches('NULL', $this->getAssertValue()) === false;
+        }
+
         return $this->isMatches((string)$value, $this->getAssertValue()) === false;
     }
 

@@ -7,6 +7,7 @@ namespace Tests\Assertions;
 use ReflectionObject;
 use Tests\TestCase;
 
+/** @SuppressWarnings(PHPMD.NumberOfChildren) */
 class AssertionCase extends TestCase
 {
     protected function makeObjectMessage(object $object): string
@@ -43,6 +44,10 @@ class AssertionCase extends TestCase
 
         if (is_bool($value) && $value === false) {
             return 'false';
+        }
+
+        if ($value === null) {
+            return 'null';
         }
 
         switch (gettype($value)) {

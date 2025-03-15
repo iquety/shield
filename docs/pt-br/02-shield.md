@@ -71,6 +71,20 @@ if ($shield->hasErrors() === true) {
 }
 ```
 
+O formato da lista de erros é propício para validação na camada de apresentação (usando Javascript, por exemplo):
+
+```php
+[
+    'username' => [
+        "O nome deve ter no mínimo 3 caracteres",
+        "O nome não pode conter acentos"
+    ],
+    'email' => [
+        "O email fornecido é inválido"
+    ]
+],
+```
+
 ## 5. Lançando exceções
 
 Outra possibilidade é usar o método `validOrThrow` para lançar uma exceção se

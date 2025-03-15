@@ -16,7 +16,17 @@ class IsFalse extends Assertion
 
     public function isValid(): bool
     {
-        return $this->getValue() === false;
+        $value = $this->getValue();
+
+        if (is_string($value) === true) {
+            $value = trim($value);
+        }
+
+        return $value === false
+            || $value === 'false'
+            || $value === 0
+            || $value === '0'
+            || $value === '';
     }
 
     public function getDefaultMessage(): Message

@@ -5,76 +5,96 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsDate;
-use Tests\TestCase;
+use stdClass;
 
-class IsDateTest extends TestCase
+class IsDateTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
-        $list['ISO 8601'] = ['2024-12-31'];
-        $list['European format'] = ['31/12/2024'];
-        $list['US format'] = ['12/31/2024'];
-        $list['Alternative format'] = ['2024.12.31'];
-        $list['Abbreviated month name'] = ['31-Dec-2024'];
-        $list['Full month name'] = ['December 31, 2024'];
+        $list['iso 8601'] = ['2024-12-31'];
+        $list['european format'] = ['31/12/2024'];
+        $list['us format'] = ['12/31/2024'];
+        $list['alternative format'] = ['2024.12.31'];
+        $list['abbreviated month name'] = ['31-Dec-2024'];
+        $list['full month name'] = ['December 31, 2024'];
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function assertedCase(string $dateString): void
+    public function valueIsDate(mixed $dateValue): void
     {
-        $assertion = new IsDate($dateString);
+        $assertion = new IsDate($dateValue);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['ISO 8601 dirty'] = ['00002024-12-31xxx'];
-        $list['European format dirty'] = ['31/12//2024'];
-        $list['US format dirty'] = ['xxx12/31/2024'];
-        $list['Alternative format dirty'] = ['rr2x024.12.31'];
-        $list['Abbreviated month name dirty'] = ['xxx31-Dec-2024'];
-        $list['Full month name dirty'] = ['xxxDecember 31, 2024'];
+        $list['iso 8601 dirty']               = $this->makeIncorrectItem('00002024-12-31xxx');
+        $list['european format dirty']        = $this->makeIncorrectItem('31/12//2024');
+        $list['us format dirty']              = $this->makeIncorrectItem('xxx12/31/2024');
+        $list['alternative format dirty']     = $this->makeIncorrectItem('rr2x024.12.31');
+        $list['abbreviated month name dirty'] = $this->makeIncorrectItem('xxx31-Dec-2024');
+        $list['full month name dirty']        = $this->makeIncorrectItem('xxxDecember 31, 2024');
 
-        $list['ISO 8601 invalid month'] = ['2024-13-31'];
-        $list['ISO 8601 invalid day'] = ['2024-12-32'];
+        $list['iso 8601 invalid month'] = $this->makeIncorrectItem('2024-13-31');
+        $list['iso 8601 invalid day']   = $this->makeIncorrectItem('2024-12-32');
 
-        $list['European format month'] = ['31/13/2024'];
-        $list['European format day'] = ['32/12/2024'];
+        $list['european format month'] = $this->makeIncorrectItem('31/13/2024');
+        $list['european format day']   = $this->makeIncorrectItem('32/12/2024');
 
-        $list['US format month'] = ['13/31/2024'];
-        $list['US format day'] = ['12/32/2024'];
+        $list['us format month'] = $this->makeIncorrectItem('13/31/2024');
+        $list['us format day']   = $this->makeIncorrectItem('12/32/2024');
 
-        $list['Alternative format month'] = ['2024.13.31'];
-        $list['Alternative format day'] = ['2024.12.32'];
+        $list['alternative format month'] = $this->makeIncorrectItem('2024.13.31');
+        $list['alternative format day']   = $this->makeIncorrectItem('2024.12.32');
 
-        $list['Abbreviated month name month'] = ['31-Err-2024'];
-        $list['Abbreviated month name day'] = ['32-Dec-2024'];
+        $list['abbreviated month name month'] = $this->makeIncorrectItem('31-Err-2024');
+        $list['abbreviated month name day']   = $this->makeIncorrectItem('32-Dec-2024');
 
-        $list['Full month name month'] = ['Invalid 31, 2024'];
-        $list['Full month name day'] = ['December 32, 2024'];
+        $list['full month name month'] = $this->makeIncorrectItem('Invalid 31, 2024');
+        $list['full month name day']   = $this->makeIncorrectItem('December 32, 2024');
+
+        $list['empty string']      = $this->makeIncorrectItem('');
+        $list['one space string']  = $this->makeIncorrectItem(' ');
+        $list['two spaces string'] = $this->makeIncorrectItem('  ');
+        $list['array']             = $this->makeIncorrectItem(['a']);
+        $list['object']            = $this->makeIncorrectItem(new stdClass());
+        $list['false']             = $this->makeIncorrectItem(false);
+        $list['true']              = $this->makeIncorrectItem(true);
+        $list['null']              = $this->makeIncorrectItem(null);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCase(string $dateString): void
+    public function valueIsNotDate(mixed $dateValue): void
     {
-        $assertion = new IsDate($dateString);
+        $assertion = new IsDate($dateValue);
 
         $this->assertFalse($assertion->isValid());
 
@@ -86,11 +106,11 @@ class IsDateTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertion(string $dateString): void
+    public function namedValueIsNotDate(mixed $dateValue): void
     {
-        $assertion = new IsDate($dateString);
+        $assertion = new IsDate($dateValue);
 
         $assertion->setFieldName('name');
 
@@ -104,31 +124,35 @@ class IsDateTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $dateString): void
-    {
-        $assertion = new IsDate($dateString);
+    public function namedValueIsNotDateWithCustomMessage(
+        mixed $dateValue,
+        string $message
+    ): void {
+        $assertion = new IsDate($dateValue);
 
         $assertion->setFieldName('name');
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $dateString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $dateString): void
-    {
-        $assertion = new IsDate($dateString);
+    public function valueIsNotDateWithCustomMessage(
+        mixed $dateValue,
+        string $message
+    ): void {
+        $assertion = new IsDate($dateValue);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $dateString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

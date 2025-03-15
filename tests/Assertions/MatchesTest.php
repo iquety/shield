@@ -21,6 +21,8 @@ class MatchesTest extends AssertionCase
         $list['integer'] = [1234567890, '/(\d{5})(\d{5})/'];
         $list['latin'] = ['Hello World', '/World/'];
         $list['array'] = [['Coração', 'Hello World', 'Leão'], '/World/'];
+        $list['null'] = $this->makeIncorrectItem(null, '/null/');
+        $list['partial null'] = $this->makeIncorrectItem(null, '/nu/');
 
         return $list;
     }

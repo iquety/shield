@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayIterator;
+use ArrayObject;
 use Iquety\Shield\Assertion\LessThan;
 use stdClass;
 
 class LessThanTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -25,12 +27,22 @@ class LessThanTest extends AssertionCase
 
         $list['array with 7 elements is less than 8'] = [$arrayValue, 8];
 
+        $list['countable with 7 elements is less than 8'] = [new ArrayObject($arrayValue), 8];
+
+        $list['countable iterator with 7 elements is less than 8'] = [new ArrayIterator($arrayValue), 8];
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is less than 4'] = [$stdObject, 4];
+
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
     public function valueLessThanLength(mixed $value, float|int $length): void
     {
@@ -52,7 +64,7 @@ class LessThanTest extends AssertionCase
     }
 
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
@@ -73,14 +85,42 @@ class LessThanTest extends AssertionCase
         $list['array with 7 elements is not less than 7'] = $this->makeIncorrectItem($arrayValue, 7);
         $list['array with 7 elements is not less than 6'] = $this->makeIncorrectItem($arrayValue, 6);
 
-        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
+        $list['countable with 7 elements is not less than 7']
+            = $this->makeIncorrectItem(new ArrayObject($arrayValue), 7);
+
+        $list['countable with 7 elements is not less than 6']
+            = $this->makeIncorrectItem(new ArrayObject($arrayValue), 6);
+
+        $list['countable iterator with 7 elements is less than 7']
+            = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 7);
+
+        $list['countable iterator with 7 elements is less than 6']
+            = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 6);
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+
+        $list['stdClass with 3 public properties is less than 3']
+            = $this->makeIncorrectItem($stdObject, 3);
+
+        $list['stdClass with 3 public properties is less than 2']
+            = $this->makeIncorrectItem($stdObject, 2);
+
+        $list['stdClass with 0 public properties is less than 2']
+            = $this->makeIncorrectItem(new stdClass(), 0);
+
+        $list['null is invalid'] = $this->makeIncorrectItem(null, 0);
+        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
+        $list['true is invalid'] = $this->makeIncorrectItem(true, 0);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotLessThanLength(mixed $value, float|int $length): void
     {
@@ -96,7 +136,7 @@ class LessThanTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotLessThanLength(mixed $value, float|int $length): void
     {
@@ -114,7 +154,7 @@ class LessThanTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotLessThanLengthAndCustomMessage(
         mixed $value,
@@ -134,7 +174,7 @@ class LessThanTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotLessThanLengthWithCustomMessage(
         mixed $value,

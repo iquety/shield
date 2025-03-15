@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
-use Iquety\Shield\Assertion\IsAmountOfTime;
+use Iquety\Shield\Assertion\IsAmountTime;
 use stdClass;
 
-class IsAmountOfTimeTest extends AssertionCase
+class IsAmountTimeTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
@@ -27,9 +27,9 @@ class IsAmountOfTimeTest extends AssertionCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function valueIsAmountOfTime(string $timeValue): void
+    public function valueIsAmountTime(string $timeValue): void
     {
-        $assertion = new IsAmountOfTime($timeValue);
+        $assertion = new IsAmountTime($timeValue);
 
         $this->assertTrue($assertion->isValid());
     }
@@ -50,12 +50,17 @@ class IsAmountOfTimeTest extends AssertionCase
     {
         $list = [];
 
-        $list['in time']      = $this->makeIncorrectItem('23:62:62');
-        $list['greater time'] = $this->makeIncorrectItem('66:62:62');
-        $list['empty string'] = $this->makeIncorrectItem('');
-        $list['boolean']      = $this->makeIncorrectItem(false);
-        $list['array']        = $this->makeIncorrectItem(['a']);
-        $list['object']       = $this->makeIncorrectItem(new stdClass());
+        $list['in time']           = $this->makeIncorrectItem('23:62:62');
+        $list['greater time']      = $this->makeIncorrectItem('66:62:62');
+        $list['empty string']      = $this->makeIncorrectItem('');
+        $list['one space string']  = $this->makeIncorrectItem(' ');
+        $list['two spaces string'] = $this->makeIncorrectItem('  ');
+        $list['boolean']           = $this->makeIncorrectItem(false);
+        $list['array']             = $this->makeIncorrectItem(['a']);
+        $list['object']            = $this->makeIncorrectItem(new stdClass());
+        $list['false']             = $this->makeIncorrectItem(false);
+        $list['true']              = $this->makeIncorrectItem(true);
+        $list['null']              = $this->makeIncorrectItem(null);
 
         return $list;
     }
@@ -66,7 +71,7 @@ class IsAmountOfTimeTest extends AssertionCase
      */
     public function valueIsNotAmountOfTime(mixed $timeValue): void
     {
-        $assertion = new IsAmountOfTime($timeValue);
+        $assertion = new IsAmountTime($timeValue);
 
         $this->assertFalse($assertion->isValid());
 
@@ -82,7 +87,7 @@ class IsAmountOfTimeTest extends AssertionCase
      */
     public function namedValueIsNotAmountOfTime(mixed $timeValue): void
     {
-        $assertion = new IsAmountOfTime($timeValue);
+        $assertion = new IsAmountTime($timeValue);
 
         $assertion->setFieldName('name');
 
@@ -100,7 +105,7 @@ class IsAmountOfTimeTest extends AssertionCase
      */
     public function namedValueIsNotAmountOfTimeAndCustomMessage(mixed $timeValue, string $message): void
     {
-        $assertion = new IsAmountOfTime($timeValue);
+        $assertion = new IsAmountTime($timeValue);
 
         $assertion->setFieldName('name');
 
@@ -116,7 +121,7 @@ class IsAmountOfTimeTest extends AssertionCase
      */
     public function valueIsNotAmountOfTimeWithCustomMessage(mixed $timeValue, string $message): void
     {
-        $assertion = new IsAmountOfTime($timeValue);
+        $assertion = new IsAmountTime($timeValue);
 
         $assertion->message('O valor {{ value }} está errado');
 

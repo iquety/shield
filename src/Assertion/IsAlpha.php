@@ -26,9 +26,15 @@ class IsAlpha extends Assertion
             return false;
         }
 
+        $value = trim((string)$value);
+
+        if (empty($value) === true) {
+            return false;
+        }
+
         return preg_match(
             '/^[a-zA-ZáéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕçÇ\s]+$/',
-            (string)$value
+            $value
         ) === 1;
     }
 

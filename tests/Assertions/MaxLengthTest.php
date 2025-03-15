@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayIterator;
+use ArrayObject;
 use Iquety\Shield\Assertion\MaxLength;
 use stdClass;
-use Tests\TestCase;
 
-class MaxLengthTest extends TestCase
+class MaxLengthTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -21,68 +22,105 @@ class MaxLengthTest extends TestCase
         $list['float'] = [9.9, 10];
         $list['float + int'] = [9.8, 9.9];
 
-        $list['array 3 -> 3'] = [[1, 2, 3], 3];
-        $list['array 3 -> 4'] = [[1, 2, 3], 4];
+        $list['array with 3 elements is max 3 length'] = [[1, 2, 3], 3];
+        $list['array with 3 elements is max 4 length'] = [[1, 2, 3], 4];
+
+        $list['countable with 3 elements is max 3 length'] = [new ArrayObject([1, 2, 3]), 3];
+        $list['countable with 3 elements is max 4 length'] = [new ArrayObject([1, 2, 3]), 4];
+
+        $list['countable interator with 3 elements is max 3 length'] = [new ArrayIterator([1, 2, 3]), 3];
+        $list['countable interator with 3 elements is max 4 length'] = [new ArrayIterator([1, 2, 3]), 4];
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is max than 3 length'] = [$stdObject, 3];
+        $list['stdClass with 3 public properties is max than 4 length'] = [$stdObject, 4];
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function assertedCase(mixed $value, float|int $maxLength): void
+    public function valueIsMaxLength(mixed $value, float|int $maxLength): void
     {
         $assertion = new MaxLength($value, $maxLength);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, float|int $length): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $length,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 5, 'Palavra', '5'];
-        $list['int'] = [9, 5, '9', '5'];
-        $list['float'] = [9.9, 5, '9.9', '5'];
-        $list['float + int'] = [9.9, 9.8, '9.9', '9.8'];
+        $list['string']      = $this->makeIncorrectItem('Palavra', 5);
+        $list['int']         = $this->makeIncorrectItem(9, 5);
+        $list['float']       = $this->makeIncorrectItem(9.9, 5);
+        $list['float + int'] = $this->makeIncorrectItem(9.9, 9.8);
 
-        $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
+        $list['array with 3 elements is not max 2 length'] = $this->makeIncorrectItem([1, 2, 3], 2);
 
-        $list['array'] = [[1, 2, 3], 2, $value, '2'];
+        $list['countable with 3 elements is not max 2 length']
+            = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 2);
 
-        $list['object not valid'] = [new stdClass(), 0, 'stdClass:[]', '0'];
+        $list['countable interator with 3 elements is not max 2 length']
+            = $this->makeIncorrectItem(new ArrayIterator([1, 2, 3]), 2);
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is not max than 2 length'] = $this->makeIncorrectItem($stdObject, 2);
+
+        $list['null is invalid'] = $this->makeIncorrectItem(null, 0);
+        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
+        $list['true is invalid'] = $this->makeIncorrectItem(true, 0);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function notAssertedCase(
+    public function valueIsNotMaxLength(
         mixed $value,
-        float|int $maxLength,
-        string $valueString,
-        string $lengthString
+        float|int $maxLength
     ): void {
         $assertion = new MaxLength($value, $maxLength);
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be less than $lengthString characters"
+            "Value must be less than $maxLength characters"
         );
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $maxLength): void
-    {
+    public function namedValueIsNotMaxLength(
+        mixed $value,
+        float|int $maxLength
+    ): void {
         $assertion = new MaxLength($value, $maxLength);
 
         $assertion->setFieldName('name');
@@ -96,12 +134,12 @@ class MaxLengthTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueIsNotMaxLengthWithCustomMessage(
         mixed $value,
         float|int $maxLength,
-        string $valueString
+        string $message
     ): void {
         $assertion = new MaxLength($value, $maxLength);
 
@@ -110,23 +148,23 @@ class MaxLengthTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $valueString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueIsNotMaxLengthWithCustomMessage(
         mixed $value,
         float|int $maxLength,
-        string $valueString
+        string $message
     ): void {
         $assertion = new MaxLength($value, $maxLength);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $valueString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

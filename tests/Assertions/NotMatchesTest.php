@@ -10,7 +10,7 @@ use stdClass;
 class NotMatchesTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -26,7 +26,7 @@ class NotMatchesTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      * @param array<mixed>|string $value
      */
     public function valueNotMatchesPattern(mixed $value, string $pattern): void
@@ -49,25 +49,27 @@ class NotMatchesTest extends AssertionCase
     }
 
     /** @return array<string,array<int,string>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['utf8'] = $this->makeIncorrectItem('Coração de Leão', '/oraç/');
-        $list['numeric'] = $this->makeIncorrectItem('123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/');
-        $list['decimal'] = $this->makeIncorrectItem(123456.7891, '/(\d{6})\.(\d{4})/');
+        $list['utf8']         = $this->makeIncorrectItem('Coração de Leão', '/oraç/');
+        $list['numeric']      = $this->makeIncorrectItem('123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/');
+        $list['decimal']      = $this->makeIncorrectItem(123456.7891, '/(\d{6})\.(\d{4})/');
         // coerção de tipo remove o zero
         //$list['decimal'] = $this->makeIncorrectItem(123456.7890, '/(\d{6})\.(\d{4})/');
-        $list['integer'] = $this->makeIncorrectItem(1234567890, '/(\d{5})(\d{5})/');
-        $list['latin'] = $this->makeIncorrectItem('Hello World', '/World/');
-        $list['array'] = $this->makeIncorrectItem(['Coração', 'Hello World', 'Leão'], '/World/');
+        $list['integer']      = $this->makeIncorrectItem(1234567890, '/(\d{5})(\d{5})/');
+        $list['latin']        = $this->makeIncorrectItem('Hello World', '/World/');
+        $list['array']        = $this->makeIncorrectItem(['Coração', 'Hello World', 'Leão'], '/World/');
+        $list['partial null'] = $this->makeIncorrectItem(null, '/nu/');
+        $list['null']         = $this->makeIncorrectItem(null, '/null/');
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      * @param array<mixed>|string $value
      */
     public function valueMatchesPattern(mixed $value, string $pattern): void
@@ -84,7 +86,7 @@ class NotMatchesTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      * @param array<mixed>|string $value
      */
     public function namedValueNotMatchesPattern(mixed $value, string $pattern): void
@@ -102,7 +104,7 @@ class NotMatchesTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      * @param array<mixed>|string $value
      */
     public function namedValueMatchesPatternAndCustomMessage(
@@ -123,7 +125,7 @@ class NotMatchesTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      * @param array<mixed>|string $value
      */
     public function valueMatchesPatternWithCustomMessage(

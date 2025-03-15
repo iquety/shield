@@ -30,9 +30,15 @@ class IsAlphaNumeric extends Assertion
             return true;
         }
 
+        $value = trim((string)$value);
+
+        if (empty($value) === true) {
+            return false;
+        }
+
         return preg_match(
             '/^[a-zA-Z0-9áéíóúÁÉÍÓÚàèìòùÀÈÌÒÙãõÃÕçÇ\s]+$/',
-            (string)$value
+            $value
         ) === 1;
     }
 

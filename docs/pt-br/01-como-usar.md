@@ -5,7 +5,7 @@
 
 As asserções são configuradas através da biblioteca `Shield`.
 
-## 1. Validando argumentos em operaçṍes
+## 1. Validando argumentos em operações
 
 Pode ser usado para validar argumentos em métodos:
 

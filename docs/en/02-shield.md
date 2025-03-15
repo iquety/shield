@@ -1,6 +1,6 @@
 # Shield object
 
-[◂ How to use](01-how-to-use.md) | [Documentation Summary](index.md) | [Asserções ▸](03-assertions.md)
+[◂ How to use](01-how-to-use.md) | [Documentation Summary](index.md) | [Assertions ▸](03-assertions.md)
 -- | -- | --
 
 ## 1. Introduction
@@ -115,5 +115,5 @@ try {
 }
 ```
 
-[◂ How to use](01-how-to-use.md) | [Documentation Summary](index.md) | [Asserções ▸](03-assertions.md)
+[◂ How to use](01-how-to-use.md) | [Documentation Summary](index.md) | [Assertions ▸](03-assertions.md)
 -- | -- | --

@@ -5,41 +5,52 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsNull;
-use Tests\TestCase;
 
-class IsNullTest extends TestCase
+class IsNullTest extends AssertionCase
 {
     /** @test */
-    public function assertedCase(): void
+    public function valueIsNull(): void
     {
         $assertion = new IsNull(null);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function notNullValuesProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['x', 'x'];
-        $list['int'] = [1, '1'];
-        $list['float'] = [1.0, '1'];
-        $list['array'] = [['x'], '["x"]'];
-
-        $list['empty string'] = ['', ''];
-        $list['empty int'] = [0, '0'];
-        $list['empty float'] = [0.0, '0'];
-        $list['empty array'] = [[], '[]'];
+        $list['bool']         = $this->makeIncorrectItem(true);
+        $list['false']        = $this->makeIncorrectItem(false);
+        $list['string']       = $this->makeIncorrectItem('x');
+        $list['int']          = $this->makeIncorrectItem(1);
+        $list['float']        = $this->makeIncorrectItem(1.0);
+        $list['array']        = $this->makeIncorrectItem(['x']);
+        $list['empty string'] = $this->makeIncorrectItem('');
+        $list['empty int']    = $this->makeIncorrectItem(0);
+        $list['empty float']  = $this->makeIncorrectItem(0.0);
+        $list['empty array']  = $this->makeIncorrectItem([]);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider notNullValuesProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCase(mixed $value): void
+    public function valueIsNotNull(mixed $value): void
     {
         $assertion = new IsNull($value);
 
@@ -53,9 +64,9 @@ class IsNullTest extends TestCase
 
     /**
      * @test
-     * @dataProvider notNullValuesProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value): void
+    public function namedValueIsNotNull(mixed $value): void
     {
         $assertion = new IsNull($value);
 
@@ -71,10 +82,12 @@ class IsNullTest extends TestCase
 
     /**
      * @test
-     * @dataProvider notNullValuesProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(mixed $value, string $valueString): void
-    {
+    public function namedValueIsNotNullWithCustomMessage(
+        mixed $value,
+        string $message
+    ): void {
         $assertion = new IsNull($value);
 
         $assertion->setFieldName('name');
@@ -82,20 +95,22 @@ class IsNullTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $valueString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider notNullValuesProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(mixed $value, string $valueString): void
-    {
+    public function valueIsNotNullWithCustomMessage(
+        mixed $value,
+        string $message
+    ): void {
         $assertion = new IsNull($value);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $valueString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

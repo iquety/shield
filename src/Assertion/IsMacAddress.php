@@ -9,23 +9,33 @@ use Iquety\Shield\Message;
 
 class IsMacAddress extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
+        $value = $this->getValue();
+
         if (
-            strpos($this->getValue(), ':') !== false
-            && strpos($this->getValue(), '-') !== false
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+        ) {
+            return false;
+        }
+
+        if (
+            strpos((string)$value, ':') !== false
+            && strpos((string)$value, '-') !== false
         ) {
             return false;
         }
 
         return preg_match(
             '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
-            $this->getValue()
+            (string)$value
         ) === 1;
     }
 

@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayIterator;
+use ArrayObject;
 use Iquety\Shield\Assertion\MinLength;
 use stdClass;
-use Tests\TestCase;
 
-class MinLengthTest extends TestCase
+class MinLengthTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -21,54 +22,88 @@ class MinLengthTest extends TestCase
         $list['float + int'] = [9.9, 5];
         $list['float'] = [9.9, 5.5];
 
-        $list['array 3 -> 0'] = [[1, 2, 3], 0];
-        $list['array 3 -> 1'] = [[1, 2, 3], 1];
-        $list['array 3 -> 2'] = [[1, 2, 3], 2];
-        $list['array 3 -> 3'] = [[1, 2, 3], 3];
+        $list['array with 3 elements is min 2 length'] = [[1, 2, 3], 2];
+        $list['array with 3 elements is min 3 length'] = [[1, 2, 3], 3];
+
+        $list['countable with 3 elements is min 2 length'] = [new ArrayObject([1, 2, 3]), 2];
+        $list['countable with 3 elements is min 3 length'] = [new ArrayObject([1, 2, 3]), 3];
+
+        $list['countable interator with 3 elements is min 2 length'] = [new ArrayIterator([1, 2, 3]), 2];
+        $list['countable interator with 3 elements is min 3 length'] = [new ArrayIterator([1, 2, 3]), 3];
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is min than 2 length'] = [$stdObject, 2];
+        $list['stdClass with 3 public properties is min than 3 length'] = [$stdObject, 3];
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
-    public function assertedCase(mixed $value, float|int $minLength): void
+    public function valueIsMinLength(mixed $value, float|int $minLength): void
     {
         $assertion = new MinLength($value, $minLength);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, float|int $length): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $length,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 10, 'Palavra', '10'];
-        $list['int'] = [9, 10, '9', '10'];
-        $list['float'] = [9.9, 10, '9.9', '10'];
-        $list['float + int'] = [9.8, 9.9, '9.8', '9.9'];
+        $list['string']           = $this->makeIncorrectItem('Palavra', 10);
+        $list['int']              = $this->makeIncorrectItem(9, 10);
+        $list['float']            = $this->makeIncorrectItem(9.9, 10);
+        $list['float + int']      = $this->makeIncorrectItem(9.8, 9.9);
 
-        $value = str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode([1, 2, 3]));
+        $list['array with 3 elements is not min 4 length']
+            = $this->makeIncorrectItem([1, 2, 3], 4);
 
-        $list['array'] = [[1, 2, 3], 4, $value, '4'];
+        $list['countable with 3 elements is not min 4 length']
+            = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 4);
 
-        $list['object not valid'] = [new stdClass(), 0, 'stdClass:[]', '0'];
+        $list['countable interator with 3 elements is not min 4 length']
+            = $this->makeIncorrectItem(new ArrayIterator([1, 2, 3]), 4);
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is not min than 4 length'] = $this->makeIncorrectItem($stdObject, 4);
+
+        $list['null is invalid'] = $this->makeIncorrectItem(null, 0);
+        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
+        $list['true is invalid'] = $this->makeIncorrectItem(true, 0);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function notAssertedCase(
+    public function valueIsNotMinLength(
         mixed $value,
-        float|int $minLength,
-        string $valueString,
-        string $lengthString
+        float|int $minLength
     ): void {
         $assertion = new MinLength($value, $minLength);
 
@@ -76,16 +111,18 @@ class MinLengthTest extends TestCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be greater than $lengthString characters"
+            "Value must be greater than $minLength characters"
         );
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertion(mixed $value, float|int $minLength): void
-    {
+    public function namedValueIsNotMinLength(
+        mixed $value,
+        float|int $minLength
+    ): void {
         $assertion = new MinLength($value, $minLength);
 
         $assertion->setFieldName('name');
@@ -100,12 +137,12 @@ class MinLengthTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(
+    public function namedValueIsNotMinLengthWithCustomMessage(
         mixed $value,
         float|int $minLength,
-        string $valueString
+        string $message
     ): void {
         $assertion = new MinLength($value, $minLength);
 
@@ -114,23 +151,23 @@ class MinLengthTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $valueString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(
+    public function valueIsNotMinLengthWithCustomMessage(
         mixed $value,
         float|int $minLength,
-        string $valueString
+        string $message
     ): void {
         $assertion = new MinLength($value, $minLength);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $valueString está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

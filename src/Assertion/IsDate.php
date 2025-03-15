@@ -11,13 +11,25 @@ use Iquety\Shield\Message;
 
 class IsDate extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
     public function isValid(): bool
     {
+        $value = $this->getValue();
+
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+            || is_null($value) === true
+            || empty(trim($value)) === true
+        ) {
+            return false;
+        }
+
         // European format = 31/12/2024
         //                   dd/mm/yyyy
         $regex = '/^'
@@ -26,7 +38,7 @@ class IsDate extends Assertion
             . '\d{4}'
             . '$/';
 
-        if (preg_match($regex, $this->getValue()) === 1) {
+        if (preg_match($regex, (string)$value) === 1) {
             return true;
         }
 
@@ -38,7 +50,7 @@ class IsDate extends Assertion
             . '(0[1-9]|[12][0-9]|3[01])' // 1 - 31
             . '$/';
 
-        if (preg_match($regex, $this->getValue()) === 1) {
+        if (preg_match($regex, (string)$value) === 1) {
             return true;
         }
 
@@ -47,7 +59,7 @@ class IsDate extends Assertion
         // Abbreviated month name = '31-Dec-2024'
         // Full month name = 'December 31, 2024'
         try {
-            new DateTime($this->getValue());
+            new DateTime((string)$value);
 
             return true;
         } catch (Exception) {

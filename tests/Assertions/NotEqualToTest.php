@@ -6,71 +6,74 @@ namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\NotEqualTo;
 use Tests\Stubs\ObjectOne;
-use Tests\TestCase;
 
-class NotEqualToTest extends TestCase
+class NotEqualToTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function validEquality(): array
+    public function validProvider(): array
     {
         $list = [];
 
-        $list['string'] = ['Palavra', 'Palavras'];
-        $list['object'] = [new ObjectOne(''), new ObjectOne('x')];
-        $list['integer'] = [44, 45];
-        $list['float'] = [44.4, 44.5];
-        $list['float zero'] = [44.0, 44.1];
+        $typeValues = [
+            'string'     => 'Palavra Diferente',
+            'object'     => new ObjectOne('x'),
+            'integer'    => 45,
+            'float'      => 44.5,
+            'float zero' => 44.1,
+        ];
+
+        foreach ($typeValues as $type => $value) {
+            $list["string != $type"]     = ["Palavra", $value];
+            $list["object != $type"]     = [new ObjectOne(''), $value];
+            $list["integer != $type"]    = [44, $value];
+            $list["float != $type"]      = [44.4, $value];
+            $list["float zero != $type"] = [44.0, $value];
+            $list["null != $type"]       = [null, $value];
+        }
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider validEquality
+     * @dataProvider validProvider
      */
-    public function assertedCase(mixed $one, mixed $two): void
+    public function valuesAreNotEquals(mixed $one, mixed $two): void
     {
         $assertion = new NotEqualTo($one, $two);
 
         $this->assertTrue($assertion->isValid());
     }
 
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $valueOne, mixed $valueTwo): array
+    {
+        return [
+            $valueOne,
+            $valueTwo,
+            $this->makeMessageValue($valueOne),
+            $this->makeMessageValue($valueTwo)
+        ];
+    }
+
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function incorrectProvider(): array
     {
         $list = [];
 
-        $list['string'] = [
-            'Palavra', 'Palavra',
-            'Palavra', 'Palavra'
-        ];
-
-        $list['object'] = [
-            new ObjectOne(''), new ObjectOne(''),
-            ObjectOne::class . ':["name"=>""]', ObjectOne::class . ':["name"=>""]'
-        ];
-
-        $list['integer'] = [
-            44, 44,
-            '44', '44'
-        ];
-
-        $list['float'] = [
-            44.4, 44.4,
-            '44.4', '44.4'
-        ];
-
-        $list['float zero'] = [
-            44.0, 44.0,
-            '44', '44'
-        ];
+        $list['string']     = $this->makeIncorrectItem('Palavra', 'Palavra');
+        $list['object']     = $this->makeIncorrectItem(new ObjectOne(''), new ObjectOne(''));
+        $list['integer']    = $this->makeIncorrectItem(44, 44);
+        $list['float']      = $this->makeIncorrectItem(44.4, 44.4);
+        $list['float zero'] = $this->makeIncorrectItem(44.0, 44.0);
+        $list['null']       = $this->makeIncorrectItem(null, null);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider incorrectProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function notAssertedCase(
@@ -91,7 +94,7 @@ class NotEqualToTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider incorrectProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function notAssertedWithNamedAssertionCase(
@@ -113,7 +116,7 @@ class NotEqualToTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider incorrectProvider
      */
     public function notAssertedWithNamedAssertionAndCustomMessageCase(
         mixed $one,
@@ -133,7 +136,7 @@ class NotEqualToTest extends TestCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider incorrectProvider
      */
     public function notAssertedCaseWithCustomMessage(
         mixed $one,

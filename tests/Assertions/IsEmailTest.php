@@ -5,33 +5,52 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsEmail;
-use Tests\TestCase;
+use stdClass;
 
-class IsEmailTest extends TestCase
+class IsEmailTest extends AssertionCase
 {
     /** @test */
-    public function assertedCase(): void
+    public function valueIsEmail(): void
     {
         $assertion = new IsEmail('teste@teste.com');
 
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,array<int,string>> */
-    public function invalidEmailsProvider(): array
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
+    /** @return array<string,array<int,string>> */
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list[] = [ 'testeteste.com' ];
+        $list['invalid']           = $this->makeIncorrectItem('testeteste.com');
+        $list['empty string']      = $this->makeIncorrectItem('');
+        $list['one space string']  = $this->makeIncorrectItem(' ');
+        $list['two spaces string'] = $this->makeIncorrectItem('  ');
+        $list['array']             = $this->makeIncorrectItem(['a']);
+        $list['object']            = $this->makeIncorrectItem(new stdClass());
+        $list['false']             = $this->makeIncorrectItem(false);
+        $list['true']              = $this->makeIncorrectItem(true);
+        $list['null']              = $this->makeIncorrectItem(null);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider invalidEmailsProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCase(string $email): void
+    public function valueIsNotEmail(mixed $email): void
     {
         $assertion = new IsEmail($email);
 
@@ -45,9 +64,9 @@ class IsEmailTest extends TestCase
 
     /**
      * @test
-     * @dataProvider invalidEmailsProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertCaseWithNamedAssertion(string $email): void
+    public function namedValueIsNotEmail(mixed $email): void
     {
         $assertion = new IsEmail($email);
 
@@ -63,10 +82,12 @@ class IsEmailTest extends TestCase
 
     /**
      * @test
-     * @dataProvider invalidEmailsProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(string $email): void
-    {
+    public function namedValueIsNotEmailWithCustomMessage(
+        mixed $email,
+        string $message
+    ): void {
         $assertion = new IsEmail($email);
 
         $assertion->setFieldName('name');
@@ -74,20 +95,22 @@ class IsEmailTest extends TestCase
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $email está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
     /**
      * @test
-     * @dataProvider invalidEmailsProvider
+     * @dataProvider invalidProvider
      */
-    public function notAssertedCaseWithCustomMessage(string $email): void
-    {
+    public function valueIsNotEmailWithCustomMessage(
+        mixed $email,
+        string $message
+    ): void {
         $assertion = new IsEmail($email);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor $email está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

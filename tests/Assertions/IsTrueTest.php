@@ -4,23 +4,75 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayObject;
 use Iquety\Shield\Assertion\IsTrue;
-use Tests\TestCase;
+use stdClass;
 
-class IsTrueTest extends TestCase
+class IsTrueTest extends AssertionCase
 {
-    /** @test */
-    public function assertedCase(): void
+    /** @return array<string,array<int,mixed>> */
+    public function validProvider(): array
     {
-        $assertion = new IsTrue(true);
+        $list = [];
+
+        $list['boolean true']       = [true];
+        $list['string true']        = ['true'];
+        $list['binary true']        = [1];
+        $list['string binary true'] = ['1'];
+
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider validProvider
+     */
+    public function valueIsTrue(mixed $value): void
+    {
+        $assertion = new IsTrue($value);
 
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @test */
-    public function notAssertedCase(): void
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
     {
-        $assertion = new IsTrue(false);
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
+    }
+
+    /** @return array<string,array<int,mixed>> */
+    public function invalidProvider(): array
+    {
+        $list = [];
+
+        $list['boolean false']       = $this->makeIncorrectItem(false);
+        $list['string false']        = $this->makeIncorrectItem('false');
+        $list['binary true']         = $this->makeIncorrectItem(0);
+        $list['string binary false'] = $this->makeIncorrectItem('0');
+        $list['empty string']        = $this->makeIncorrectItem('');
+        $list['one space string']    = $this->makeIncorrectItem(' ');
+        $list['two spaces string']   = $this->makeIncorrectItem('  ');
+        $list['string']              = $this->makeIncorrectItem('x');
+        $list['empty array']         = $this->makeIncorrectItem([]);
+        $list['object']              = $this->makeIncorrectItem(new stdClass());
+        $list['countable']           = $this->makeIncorrectItem(new ArrayObject());
+        $list['null']                = $this->makeIncorrectItem(null);
+
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidProvider
+     */
+    public function valueIsNotTrue(mixed $value): void
+    {
+        $assertion = new IsTrue($value);
 
         $this->assertFalse($assertion->isValid());
 
@@ -30,10 +82,13 @@ class IsTrueTest extends TestCase
         );
     }
 
-    /** @test */
-    public function notAssertedCaseWithNamedAssertion(): void
+    /**
+     * @test
+     * @dataProvider invalidProvider
+     */
+    public function namedValueIsNotTrue(mixed $value): void
     {
-        $assertion = new IsTrue(false);
+        $assertion = new IsTrue($value);
 
         $assertion->setFieldName('name');
 
@@ -45,27 +100,37 @@ class IsTrueTest extends TestCase
         );
     }
 
-    /** @test */
-    public function notAssertedCaseWithNamedAssertionAndCustomMessage(): void
-    {
-        $assertion = new IsTrue(false);
+    /**
+     * @test
+     * @dataProvider invalidProvider
+     */
+    public function namedValueIsNotTimeWithCustomMessage(
+        mixed $value,
+        string $message
+    ): void {
+        $assertion = new IsTrue($value);
 
         $assertion->setFieldName('name');
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor false está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 
-    /** @test */
-    public function notAssertedCaseWithCustomMessage(): void
-    {
-        $assertion = new IsTrue(false);
+    /**
+     * @test
+     * @dataProvider invalidProvider
+     */
+    public function valueIsNotTrueWithCustomMessage(
+        mixed $value,
+        string $message
+    ): void {
+        $assertion = new IsTrue($value);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
-        $this->assertEquals($assertion->makeMessage(), "O valor false está errado");
+        $this->assertEquals($assertion->makeMessage(), $message);
     }
 }

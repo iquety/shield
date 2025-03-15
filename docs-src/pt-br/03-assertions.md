@@ -4,45 +4,80 @@
 
 As seguintes asserções são usadas para validar o valor de uma variável:
 
-| Asserção             | Descrição                                           |
-| :--                  | :--                                                 |
-| Contains             | O valor contém o valor esperado                     |
-| EndsWith             | O valor termina com o valor esperado                |
-| EqualTo              | Ambos os valores são iguais                         |
-| GreaterThan          | O valor é maior do que o valor esperado             |
-| GreaterThanOrEqualTo | O valor é maior ou igual ao esperado                |
-| IsAlpha              | O valor contém apenas letras                        |
-| IsAlphaNumeric       | O valor contém apenas letras e números              |
-| IsBase32             | O valor é uma string codificada em base32           |
-| IsBase64             | O valor é uma string codificada em base64           |
-| IsCreditCard         | O valor é um cartão de crédito válido               |
-| IsDate               | O valor é uma data válida                           |
-| IsDateTime           | O valor é uma data e hora válida                    |
-| IsEmail              | O valor é um e-mail válido                          |
-| IsEmpty              | O valor é vazio                                     |
-| IsFalse              | O valor é falso                                     |
-| IsHexadecimal        | O valor é um número hexadecimal válido              |
-| IsHexColor           | O valor é uma cor hexadecimal válida                |
-| IsIp                 | O valor é um endereço IP válido                     |
-| IsMacAddress         | O valor é um endereço MAC válido                    |
-| IsNotEmpty           | O valor não é vazio                                 |
-| IsNotNull            | O valor não é nulo                                  |
-| IsNull               | O valor é nulo                                      |
-| IsPhoneNumber        | O valor é um número de telefone válido              |
-| IsPostalCode         | O valor é um código postal válido                   |
-| IsTime               | O valor é uma hora válida                           |
-| IsTrue               | O valor é verdadeiro                                |
-| IsUrl                | O valor é uma URL válida                            |
-| IsUuid               | O valor é um UUID válido                            |
-| Length               | O valor possui o tamanho esperado                   |
-| LessThan             | O valor é menor do que o valor esperado             |
-| LessThanOrEqualTo    | O valor é menor ou igual ao valor esperado          |
-| Matches              | O valor corresponde ao padrão esperado              |
-| MaxLength            | O valor possui o tamanho máximo esperado            |
-| MinLength            | O valor possui pelo menos o tamanho mínimo esperado |
-| NotContains          | O valor não contém o valor esperado                 |
-| NotEqualTo           | Os valores são diferentes                           |
-| NotMatches           | O valor não corresponde ao padrão esperado          |
-| StartsWith           | O valor começa com o valor esperado                 |
+## Igualdade
+
+| Asserção                       | Descrição                  |
+| :--                            | :--                        |
+| [EqualTo](04-equalto.md)       | Os valores são iguais      |
+| [NotEqualTo](04-notequalto.md) | Os valores são diferentes  |
+
+## Elementos
+
+| Asserção                         | Descrição                         |
+| :--                              | :--                               |
+| [Contains](05-contains.md)       | O valor contém o outro valor      |
+| [EndsWith](05-endswith.md)       | O valor termina com o outro valor |
+| [Matches](05-matches.md)         | O valor corresponde ao padrão     |
+| [NotContains](05-notcontains.md) | O valor não contém o outro valor  |
+| [NotMatches](05-notmatches.md)   | O valor não corresponde ao padrão |
+| [StartsWith](05-startswith.md)   | O valor começa com o outro valor  |
+
+## Contagem
+
+| Asserção                                     | Descrição                                  |
+| :--                                          | :--                                        |
+| [GreaterThan](06-greaterthan.md)             | O valor é maior do que o esperado          |
+| [GreaterThanOrEqualTo](06-greaterthanorequalto.md) | O valor é maior ou igual ao esperado |
+| [Length](06-length.md)                       | O valor possui o tamanho esperado          |
+| [LessThan](06-lessthan.md)                   | O valor é menor do que o esperado          |
+| [LessThanOrEqualTo](06-lessthanorequalto.md) | O valor é menor ou igual ao outro valor    |
+| [MaxLength](06-maxlength.md)                 | O valor possui o tamanho máximo            |
+| [MinLength](06-minlength.md)                 | O valor possui o tamanho mínimo            |
+
+## Datas e tempo
+
+| Asserção                           | Descrição                               |
+| :--                                | :--                                     |
+| [IsDate](07-isdate.md)             | Formatos de data                        |
+| [IsDateTime](07-isdatetime.md)     | Formatos de data + hora                 |
+| [IsTime](07-istime.md)             | Formato de hora com limite de 24 horas) |
+| [IsAmountTime](07-isamounttime.md) | Formato de hora sem limite de horas     |
+
+## Internet
+
+| Asserção                           | Descrição                                        |
+| :--                                | :--                                              |
+| IsEmail                            | Endereço eletrônico (ex.: **fulano@gmail.com**)  |
+| [IsIp](08-isip.md)                 | É um endereço IP                                 |
+| [IsMacAddress](08-ismacaddress.md) | É um endereço MAC                                |
+| [IsUrl](08-isurl.md)               | É uma URL                                        |
+
+## Formatos brasileiros
+
+| Asserção           | Descrição                                              |
+| :--                | :--                                                    |
+| [IsBrPhoneNumber](09-isbrphonenumber.md) | O valor é um telefone brasileiro |
+| IsCep              | Código de endereçamento postal (ex.: **12.380-315**)   |
+| IsCpf              | Cadastro de pessoa física (ex.: **742.143.120-90**)    |
+
+## Outros formatos
+
+| Asserção           | Descrição                                                                |
+| :--                | :--                                                                      |
+| IsAlpha            | Caracteres alfabéticos (ex.: **abcdefghijklmnopqrstuvwxyz**)             |
+| IsAlphaNumeric     | Caracteres alfanuméricos (ex.: **abcdefghijklmnopqrstuvwxyz1234567890**) |
+| IsBase64           | Texto codificado em base64: (ex.: **YcOnw6NvdmFsZW50ZQ==**)              |
+| IsCreditCard       | Número de cartão de crédito: (ex.: **5279 6901 2297 4109** ou **5279-6901-2297-4109**) |
+| IsCreditCardBrand  | Uma bandeira de cartão de crédito                                        |
+| IsCvv              | Código de segurança de cartão de crédito (ex.: **345**)                  |
+| IsEmpty            | O valor é vazio                                                          |
+| IsFalse            | O valor é falso                                                          |
+| IsHexadecimal      | Caracteres hexadecimais (ex.: **1234567890abcdef**)                      |
+| IsHexColor         | É uma cor hexadecimal (ex.: **#ff00ee** ou **#FF00EE**)                  |
+| IsNotEmpty         | O valor não é vazio                                                      |
+| IsNotNull          | O valor não é nulo                                                       |
+| IsNull             | O valor é nulo                                                           |
+| IsTrue             | O valor é verdadeiro                                                     |
+| IsUuid             | É um UUID (ex.: **3f2504e0-4f89-41d3-9a0c-0305e82c3301**)                |
 
 --page-nav--

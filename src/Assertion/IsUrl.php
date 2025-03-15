@@ -9,14 +9,29 @@ use Iquety\Shield\Message;
 
 class IsUrl extends Assertion
 {
-    public function __construct(string $value)
+    public function __construct(mixed $value)
     {
         $this->setValue($value);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     public function isValid(): bool
     {
-        $value = trim($this->getValue());
+        $value = $this->getValue();
+
+        if (
+            is_bool($value) === true
+            || is_object($value) === true
+            || is_array($value) === true
+            || is_null($value) === true
+        ) {
+            return false;
+        }
+
+        $value = trim($value);
 
         // é vazio
         if ($value === '') {

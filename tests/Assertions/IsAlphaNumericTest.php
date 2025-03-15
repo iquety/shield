@@ -10,7 +10,7 @@ use stdClass;
 class IsAlphaNumericTest extends AssertionCase
 {
     /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    public function validProvider(): array
     {
         $list = [];
 
@@ -29,7 +29,7 @@ class IsAlphaNumericTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider validProvider
      */
     public function valueIsAlphaNumeric(mixed $alphaNumeric): void
     {
@@ -50,39 +50,43 @@ class IsAlphaNumericTest extends AssertionCase
     }
 
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         return [
-            'ISO 8601 dirty' => $this->makeIncorrectItem('00002024-12-31xxx'),
-            'European format dirty' => $this->makeIncorrectItem('31/12//2024'),
-            'US format dirty' => $this->makeIncorrectItem('xxx12/31/2024'),
-            'Alternative format dirty' => $this->makeIncorrectItem('rr2x024.12.31'),
-            'Abbreviated month name dirty' => $this->makeIncorrectItem('xxx31-Dec-2024'),
-            'Full month name dirty' => $this->makeIncorrectItem('xxxDecember 31, 2024'),
-            'ISO 8601 invalid month' => $this->makeIncorrectItem('2024-13-31'),
-            'ISO 8601 invalid day' => $this->makeIncorrectItem('2024-12-32'),
-            'European format month' => $this->makeIncorrectItem('31/13/2024'),
-            'European format day' => $this->makeIncorrectItem('32/12/2024'),
-            'US format month' => $this->makeIncorrectItem('13/31/2024'),
-            'US format day' => $this->makeIncorrectItem('12/32/2024'),
-            'Alternative format month' => $this->makeIncorrectItem('2024.13.31'),
-            'Alternative format day' => $this->makeIncorrectItem('2024.12.32'),
-            'Abbreviated month name month' => $this->makeIncorrectItem('31-Err-2024'),
-            'Abbreviated month name day' => $this->makeIncorrectItem('32-Dec-2024'),
-            'Full month name month' => $this->makeIncorrectItem('Invalid 31, 2024'),
-            'Full month name day' => $this->makeIncorrectItem('December 32, 2024'),
-            'Special characters' => $this->makeIncorrectItem('@#$%^&*()'),
-            'Numbers and special characters' => $this->makeIncorrectItem('123@#$%'),
-            'Empty string' => $this->makeIncorrectItem(''),
-            'Boolean' => $this->makeIncorrectItem(false),
-            'Array' => $this->makeIncorrectItem(['a']),
-            'Object' => $this->makeIncorrectItem(new stdClass()),
+            'iso 8601 dirty' => $this->makeIncorrectItem('00002024-12-31xxx'),
+            'european format dirty' => $this->makeIncorrectItem('31/12//2024'),
+            'us format dirty' => $this->makeIncorrectItem('xxx12/31/2024'),
+            'alternative format dirty' => $this->makeIncorrectItem('rr2x024.12.31'),
+            'abbreviated month name dirty' => $this->makeIncorrectItem('xxx31-Dec-2024'),
+            'full month name dirty' => $this->makeIncorrectItem('xxxDecember 31, 2024'),
+            'iso 8601 invalid month' => $this->makeIncorrectItem('2024-13-31'),
+            'iso 8601 invalid day' => $this->makeIncorrectItem('2024-12-32'),
+            'european format month' => $this->makeIncorrectItem('31/13/2024'),
+            'european format day' => $this->makeIncorrectItem('32/12/2024'),
+            'us format month' => $this->makeIncorrectItem('13/31/2024'),
+            'us format day' => $this->makeIncorrectItem('12/32/2024'),
+            'alternative format month' => $this->makeIncorrectItem('2024.13.31'),
+            'alternative format day' => $this->makeIncorrectItem('2024.12.32'),
+            'abbreviated month name month' => $this->makeIncorrectItem('31-Err-2024'),
+            'abbreviated month name day' => $this->makeIncorrectItem('32-Dec-2024'),
+            'full month name month' => $this->makeIncorrectItem('Invalid 31, 2024'),
+            'full month name day' => $this->makeIncorrectItem('December 32, 2024'),
+            'special characters' => $this->makeIncorrectItem('@#$%^&*()'),
+            'numbers and special characters' => $this->makeIncorrectItem('123@#$%'),
+            'empty string' => $this->makeIncorrectItem(''),
+            'one space string' => $this->makeIncorrectItem(' '),
+            'two spaces string' => $this->makeIncorrectItem('  '),
+            'array' => $this->makeIncorrectItem(['a']),
+            'object' => $this->makeIncorrectItem(new stdClass()),
+            'false' => $this->makeIncorrectItem(false),
+            'true' => $this->makeIncorrectItem(true),
+            'null' => $this->makeIncorrectItem(null),
         ];
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueIsNotAlphaNumeric(mixed $value): void
     {
@@ -98,7 +102,7 @@ class IsAlphaNumericTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueIsNotAlphaNumeric(mixed $value): void
     {
@@ -116,7 +120,7 @@ class IsAlphaNumericTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueIsNotAlphaNumericAndCustomMessage(mixed $value, string $message): void
     {
@@ -132,7 +136,7 @@ class IsAlphaNumericTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueIsNotAlphaNumericWithCustomMessage(mixed $value, string $message): void
     {

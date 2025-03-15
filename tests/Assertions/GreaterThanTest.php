@@ -102,10 +102,10 @@ class GreaterThanTest extends AssertionCase
         $stdObject->two   = 'Texto';
         $stdObject->three = 'Legal';
 
-        $list['stdClass with 3 public properties is not greater than 3'] 
+        $list['stdClass with 3 public properties is not greater than 3']
             = $this->makeIncorrectItem($stdObject, 3);
 
-        $list['stdClass with 3 public properties is not greater than 4'] 
+        $list['stdClass with 3 public properties is not greater than 4']
             = $this->makeIncorrectItem($stdObject, 4);
 
         $list['stdClass is not greater than 0'] = $this->makeIncorrectItem(new stdClass(), 0);

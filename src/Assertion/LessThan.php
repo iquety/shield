@@ -26,7 +26,7 @@ class LessThan extends Assertion
         if (is_null($value) === true || $value === true || $value === false) {
             return false;
         }
-        
+
         if ($value instanceof Countable) {
             return $this->isValidCountable($value, $this->getAssertValue());
         }

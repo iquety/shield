@@ -24,7 +24,7 @@ class MinLengthTest extends AssertionCase
 
         $list['array with 3 elements is min 2 length'] = [[1, 2, 3], 2];
         $list['array with 3 elements is min 3 length'] = [[1, 2, 3], 3];
-        
+
         $list['countable with 3 elements is min 2 length'] = [new ArrayObject([1, 2, 3]), 2];
         $list['countable with 3 elements is min 3 length'] = [new ArrayObject([1, 2, 3]), 3];
 
@@ -76,7 +76,7 @@ class MinLengthTest extends AssertionCase
 
         $list['array with 3 elements is not min 4 length']
             = $this->makeIncorrectItem([1, 2, 3], 4);
-        
+
         $list['countable with 3 elements is not min 4 length']
             = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 4);
 

@@ -24,7 +24,7 @@ class MaxLengthTest extends AssertionCase
 
         $list['array with 3 elements is max 3 length'] = [[1, 2, 3], 3];
         $list['array with 3 elements is max 4 length'] = [[1, 2, 3], 4];
-        
+
         $list['countable with 3 elements is max 3 length'] = [new ArrayObject([1, 2, 3]), 3];
         $list['countable with 3 elements is max 4 length'] = [new ArrayObject([1, 2, 3]), 4];
 
@@ -75,10 +75,12 @@ class MaxLengthTest extends AssertionCase
         $list['float + int'] = $this->makeIncorrectItem(9.9, 9.8);
 
         $list['array with 3 elements is not max 2 length'] = $this->makeIncorrectItem([1, 2, 3], 2);
-        
-        $list['countable with 3 elements is not max 2 length'] = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 2);
 
-        $list['countable interator with 3 elements is not max 2 length'] = $this->makeIncorrectItem(new ArrayIterator([1, 2, 3]), 2);
+        $list['countable with 3 elements is not max 2 length']
+            = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 2);
+
+        $list['countable interator with 3 elements is not max 2 length']
+            = $this->makeIncorrectItem(new ArrayIterator([1, 2, 3]), 2);
 
         $stdObject        = new stdClass();
         $stdObject->one   = 'Meu';

@@ -86,16 +86,19 @@ class GreaterThanOrEqualToTest extends AssertionCase
         $list['float']            = $this->makeIncorrectItem(9.9, 10.0);
         $list['float + int']      = $this->makeIncorrectItem(9.8, 10);
         $list['array less']       = $this->makeIncorrectItem([1, 2, 3], 4);
-        
-        $list['countable with 3 elements is not greater than or equal to 4'] = $this->makeIncorrectItem(new ArrayObject(['a', 'b', 'c']), 4);
 
-        $list['countable iterator with 3 elements is not greater than or equal to 4'] = $this->makeIncorrectItem(new ArrayIterator(['a', 'b', 'c']), 4);
+        $list['countable with 3 elements is not greater than or equal to 4']
+            = $this->makeIncorrectItem(new ArrayObject(['a', 'b', 'c']), 4);
+
+        $list['countable iterator with 3 elements is not greater than or equal to 4']
+            = $this->makeIncorrectItem(new ArrayIterator(['a', 'b', 'c']), 4);
 
         $stdObject        = new stdClass();
         $stdObject->one   = 'Meu';
         $stdObject->two   = 'Texto';
         $stdObject->three = 'Legal';
-        $list['stdClass with 3 public properties is not greater than or equal to 4'] = $this->makeIncorrectItem($stdObject, 4);
+        $list['stdClass with 3 public properties is not greater than or equal to 4']
+            = $this->makeIncorrectItem($stdObject, 4);
 
         $list['null is invalid']  = $this->makeIncorrectItem(null, 0);
         $list['false is invalid'] = $this->makeIncorrectItem(false, 0);

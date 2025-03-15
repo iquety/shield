@@ -22,7 +22,7 @@ class Length extends Assertion
     public function isValid(): bool
     {
         $value = $this->getValue();
-        
+
         if (is_null($value) === true || $value === true || $value === false) {
             return false;
         }

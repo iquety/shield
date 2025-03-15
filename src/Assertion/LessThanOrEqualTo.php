@@ -23,12 +23,16 @@ class LessThanOrEqualTo extends Assertion
     {
         $value = $this->getValue();
 
+        if (is_null($value) === true || $value === true || $value === false) {
+            return false;
+        }
+        
         if ($value instanceof Countable) {
             return $this->isValidCountable($value, $this->getAssertValue());
         }
 
         if (is_object($value) === true) {
-            return false;
+            $value = (array)$value;
         }
 
         if (is_array($value) === true) {

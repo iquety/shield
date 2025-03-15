@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayIterator;
 use ArrayObject;
 use Iquety\Shield\Assertion\LessThanOrEqualTo;
 use stdClass;
@@ -34,8 +35,18 @@ class LessThanOrEqualToTest extends AssertionCase
         $list['array with 7 elements is less than 7'] = [$arrayValue, 7];
         $list['array with 7 elements is less than 8'] = [$arrayValue, 8];
 
-        $list['countable with 7 elements is less than 7'] = [new ArrayObject($arrayValue), 7];
-        $list['countable with 7 elements is less than 8'] = [new ArrayObject($arrayValue), 8];
+        $list['countable with 7 elements is less than or equal 7'] = [new ArrayObject($arrayValue), 7];
+        $list['countable with 7 elements is less than or equal 8'] = [new ArrayObject($arrayValue), 8];
+
+        $list['countable iterator with 7 elements is less than or equal 7'] = [new ArrayIterator($arrayValue), 7];
+        $list['countable iterator with 7 elements is less than or equal 8'] = [new ArrayIterator($arrayValue), 8];
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is less than or equal 3'] = [$stdObject, 3];
+        $list['stdClass with 3 public properties is less than or equal 4'] = [$stdObject, 4];
 
         return $list;
     }
@@ -76,9 +87,23 @@ class LessThanOrEqualToTest extends AssertionCase
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements is not less than 6'] = $this->makeIncorrectItem($arrayValue, 6);
-        $list['countable with 7 elements is not less than 6']
+
+        $list['countable with 7 elements is not less than or equal 6']
             = $this->makeIncorrectItem(new ArrayObject($arrayValue), 6);
-        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
+        
+        $list['countable iterator with 7 elements is not less than or equal 6']
+            = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 6);
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is not less than or equal 2']
+            = $this->makeIncorrectItem($stdObject, 2);
+
+        $list['null is invalid'] = $this->makeIncorrectItem(null, 0);
+        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
+        $list['true is invalid'] = $this->makeIncorrectItem(true, 0);
 
         return $list;
     }

@@ -7,7 +7,7 @@ namespace Iquety\Shield\Assertion;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
-class IsAmountOfTime extends Assertion
+class IsAmountTime extends Assertion
 {
     public function __construct(mixed $value)
     {

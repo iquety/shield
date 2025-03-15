@@ -1,6 +1,6 @@
 # EqualTo
 
-[◂ EndsWith](04-endswith.md) | [Sumário da Documentação](indice.md) | [Matches ▸](04-matches.md)
+[◂ Asserções](03-assertions.md) | [Sumário da Documentação](indice.md) | [EqualTo ▸](04-notequalto.md)
 -- | -- | --
 
 Verifica se ambos os valores são iguais.
@@ -25,5 +25,5 @@ new EqualTo(true, true);
 new EqualTo(false, false);
 ```
 
-[◂ EndsWith](04-endswith.md) | [Sumário da Documentação](indice.md) | [Matches ▸](04-matches.md)
+[◂ Asserções](03-assertions.md) | [Sumário da Documentação](indice.md) | [EqualTo ▸](04-notequalto.md)
 -- | -- | --

@@ -1,6 +1,6 @@
 # NotContains
 
-[◂ Matches](04-matches.md) | [Sumário da Documentação](indice.md) | [EqualTo ▸](04-notequalto.md)
+[◂ Matches](05-matches.md) | [Sumário da Documentação](indice.md) | [NotMatches ▸](05-notmatches.md)
 -- | -- | --
 
 O valor completo não contém o valor parcial.
@@ -34,8 +34,8 @@ new Contains(new ArrayIterator(['Meu', 'texto']), 'legal');
 $stdObject = new stdClass();
 $stdObject->one = 'Meu';
 $stdObject->two = 'Texto';
-new Contains($stdObject, 'texto');
+new Contains($stdObject, 'legal');
 ```
 
-[◂ Matches](04-matches.md) | [Sumário da Documentação](indice.md) | [EqualTo ▸](04-notequalto.md)
+[◂ Matches](05-matches.md) | [Sumário da Documentação](indice.md) | [NotMatches ▸](05-notmatches.md)
 -- | -- | --

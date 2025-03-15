@@ -1,7 +1,7 @@
 # StartsWith
 
-[◂ NotMatches](04-notmatches.md) | [Sumário da Documentação ▸](indice.md)
--- | --
+[◂ NotMatches](05-notmatches.md) | [Sumário da Documentação](indice.md) | [GreaterThan ▸](06-greaterthan.md)
+-- | -- | --
 
 O valor completo começa com o valor parcial.
 
@@ -37,5 +37,5 @@ $stdObject->two = 'Texto';
 new StartsWith($stdObject, 'Meu');
 ```
 
-[◂ NotMatches](04-notmatches.md) | [Sumário da Documentação ▸](indice.md)
--- | --
+[◂ NotMatches](05-notmatches.md) | [Sumário da Documentação](indice.md) | [GreaterThan ▸](06-greaterthan.md)
+-- | -- | --

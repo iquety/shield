@@ -1,6 +1,7 @@
 # IsUrl
 
---page-nav--
+[◂ IsMacAddress](08-ismacaddress.md) | [Sumário da Documentação](indice.md) | [IsTime ▸](09-isbrphonenumber.md)
+-- | -- | --
 
 Formatos de URL válidos:
 
@@ -36,4 +37,5 @@ new IsUrl('http://www.exemplo.com:8080');
 new IsUrl('http://www.exemplo.museum');
 ```
 
---page-nav--
+[◂ IsMacAddress](08-ismacaddress.md) | [Sumário da Documentação](indice.md) | [IsTime ▸](09-isbrphonenumber.md)
+-- | -- | --

@@ -2,19 +2,19 @@
 
 --page-nav--
 
-Formatos de endereços MAC:
+MAC address formats:
 
 ```php
-// separado por dois pontos
+// colon separated
 new IsMacAddress('00:1A:2B:3C:4D:5E');
 
-// separado por hífen
+// hyphen separated
 new IsMacAddress('00-1A-2B-3C-4D-5E');
 
-// em caixa alta
+// uppercase
 new IsMacAddress('00:1A:2B:3C:4D:5E');
 
-// em caixa baixa
+//lowercase
 new IsMacAddress('00:1a:2b:3c:4d:5e');
 ```
 

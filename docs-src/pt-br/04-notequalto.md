@@ -6,22 +6,22 @@ Verifica se ambos os valores são diferentes.
 
 ```php
 // textos diferentes
-new EqualTo('Palavra', 'Palavrasss');
+new NotEqualTo('Palavra', 'Palavrasss');
 
 // tipo e conteúdo de objetos diferentes
-new EqualTo(new ObjectOne(''), new ObjectOne('valor'));
+new NotEqualTo(new ObjectOne(''), new ObjectOne('valor'));
 
 // números diferentes
-new EqualTo(44, 45);
-new EqualTo(10.5, 10.6);
+new NotEqualTo(44, 45);
+new NotEqualTo(10.5, 10.6);
 
 // arrays diferentes
-new EqualTo(['one', 'two'], ['three', 'two']);
+new NotEqualTo(['one', 'two'], ['three', 'two']);
 
 // outros valores diferentes
-new EqualTo(null, true);
-new EqualTo(true, null);
-new EqualTo(false, 'x');
+new NotEqualTo(null, true);
+new NotEqualTo(true, null);
+new NotEqualTo(false, 'x');
 ```
 
 --page-nav--

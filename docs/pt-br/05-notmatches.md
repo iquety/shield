@@ -1,6 +1,6 @@
 # NotMatches
 
-[◂ EqualTo](04-notequalto.md) | [Sumário da Documentação](indice.md) | [StartsWith ▸](04-startswith.md)
+[◂ NotContains](05-notcontains.md) | [Sumário da Documentação](indice.md) | [StartsWith ▸](05-startswith.md)
 -- | -- | --
 
 O valor completo não corresponde ou não contém um trecho da expressão regular.
@@ -15,9 +15,6 @@ new Matches('123-456-7890', '/(\d{3})-(\d{3})-(\d{9})/');
 // formato do número decimal não corresponde ao padrão
 new Matches(123456.7891, '/(\d{6})\.(\d{9})/');
 
-// Atenção: números decimais com zero no final não funcionarão por uma limitação da coreção de tipos do PHP, que removerá os zeros do final
-new Matches(123456.7890, '/(\d{6})\.(\d{9})/');
-
 // formato do número inteiro não corresponde ao padrão
 new Matches(1234567890, '/(\d{5})(\d{9})/');
 
@@ -28,5 +25,13 @@ new Matches(['Coração', 'Hello World', 'Leão'], '/Life/');
 new Matches(null, '/nus/');
 ```
 
-[◂ EqualTo](04-notequalto.md) | [Sumário da Documentação](indice.md) | [StartsWith ▸](04-startswith.md)
+## Limitações
+
+**Atenção:** números decimais com zero no final não funcionarão por uma limitação da correção de tipos do PHP, que removerá os zeros do final
+
+```php
+new Matches(123456.7890, '/(\d{6})\.(\d{9})/');
+```
+
+[◂ NotContains](05-notcontains.md) | [Sumário da Documentação](indice.md) | [StartsWith ▸](05-startswith.md)
 -- | -- | --

@@ -1,6 +1,6 @@
 # EndsWith
 
-[◂ Contains](04-contains.md) | [Sumário da Documentação](indice.md) | [EqualTo ▸](04-equalto.md)
+[◂ Contains](05-contains.md) | [Sumário da Documentação](indice.md) | [Matches ▸](05-matches.md)
 -- | -- | --
 
 O valor completo termina com o valor parcial.
@@ -37,5 +37,5 @@ $stdObject->two = 'Texto';
 new EndsWith($stdObject, 'texto');
 ```
 
-[◂ Contains](04-contains.md) | [Sumário da Documentação](indice.md) | [EqualTo ▸](04-equalto.md)
+[◂ Contains](05-contains.md) | [Sumário da Documentação](indice.md) | [Matches ▸](05-matches.md)
 -- | -- | --

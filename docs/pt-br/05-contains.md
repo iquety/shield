@@ -1,6 +1,6 @@
 # Contains
 
-[◂ Asserções](03-assertions.md) | [Sumário da Documentação](indice.md) | [EndsWith ▸](04-endswith.md)
+[◂ EqualTo](04-notequalto.md) | [Sumário da Documentação](indice.md) | [EndsWith ▸](05-endswith.md)
 -- | -- | --
 
 O valor completo contém o valor parcial.
@@ -37,5 +37,5 @@ $stdObject->two = 'Texto';
 new Contains($stdObject, 'texto');
 ```
 
-[◂ Asserções](03-assertions.md) | [Sumário da Documentação](indice.md) | [EndsWith ▸](04-endswith.md)
+[◂ EqualTo](04-notequalto.md) | [Sumário da Documentação](indice.md) | [EndsWith ▸](05-endswith.md)
 -- | -- | --

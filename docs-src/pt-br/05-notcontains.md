@@ -33,7 +33,7 @@ new Contains(new ArrayIterator(['Meu', 'texto']), 'legal');
 $stdObject = new stdClass();
 $stdObject->one = 'Meu';
 $stdObject->two = 'Texto';
-new Contains($stdObject, 'texto');
+new Contains($stdObject, 'legal');
 ```
 
 --page-nav--

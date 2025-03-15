@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayIterator;
 use ArrayObject;
 use Iquety\Shield\Assertion\MinLength;
 use stdClass;
@@ -21,15 +22,21 @@ class MinLengthTest extends AssertionCase
         $list['float + int'] = [9.9, 5];
         $list['float'] = [9.9, 5.5];
 
-        $list['array 3 -> 0'] = [[1, 2, 3], 0];
-        $list['array 3 -> 1'] = [[1, 2, 3], 1];
-        $list['array 3 -> 2'] = [[1, 2, 3], 2];
-        $list['array 3 -> 3'] = [[1, 2, 3], 3];
+        $list['array with 3 elements is min 2 length'] = [[1, 2, 3], 2];
+        $list['array with 3 elements is min 3 length'] = [[1, 2, 3], 3];
+        
+        $list['countable with 3 elements is min 2 length'] = [new ArrayObject([1, 2, 3]), 2];
+        $list['countable with 3 elements is min 3 length'] = [new ArrayObject([1, 2, 3]), 3];
 
-        $list['countable 3 -> 0'] = [new ArrayObject([1, 2, 3]), 0];
-        $list['countable 3 -> 1'] = [new ArrayObject([1, 2, 3]), 1];
-        $list['countable 3 -> 2'] = [new ArrayObject([1, 2, 3]), 2];
-        $list['countable 3 -> 3'] = [new ArrayObject([1, 2, 3]), 3];
+        $list['countable interator with 3 elements is min 2 length'] = [new ArrayIterator([1, 2, 3]), 2];
+        $list['countable interator with 3 elements is min 3 length'] = [new ArrayIterator([1, 2, 3]), 3];
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is min than 2 length'] = [$stdObject, 2];
+        $list['stdClass with 3 public properties is min than 3 length'] = [$stdObject, 3];
 
         return $list;
     }
@@ -66,10 +73,25 @@ class MinLengthTest extends AssertionCase
         $list['int']              = $this->makeIncorrectItem(9, 10);
         $list['float']            = $this->makeIncorrectItem(9.9, 10);
         $list['float + int']      = $this->makeIncorrectItem(9.8, 9.9);
-        $list['array']            = $this->makeIncorrectItem([1, 2, 3], 4,);
-        $list['countable']        = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 4,);
-        $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), 0);
-        $list['null']             = $this->makeIncorrectItem(null, 0);
+
+        $list['array with 3 elements is not min 4 length']
+            = $this->makeIncorrectItem([1, 2, 3], 4);
+        
+        $list['countable with 3 elements is not min 4 length']
+            = $this->makeIncorrectItem(new ArrayObject([1, 2, 3]), 4);
+
+        $list['countable interator with 3 elements is not min 4 length']
+            = $this->makeIncorrectItem(new ArrayIterator([1, 2, 3]), 4);
+
+        $stdObject        = new stdClass();
+        $stdObject->one   = 'Meu';
+        $stdObject->two   = 'Texto';
+        $stdObject->three = 'Legal';
+        $list['stdClass with 3 public properties is not min than 4 length'] = $this->makeIncorrectItem($stdObject, 4);
+
+        $list['null is invalid'] = $this->makeIncorrectItem(null, 0);
+        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
+        $list['true is invalid'] = $this->makeIncorrectItem(true, 0);
 
         return $list;
     }

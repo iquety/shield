@@ -22,13 +22,17 @@ class Length extends Assertion
     public function isValid(): bool
     {
         $value = $this->getValue();
+        
+        if (is_null($value) === true || $value === true || $value === false) {
+            return false;
+        }
 
         if ($value instanceof Countable) {
             return $this->isValidCountable($value, $this->getAssertValue());
         }
 
-        if (is_object($value) === true || is_null($value) === true) {
-            return false;
+        if (is_object($value) === true) {
+            $value = (array)$value;
         }
 
         if (is_array($value) === true) {

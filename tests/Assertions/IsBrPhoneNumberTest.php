@@ -9,7 +9,7 @@ use stdClass;
 
 class IsBrPhoneNumberTest extends AssertionCase
 {
-    /** @return array<string,array<int,string>> */
+    /** @return array<string,array<int,int|string>> */
     public function correctValueProvider(): array
     {
         $list = [];

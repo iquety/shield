@@ -11,7 +11,10 @@ use stdClass;
 
 class StartsWithTest extends AssertionSearchCase
 {
-    /** @return array<string,array<int,mixed>> */
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array<string,array<int,mixed>>
+     */
     public function validProvider(): array
     {
         $list = [];

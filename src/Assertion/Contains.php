@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
-use Iquety\Shield\Assertion;
-use Iquety\Shield\HasValueNormalizer;
+use Iquety\Shield\AssertionSearch;
 use Iquety\Shield\Message;
 
-class Contains extends Assertion
+class Contains extends AssertionSearch
 {
-    use HasValueNormalizer;
-
     /** @param array<int|string,mixed>|string $value */
     public function __construct(
         mixed $value,
@@ -22,23 +19,25 @@ class Contains extends Assertion
         $this->setAssertValue($needle);
     }
 
-    public function isValid(): bool
+    protected function isMatches(string $value, mixed $needle): bool
     {
-        $value = $this->normalize($this->getValue());
-
-        if (is_array($value) === true) {
-            return $this->isValidInArray($value, $this->getAssertValue());
+        if ($needle === null) {
+            $needle = 'null';
         }
 
-        if (is_bool($value) === true || is_null($value) === true) {
-            return false;
+        if ($needle === false) {
+            $needle = 'false';
         }
 
-        return str_contains((string)$value, (string)$this->getAssertValue()) === true;
+        if ($needle === true) {
+            $needle = 'true';
+        }
+
+        return str_contains($value, (string)$needle) === true;
     }
 
     /** @param array<string,mixed> $list */
-    private function isValidInArray(array $list, mixed $element): bool
+    protected function isValidInArray(array $list, mixed $element): bool
     {
         return array_search($element, $list, true) !== false;
     }

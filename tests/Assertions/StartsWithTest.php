@@ -18,6 +18,21 @@ class StartsWithTest extends AssertionSearchCase
 
         $list['string starts with @'] = ['@Coração!#', '@Co'];
 
+        $list['string 123456 starts with string 123']   = ['123456', '123'];
+        $list['string 123456 starts with integer 123']  = ['123456', 123];
+        $list['integer 123456 starts with string 123']  = [123456, '123'];
+        $list['integer 123456 starts with integer 123'] = [123456, 123];
+
+        $list['string 12.0 starts with string 12.0']   = ['12.0', '12.0'];
+        $list['decimal 12.0 starts with string 12.0']  = [12.0, '12.0'];
+        $list['string 12.0 starts with decimal 12.0']  = ['12.0', 12.0];
+        $list['decimal 12.0 starts with decimal 12.0'] = [12.0, 12.0];
+
+        $list['string 12345.6 starts with string 123']   = ['12345.6', '123'];
+        $list['string 12345.6 starts with decimal 123']  = ['12345.6', 123];
+        $list['decimal 12345.6 starts with string 123']  = [12345.6, '123'];
+        $list['decimal 12345.6 starts with decimal 123'] = [12345.6, 123];
+
         $list['boolean true starts with boolean true']   = [true, true];
         $list['boolean true starts with lower true']   = [true, 'true'];
         $list['boolean true starts with lower tr']     = [true, 'tr'];

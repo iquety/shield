@@ -42,6 +42,11 @@ class ContainsTest extends AssertionSearchCase
         $list['integer 123456 contains integer 345'] = [123456, 345];
         $list['integer 123456 contains integer 456'] = [123456, 456];
 
+        $list['string 12345.0 contains string 45.0']   = ['12345.0', '45.0'];
+        $list['decimal 12345.0 contains string 45.0']  = [12345.0, '45.0'];
+        $list['string 12345.0 contains decimal 45.0']  = ['12345.0', 45.0];
+        $list['decimal 12345.0 contains decimal 45.0'] = [12345.0, 45.0];
+
         $list['string 12.3456 contains string 12.3'] = ['12.3456', '12.3'];
         $list['string 1234.56 contains string 34.5'] = ['1234.56', '34.5'];
         $list['string 12345.6 contains string 45.6'] = ['12345.6', '45.6'];

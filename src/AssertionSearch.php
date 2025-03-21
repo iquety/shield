@@ -38,6 +38,8 @@ abstract class AssertionSearch extends Assertion
                 || $this->isMatches('FALSE', $this->getAssertValue()) === true;
         }
 
-        return $this->isMatches((string)$value, $this->getAssertValue()) === true;
+        $assertValue = $this->normalize($this->getAssertValue());
+
+        return $this->isMatches((string)$value, $assertValue) === true;
     }
 }

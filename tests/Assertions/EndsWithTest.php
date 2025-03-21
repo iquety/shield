@@ -25,15 +25,15 @@ class EndsWithTest extends AssertionSearchCase
         $list['integer 123456 ends with string 456']  = [123456, '456'];
         $list['integer 123456 ends with integer 456'] = [123456, 456];
 
+        $list['string 12345.0 ends with string 45.0']   = ['12345.0', '45.0'];
+        $list['decimal 12345.0 ends with string 45.0']  = [12345.0, '45.0'];
+        $list['string 12345.0 ends with decimal 45.0']  = ['12345.0', 45.0];
+        $list['decimal 12345.0 ends with decimal 45.0'] = [12345.0, 45.0];
+
         $list['string 12345.6 ends with string 45.6']   = ['12345.6', '45.6'];
         $list['string 12345.6 ends with decimal 45.6']  = ['12345.6', 45.6];
         $list['decimal 12345.6 ends with string 45.6']  = [12345.6, '45.6'];
         $list['decimal 12345.6 ends with decimal 45.6'] = [12345.6, 45.6];
-
-        $list['stringable @Coração!# ends with o!#'] = [
-            $this->makeStringableObject('@Coração!#'),
-            'o!#'
-        ];
 
         $list['boolean true ends with boolean true']   = [true, true];
         $list['boolean true ends with lower true']   = [true, 'true'];
@@ -69,6 +69,11 @@ class EndsWithTest extends AssertionSearchCase
         $list['string null ends with upper LL']   = ['NULL', 'LL'];
         $list['string null ends with upper NULL'] = ['NULL', 'NULL'];
 
+        $list['stringable @Coração!# ends with o!#'] = [
+            $this->makeStringableObject('@Coração!#'),
+            'o!#'
+        ];
+        
         // lista de valores de diversos tipos
         $valueTypes = $this->makeValueTypeList();
 

@@ -138,6 +138,11 @@ class NotContainsTest extends AssertionSearchCase
         $list['stringable @Coração!# contains ção!#']
             = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), 'ção!#');
 
+        $list['string 12345.0 contains string 45.0']   = $this->makeIncorrectItem('12345.0', '45.0');
+        $list['decimal 12345.0 contains string 45.0']  = $this->makeIncorrectItem(12345.0, '45.0');
+        $list['string 12345.0 contains decimal 45.0']  = $this->makeIncorrectItem('12345.0', 45.0);
+        $list['decimal 12345.0 contains decimal 45.0'] = $this->makeIncorrectItem(12345.0, 45.0);
+
         $list['boolean true contains boolean true'] = $this->makeIncorrectItem(true, true);
         $list['boolean true contains lower true']   = $this->makeIncorrectItem(true, 'true');
         $list['boolean true contains lower tr']     = $this->makeIncorrectItem(true, 'tr');

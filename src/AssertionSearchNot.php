@@ -42,6 +42,8 @@ abstract class AssertionSearchNot extends Assertion
                 && $this->isMatches('NULL', $this->getAssertValue()) === false;
         }
 
-        return $this->isMatches((string)$value, $this->getAssertValue()) === false;
+        $assertValue = $this->normalize($this->getAssertValue());
+
+        return $this->isMatches((string)$value, $assertValue) === false;
     }
 }

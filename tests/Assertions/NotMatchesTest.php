@@ -18,7 +18,6 @@ class NotMatchesTest extends AssertionCase
         $list['array'] = [['Coração', 'Hello World', 'Leão'], '/Worlx/'];
         $list['decimal'] = [123456.7891, '/(\d{3})456\.7899/'];
         $list['integer'] = [1234567890, '/(\d{5})67899/'];
-
         $list['object not valid'] = [new stdClass(), '/x/'];
 
         return $list;
@@ -61,8 +60,27 @@ class NotMatchesTest extends AssertionCase
         $list['integer']      = $this->makeIncorrectItem(1234567890, '/(\d{5})(\d{5})/');
         $list['latin']        = $this->makeIncorrectItem('Hello World', '/World/');
         $list['array']        = $this->makeIncorrectItem(['Coração', 'Hello World', 'Leão'], '/World/');
-        $list['partial null'] = $this->makeIncorrectItem(null, '/nu/');
-        $list['null']         = $this->makeIncorrectItem(null, '/null/');
+
+        $list['true matches lower true']   = $this->makeIncorrectItem(true, '/true/');
+        $list['true matches lower tr']     = $this->makeIncorrectItem(true, '/tr/');
+        $list['true matches lower ue']     = $this->makeIncorrectItem(true, '/ue/');
+        $list['true matches upper TRUE']   = $this->makeIncorrectItem(true, '/TRUE/');
+        $list['true matches upper TR']     = $this->makeIncorrectItem(true, '/TR/');
+        $list['true matches upper UE']     = $this->makeIncorrectItem(true, '/UE/');
+
+        $list['false matches lower false'] = $this->makeIncorrectItem(false, '/false/');
+        $list['false matches lower fa']    = $this->makeIncorrectItem(false, '/fa/');
+        $list['false matches lower se']    = $this->makeIncorrectItem(false, '/se/');
+        $list['false matches upper FALSE'] = $this->makeIncorrectItem(false, '/FALSE/');
+        $list['false matches upper FA']    = $this->makeIncorrectItem(false, '/FA/');
+        $list['false matches upper SE']    = $this->makeIncorrectItem(false, '/SE/');
+
+        $list['null matches lower null'] = $this->makeIncorrectItem(null, '/null/');
+        $list['null matches lower nu']   = $this->makeIncorrectItem(null, '/nu/');
+        $list['null matches lower ll']   = $this->makeIncorrectItem(null, '/ll/');
+        $list['null matches upper NULL'] = $this->makeIncorrectItem(null, '/NULL/');
+        $list['null matches upper nu']   = $this->makeIncorrectItem(null, '/NU/');
+        $list['null matches upper ll']   = $this->makeIncorrectItem(null, '/LL/');
 
         return $list;
     }

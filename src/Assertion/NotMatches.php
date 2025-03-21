@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
-use Iquety\Shield\Assertion;
+use Iquety\Shield\AssertionSearchNot;
 use Iquety\Shield\Message;
 
-class NotMatches extends Assertion
+class NotMatches extends AssertionSearchNot
 {
     /** @param array<mixed>|string $value */
     public function __construct(
@@ -19,40 +19,18 @@ class NotMatches extends Assertion
         $this->setAssertValue($pattern);
     }
 
-    public function isValid(): bool
+    protected function isMatches(string $value, mixed $needle): bool
     {
-        $value = $this->getValue();
-
-        if (is_object($value) === true) {
-            return true;
-        }
-
-        if (is_array($value) === true) {
-            return $this->isValidInArray();
-        }
-
-        if (is_null($this->getValue()) === true) {
-            return $this->isMatches('null', $this->getAssertValue()) === false
-                && $this->isMatches('NULL', $this->getAssertValue()) === false;
-        }
-
-        return $this->isMatches((string)$value, $this->getAssertValue()) === false;
+        return preg_match($needle, $value) === 1;
     }
 
-    private function isMatches(string $value, string $pattern): bool
+    /** @param array<string,mixed> $list */
+    protected function isValidInArray(array $list, mixed $element): bool
     {
-        return preg_match($pattern, $value) === 1;
-    }
-
-
-    private function isValidInArray(): bool
-    {
-        $array = $this->getValue();
-
         $notMatched = true;
 
-        foreach ($array as $item) {
-            if ($this->isMatches((string)$item, $this->getAssertValue()) === true) {
+        foreach ($list as $item) {
+            if ($this->isMatches((string)$item, $element) === true) {
                 $notMatched = false;
             }
         }

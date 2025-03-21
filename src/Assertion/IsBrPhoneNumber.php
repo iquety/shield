@@ -41,7 +41,7 @@ class IsBrPhoneNumber extends Assertion
         }
 
         // retira todos os separadores, espaços e parêntesis
-        $number = str_replace(['-', ' ', '(', ')'], '', $value);
+        $number = str_replace(['-', ' ', '(', ')'], '', (string)$value);
 
         $length = strlen($number);
 

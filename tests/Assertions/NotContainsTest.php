@@ -35,9 +35,6 @@ class NotContainsTest extends AssertionSearchCase
         $list['stringable @Coração!# contains @Cr'] = [$this->makeStringableObject('@Coração!#'), '@Cr'];
 
         $list['object not valid'] = [new stdClass(), ''];
-        $list['null not valid']   = [null, ''];
-        $list['true not valid']   = [true, ''];
-        $list['false not valid']  = [false, ''];
 
         $valueTypes = $this->makeValueTypeList();
 
@@ -111,6 +108,7 @@ class NotContainsTest extends AssertionSearchCase
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array<string,array<int,mixed>>
      */
@@ -139,6 +137,57 @@ class NotContainsTest extends AssertionSearchCase
 
         $list['stringable @Coração!# contains ção!#']
             = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), 'ção!#');
+
+        $list['string 12345.0 contains string 45.0']   = $this->makeIncorrectItem('12345.0', '45.0');
+        $list['decimal 12345.0 contains string 45.0']  = $this->makeIncorrectItem(12345.0, '45.0');
+        $list['string 12345.0 contains decimal 45.0']  = $this->makeIncorrectItem('12345.0', 45.0);
+        $list['decimal 12345.0 contains decimal 45.0'] = $this->makeIncorrectItem(12345.0, 45.0);
+
+        $list['boolean true contains boolean true'] = $this->makeIncorrectItem(true, true);
+        $list['boolean true contains lower true']   = $this->makeIncorrectItem(true, 'true');
+        $list['boolean true contains lower tr']     = $this->makeIncorrectItem(true, 'tr');
+        $list['boolean true contains lower ue']     = $this->makeIncorrectItem(true, 'ue');
+        $list['string true contains lower true']    = $this->makeIncorrectItem('true', 'true');
+        $list['string true contains lower tr']      = $this->makeIncorrectItem('true', 'tr');
+        $list['string true contains lower ue']      = $this->makeIncorrectItem('true', 'ue');
+
+        $list['boolean true contains upper TRUE']   = $this->makeIncorrectItem(true, 'TRUE');
+        $list['boolean true contains upper TR']     = $this->makeIncorrectItem(true, 'TR');
+        $list['boolean true contains upper UE']     = $this->makeIncorrectItem(true, 'UE');
+        $list['string TRUE contains upper TRUE']    = $this->makeIncorrectItem('TRUE', 'TRUE');
+        $list['string TRUE contains upper TR']      = $this->makeIncorrectItem('TRUE', 'TR');
+        $list['string TRUE contains upper UE']      = $this->makeIncorrectItem('TRUE', 'UE');
+
+        $list['boolean false contains lower false'] = $this->makeIncorrectItem(false, 'false');
+        $list['boolean false contains lower fa']    = $this->makeIncorrectItem(false, 'fa');
+        $list['boolean false contains lower se']    = $this->makeIncorrectItem(false, 'se');
+        $list['string false contains lower false']  = $this->makeIncorrectItem('false', 'false');
+        $list['string false contains lower fa']     = $this->makeIncorrectItem('false', 'fa');
+        $list['string false contains lower se']     = $this->makeIncorrectItem('false', 'se');
+
+        $list['boolean false contains upper FALSE'] = $this->makeIncorrectItem(false, 'FALSE');
+        $list['boolean false contains upper FA']    = $this->makeIncorrectItem(false, 'FA');
+        $list['boolean false contains upper SE']    = $this->makeIncorrectItem(false, 'SE');
+        $list['string false contains upper FALSE']  = $this->makeIncorrectItem('FALSE', 'FALSE');
+        $list['string false contains upper FA']     = $this->makeIncorrectItem('FALSE', 'FA');
+        $list['string false contains upper SE']     = $this->makeIncorrectItem('FALSE', 'SE');
+
+        $list['null contains null']               = $this->makeIncorrectItem(null, null);
+        $list['string null contains string null'] = $this->makeIncorrectItem('null', 'null');
+
+        $list['null contains lower nu']          = $this->makeIncorrectItem(null, 'nu');
+        $list['null contains lower ll']          = $this->makeIncorrectItem(null, 'll');
+        $list['null contains lower null']        = $this->makeIncorrectItem(null, 'null');
+        $list['string null contains lower nu']   = $this->makeIncorrectItem('null', 'nu');
+        $list['string null contains lower ll']   = $this->makeIncorrectItem('null', 'll');
+        $list['string null contains lower null'] = $this->makeIncorrectItem('null', 'null');
+
+        $list['null contains upper NU']          = $this->makeIncorrectItem(null, 'NU');
+        $list['null contains upper LL']          = $this->makeIncorrectItem(null, 'LL');
+        $list['null contains upper NULL']        = $this->makeIncorrectItem(null, 'NULL');
+        $list['string null contains upper NU']   = $this->makeIncorrectItem('NULL', 'NU');
+        $list['string null contains upper LL']   = $this->makeIncorrectItem('NULL', 'LL');
+        $list['string null contains upper NULL'] = $this->makeIncorrectItem('NULL', 'NULL');
 
         $valueTypes = $this->makeValueTypeList();
 

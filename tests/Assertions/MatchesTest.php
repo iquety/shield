@@ -14,15 +14,35 @@ class MatchesTest extends AssertionCase
     {
         $list = [];
 
-        $list['utf8'] = ['Coração de Leão', '/oraç/'];
+        $list['utf8']    = ['Coração de Leão', '/oraç/'];
         $list['numeric'] = ['123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/'];
         $list['decimal'] = [123456.7891, '/(\d{6})\.(\d{4})/'];
+
         //$list['decimal'] = [123456.7890, '/(\d{6})\.(\d{4})/']; // coerção de tipo remove o zero
         $list['integer'] = [1234567890, '/(\d{5})(\d{5})/'];
-        $list['latin'] = ['Hello World', '/World/'];
-        $list['array'] = [['Coração', 'Hello World', 'Leão'], '/World/'];
-        $list['null'] = $this->makeIncorrectItem(null, '/null/');
-        $list['partial null'] = $this->makeIncorrectItem(null, '/nu/');
+        $list['latin']   = ['Hello World', '/World/'];
+        $list['array']   = [['Coração', 'Hello World', 'Leão'], '/World/'];
+
+        $list['true matches lower true']   = [true, '/true/'];
+        $list['true matches lower tr']     = [true, '/tr/'];
+        $list['true matches lower ue']     = [true, '/ue/'];
+        $list['true matches upper TRUE']   = [true, '/TRUE/'];
+        $list['true matches upper TR']     = [true, '/TR/'];
+        $list['true matches upper UE']     = [true, '/UE/'];
+
+        $list['false matches lower false'] = [false, '/false/'];
+        $list['false matches lower fa']    = [false, '/fa/'];
+        $list['false matches lower se']    = [false, '/se/'];
+        $list['false matches upper FALSE'] = [false, '/FALSE/'];
+        $list['false matches upper FA']    = [false, '/FA/'];
+        $list['false matches upper SE']    = [false, '/SE/'];
+
+        $list['null matches lower null'] = [null, '/null/'];
+        $list['null matches lower nu'] = [null, '/nu/'];
+        $list['null matches lower ll'] = [null, '/ll/'];
+        $list['null matches upper NULL'] = [null, '/NULL/'];
+        $list['null matches upper nu'] = [null, '/NU/'];
+        $list['null matches upper ll'] = [null, '/LL/'];
 
         return $list;
     }

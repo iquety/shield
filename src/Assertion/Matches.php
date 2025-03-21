@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
-use Iquety\Shield\Assertion;
+use Iquety\Shield\AssertionSearch;
 use Iquety\Shield\Message;
 
-class Matches extends Assertion
+class Matches extends AssertionSearch
 {
     /** @param array<mixed>|string $value */
     public function __construct(
@@ -19,37 +19,16 @@ class Matches extends Assertion
         $this->setAssertValue($pattern);
     }
 
-    public function isValid(): bool
+    protected function isMatches(string $value, mixed $needle): bool
     {
-        $value = $this->getValue();
-
-        if (is_object($value) === true) {
-            return false;
-        }
-
-        if (is_array($this->getValue()) === true) {
-            return $this->isValidInArray();
-        }
-
-        if (is_null($this->getValue()) === true) {
-            return $this->isMatches('null', $this->getAssertValue())
-                || $this->isMatches('NULL', $this->getAssertValue());
-        }
-
-        return $this->isMatches((string)$this->getValue(), $this->getAssertValue());
+        return preg_match($needle, $value) === 1;
     }
 
-    private function isMatches(string $value, string $pattern): bool
+    /** @param array<string,mixed> $list */
+    protected function isValidInArray(array $list, mixed $element): bool
     {
-        return preg_match($pattern, $value) === 1;
-    }
-
-    private function isValidInArray(): bool
-    {
-        $array = $this->getValue();
-
-        foreach ($array as $item) {
-            $matched = $this->isMatches((string)$item, $this->getAssertValue());
+        foreach ($list as $item) {
+            $matched = $this->isMatches((string)$item, $element);
 
             if ($matched === true) {
                 return true;

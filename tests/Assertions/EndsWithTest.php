@@ -73,7 +73,7 @@ class EndsWithTest extends AssertionSearchCase
             $this->makeStringableObject('@Coração!#'),
             'o!#'
         ];
-        
+
         // lista de valores de diversos tipos
         $valueTypes = $this->makeValueTypeList();
 

@@ -42,6 +42,11 @@ class ContainsTest extends AssertionSearchCase
         $list['integer 123456 contains integer 345'] = [123456, 345];
         $list['integer 123456 contains integer 456'] = [123456, 456];
 
+        $list['string 12345.0 contains string 45.0']   = ['12345.0', '45.0'];
+        $list['decimal 12345.0 contains string 45.0']  = [12345.0, '45.0'];
+        $list['string 12345.0 contains decimal 45.0']  = ['12345.0', 45.0];
+        $list['decimal 12345.0 contains decimal 45.0'] = [12345.0, 45.0];
+
         $list['string 12.3456 contains string 12.3'] = ['12.3456', '12.3'];
         $list['string 1234.56 contains string 34.5'] = ['1234.56', '34.5'];
         $list['string 12345.6 contains string 45.6'] = ['12345.6', '45.6'];
@@ -57,6 +62,52 @@ class ContainsTest extends AssertionSearchCase
         $list['decimal 12.3456 contains decimal 12.3'] = [12.3456, 12.3];
         $list['decimal 1234.56 contains decimal 34.5'] = [1234.56, 34.5];
         $list['decimal 12345.6 contains decimal 45.6'] = [12345.6, 45.6];
+
+        $list['boolean true contains boolean true']  = [true, true];
+        $list['boolean true contains lower true']   = [true, 'true'];
+        $list['boolean true contains lower tr']     = [true, 'tr'];
+        $list['boolean true contains lower ue']     = [true, 'ue'];
+        $list['string true contains lower true']    = ['true', 'true'];
+        $list['string true contains lower tr']      = ['true', 'tr'];
+        $list['string true contains lower ue']      = ['true', 'ue'];
+
+        $list['boolean true contains upper TRUE']   = [true, 'TRUE'];
+        $list['boolean true contains upper TR']     = [true, 'TR'];
+        $list['boolean true contains upper UE']     = [true, 'UE'];
+        $list['string TRUE contains upper TRUE']    = ['TRUE', 'TRUE'];
+        $list['string TRUE contains upper TR']      = ['TRUE', 'TR'];
+        $list['string TRUE contains upper UE']      = ['TRUE', 'UE'];
+
+        $list['boolean false contains lower false'] = [false, 'false'];
+        $list['boolean false contains lower fa']    = [false, 'fa'];
+        $list['boolean false contains lower se']    = [false, 'se'];
+        $list['string false contains lower false']  = ['false', 'false'];
+        $list['string false contains lower fa']     = ['false', 'fa'];
+        $list['string false contains lower se']     = ['false', 'se'];
+
+        $list['boolean false contains upper FALSE'] = [false, 'FALSE'];
+        $list['boolean false contains upper FA']    = [false, 'FA'];
+        $list['boolean false contains upper SE']    = [false, 'SE'];
+        $list['string false contains upper FALSE']  = ['FALSE', 'FALSE'];
+        $list['string false contains upper FA']     = ['FALSE', 'FA'];
+        $list['string false contains upper SE']     = ['FALSE', 'SE'];
+
+        $list['null contains null']               = [null, null];
+        $list['string null contains string null'] = [null, null];
+
+        $list['null contains lower nu']          = [null, 'nu'];
+        $list['null contains lower ll']          = [null, 'll'];
+        $list['null contains lower null']        = [null, 'null'];
+        $list['string null contains lower nu']   = ['null', 'nu'];
+        $list['string null contains lower ll']   = ['null', 'll'];
+        $list['string null contains lower null'] = ['null', 'null'];
+
+        $list['null contains upper NU']          = [null, 'NU'];
+        $list['null contains upper LL']          = [null, 'LL'];
+        $list['null contains upper NULL']        = [null, 'NULL'];
+        $list['string null contains upper NU']   = ['NULL', 'NU'];
+        $list['string null contains upper LL']   = ['NULL', 'LL'];
+        $list['string null contains upper NULL'] = ['NULL', 'NULL'];
 
         $list['stringable Exception  @Coração!# contains @Co']   = [new Exception('@Coração!#'), '@Co'];
         $list['stringable Exception  @Coração!# contains ra']    = [new Exception('@Coração!#'), 'ra'];
@@ -152,9 +203,6 @@ class ContainsTest extends AssertionSearchCase
             = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '@Cr');
 
         $list['object not valid'] = $this->makeIncorrectItem(new stdClass(), '');
-        $list['null not valid']   = $this->makeIncorrectItem(null, '');
-        $list['true not valid']   = $this->makeIncorrectItem(true, '');
-        $list['false not valid']  = $this->makeIncorrectItem(false, '');
 
         $valueTypes = $this->makeValueTypeList();
 

@@ -10,18 +10,71 @@ use Iquety\Shield\Assertion\EndsWith;
 
 class EndsWithTest extends AssertionSearchCase
 {
-    /** @return array<string,array<int,mixed>> */
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array<string,array<int,mixed>>
+     */
     public function validProvider(): array
     {
         $list = [];
 
         $list['string ends with !#'] = ['@Coração!#', '!#'];
 
+        $list['string 123456 ends with string 456']   = ['123456', '456'];
+        $list['string 123456 ends with integer 456']  = ['123456', 456];
+        $list['integer 123456 ends with string 456']  = [123456, '456'];
+        $list['integer 123456 ends with integer 456'] = [123456, 456];
+
+        $list['string 12345.0 ends with string 45.0']   = ['12345.0', '45.0'];
+        $list['decimal 12345.0 ends with string 45.0']  = [12345.0, '45.0'];
+        $list['string 12345.0 ends with decimal 45.0']  = ['12345.0', 45.0];
+        $list['decimal 12345.0 ends with decimal 45.0'] = [12345.0, 45.0];
+
+        $list['string 12345.6 ends with string 45.6']   = ['12345.6', '45.6'];
+        $list['string 12345.6 ends with decimal 45.6']  = ['12345.6', 45.6];
+        $list['decimal 12345.6 ends with string 45.6']  = [12345.6, '45.6'];
+        $list['decimal 12345.6 ends with decimal 45.6'] = [12345.6, 45.6];
+
+        $list['boolean true ends with boolean true']   = [true, true];
+        $list['boolean true ends with lower true']   = [true, 'true'];
+        $list['boolean true ends with lower ue']     = [true, 'ue'];
+        $list['string true ends with lower true']    = ['true', 'true'];
+        $list['string true ends with lower ue']      = ['true', 'ue'];
+
+        $list['boolean true ends with upper TRUE']   = [true, 'TRUE'];
+        $list['boolean true ends with upper UE']     = [true, 'UE'];
+        $list['string TRUE ends with upper TRUE']    = ['TRUE', 'TRUE'];
+        $list['string TRUE ends with upper UE']      = ['TRUE', 'UE'];
+
+        $list['boolean false ends with lower false'] = [false, 'false'];
+        $list['boolean false ends with lower se']    = [false, 'se'];
+        $list['string false ends with lower false']  = ['false', 'false'];
+        $list['string false ends with lower se']     = ['false', 'se'];
+
+        $list['boolean false ends with upper FALSE'] = [false, 'FALSE'];
+        $list['boolean false ends with upper SE']    = [false, 'SE'];
+        $list['string false ends with upper FALSE']  = ['FALSE', 'FALSE'];
+        $list['string false ends with upper SE']     = ['FALSE', 'SE'];
+
+        $list['null ends with null']              = [null, null];
+        $list['null ends with lower ll']          = [null, 'll'];
+        $list['null ends with lower null']        = [null, 'null'];
+        $list['string null ends with lower null'] = ['null', 'null'];
+        $list['string null ends with lower ll']   = ['null', 'll'];
+        $list['string null ends with lower null'] = ['null', 'null'];
+
+        $list['null ends with upper LL']          = [null, 'LL'];
+        $list['null ends with upper NULL']        = [null, 'NULL'];
+        $list['string null ends with upper NULL'] = ['NULL', 'NULL'];
+        $list['string null ends with upper LL']   = ['NULL', 'LL'];
+        $list['string null ends with upper NULL'] = ['NULL', 'NULL'];
+
         $list['stringable @Coração!# ends with o!#'] = [
             $this->makeStringableObject('@Coração!#'),
             'o!#'
         ];
 
+        // lista de valores de diversos tipos
         $valueTypes = $this->makeValueTypeList();
 
         $arrayValues = $valueTypes;
@@ -102,9 +155,22 @@ class EndsWithTest extends AssertionSearchCase
 
         $list['string not end with $']   = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string not end with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
-        $list['null not valid']          = $this->makeIncorrectItem(null, '');
-        $list['true not valid']          = $this->makeIncorrectItem(true, '');
-        $list['false not valid']         = $this->makeIncorrectItem(false, '');
+
+        $list['boolean true not ends with lower tr']   = $this->makeIncorrectItem(true, 'tr');
+        $list['boolean false not ends with lower fal'] = $this->makeIncorrectItem(false, 'fal');
+        $list['string true not ends with lower tr']    = $this->makeIncorrectItem('true', 'tr');
+        $list['string false not ends with lower fal']  = $this->makeIncorrectItem('false', 'fal');
+
+        $list['boolean true not ends with upper TR']   = $this->makeIncorrectItem(true, 'TR');
+        $list['boolean false not ends with upper FAL'] = $this->makeIncorrectItem(false, 'FAL');
+        $list['string TRUE not ends with upper TR']    = $this->makeIncorrectItem('TRUE', 'TR');
+        $list['string FALSE not ends with upper FAL']  = $this->makeIncorrectItem('TRUE', 'FAL');
+
+        $list['null not ends with lower nu']   = $this->makeIncorrectItem(null, 'nu');
+        $list['string null not ends with lower nu']   = $this->makeIncorrectItem('null', 'nu');
+
+        $list['null not ends with upper NU']   = $this->makeIncorrectItem(null, 'NU');
+        $list['string NULL not ends with upper NU']   = $this->makeIncorrectItem('NULL', 'NU');
 
         $valueTypes = $this->makeValueTypeList();
 

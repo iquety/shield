@@ -43,7 +43,7 @@ class IsNotEmpty extends Assertion
             return $value > 0;
         }
 
-        return is_null($value) === false;
+        return $value !== null;
     }
 
     private function stringIsNotEmpty(string $value): bool

@@ -11,12 +11,64 @@ use stdClass;
 
 class StartsWithTest extends AssertionSearchCase
 {
-    /** @return array<string,array<int,mixed>> */
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array<string,array<int,mixed>>
+     */
     public function validProvider(): array
     {
         $list = [];
 
         $list['string starts with @'] = ['@Coração!#', '@Co'];
+
+        $list['string 123456 starts with string 123']   = ['123456', '123'];
+        $list['string 123456 starts with integer 123']  = ['123456', 123];
+        $list['integer 123456 starts with string 123']  = [123456, '123'];
+        $list['integer 123456 starts with integer 123'] = [123456, 123];
+
+        $list['string 12.0 starts with string 12.0']   = ['12.0', '12.0'];
+        $list['decimal 12.0 starts with string 12.0']  = [12.0, '12.0'];
+        $list['string 12.0 starts with decimal 12.0']  = ['12.0', 12.0];
+        $list['decimal 12.0 starts with decimal 12.0'] = [12.0, 12.0];
+
+        $list['string 12345.6 starts with string 123']   = ['12345.6', '123'];
+        $list['string 12345.6 starts with decimal 123']  = ['12345.6', 123];
+        $list['decimal 12345.6 starts with string 123']  = [12345.6, '123'];
+        $list['decimal 12345.6 starts with decimal 123'] = [12345.6, 123];
+
+        $list['boolean true starts with boolean true']   = [true, true];
+        $list['boolean true starts with lower true']   = [true, 'true'];
+        $list['boolean true starts with lower tr']     = [true, 'tr'];
+        $list['string true starts with lower true']    = ['true', 'true'];
+        $list['string true starts with lower tr']      = ['true', 'tr'];
+
+        $list['boolean true starts with upper TRUE']   = [true, 'TRUE'];
+        $list['boolean true starts with upper TR']     = [true, 'TR'];
+        $list['string TRUE starts with upper TRUE']    = ['TRUE', 'TRUE'];
+        $list['string TRUE starts with upper TR']      = ['TRUE', 'TR'];
+
+        $list['boolean false starts with lower false'] = [false, 'false'];
+        $list['boolean false starts with lower fa']    = [false, 'fa'];
+        $list['string false starts with lower false']  = ['false', 'false'];
+        $list['string false starts with lower fa']     = ['false', 'fa'];
+
+        $list['boolean false starts with upper FALSE'] = [false, 'FALSE'];
+        $list['boolean false starts with upper FA']    = [false, 'FA'];
+        $list['string false starts with upper FALSE']  = ['FALSE', 'FALSE'];
+        $list['string false starts with upper FA']     = ['FALSE', 'FA'];
+
+        $list['null starts with null']              = [null, null];
+        $list['null starts with lower nu']          = [null, 'nu'];
+        $list['null starts with lower null']        = [null, 'null'];
+        $list['string null starts with lower null'] = ['null', 'null'];
+        $list['string null starts with lower nu']   = ['null', 'nu'];
+        $list['string null starts with lower null'] = ['null', 'null'];
+
+        $list['null starts with upper NU']          = [null, 'NU'];
+        $list['null starts with upper NULL']        = [null, 'NULL'];
+        $list['string null starts with upper NULL'] = ['NULL', 'NULL'];
+        $list['string null starts with upper NU']   = ['NULL', 'NU'];
+        $list['string null starts with upper NULL'] = ['NULL', 'NULL'];
 
         $list['stringable @Coração!# starts with @Cor'] = [
             $this->makeStringableObject('@Coração!#'),
@@ -104,9 +156,23 @@ class StartsWithTest extends AssertionSearchCase
         $list['string not start with $']   = $this->makeIncorrectItem('@Coração!#', '$');
         $list['string not start with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
         $list['object not valid']          = $this->makeIncorrectItem(new stdClass(), '');
-        $list['null not valid']            = $this->makeIncorrectItem(null, '');
-        $list['true not valid']            = $this->makeIncorrectItem(true, '');
-        $list['false not valid']           = $this->makeIncorrectItem(false, '');
+
+        $list['boolean true not starts with lower ue']  = $this->makeIncorrectItem(true, 'ue');
+        $list['boolean false not starts with lower se'] = $this->makeIncorrectItem(false, 'se');
+        $list['string true not starts with lower ue']   = $this->makeIncorrectItem('true', 'ue');
+        $list['string false not starts with lower se']  = $this->makeIncorrectItem('false', 'se');
+
+        $list['boolean true not starts with upper UE']  = $this->makeIncorrectItem(true, 'UE');
+        $list['boolean false not starts with upper SE'] = $this->makeIncorrectItem(false, 'SE');
+        $list['string TRUE not starts with upper UE']   = $this->makeIncorrectItem('TRUE', 'UE');
+        $list['string FALSE not starts with upper SE']  = $this->makeIncorrectItem('FALSE', 'SE');
+
+        $list['null not starts with lower ll']        = $this->makeIncorrectItem(null, 'll');
+        $list['null not starts with upper LL']        = $this->makeIncorrectItem(null, 'LL');
+
+        $list['string NULL not starts with lower ll'] = $this->makeIncorrectItem('NULL', 'll');
+        $list['string NULL not starts with upper LL'] = $this->makeIncorrectItem('NULL', 'LL');
+
 
         $valueTypes = $this->makeValueTypeList();
 

@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
-use Iquety\Shield\Assertion;
-use Iquety\Shield\HasValueNormalizer;
+use Iquety\Shield\AssertionSearch;
 use Iquety\Shield\Message;
 
-class StartsWith extends Assertion
+class StartsWith extends AssertionSearch
 {
-    use HasValueNormalizer;
-
     public function __construct(
         mixed $value,
         null|bool|float|int|string $needle
@@ -21,39 +18,25 @@ class StartsWith extends Assertion
         $this->setAssertValue($needle);
     }
 
-    public function isValid(): bool
+    protected function isMatches(string $value, mixed $needle): bool
     {
-        $value = $this->normalize($this->getValue());
-
-        if (is_array($value) === true) {
-            return $this->isValidInArray($value, $this->getAssertValue());
+        if ($needle === null) {
+            $needle = 'null';
         }
 
-        if (is_bool($value) === true || is_null($value) === true) {
-            return false;
+        if ($needle === false) {
+            $needle = 'false';
         }
 
-        return str_starts_with((string)$value, (string)$this->getAssertValue());
+        if ($needle === true) {
+            $needle = 'true';
+        }
 
-        // $value = $this->getValue();
-
-        // if (
-        //     is_object($value) === true
-        //     || is_bool($value) === true
-        //     || is_null($value) === true
-        // ) {
-        //     return false;
-        // }
-
-        // if (is_array($value) === true) {
-        //     return $this->isValidInArray();
-        // }
-
-        // return str_starts_with($value, (string)$this->getAssertValue());
+        return str_starts_with($value, (string)$needle);
     }
 
     /** @param array<string,mixed> $list */
-    private function isValidInArray(array $list, mixed $element): bool
+    protected function isValidInArray(array $list, mixed $element): bool
     {
         if ($list === []) {
             return false;
@@ -61,13 +44,6 @@ class StartsWith extends Assertion
 
         return $element === $list[array_key_first($list)];
     }
-
-    // private function isValidInArray(): bool
-    // {
-    //     $array = $this->getValue();
-
-    //     return $this->getAssertValue() === array_shift($array);
-    // }
 
     public function getDefaultMessage(): Message
     {

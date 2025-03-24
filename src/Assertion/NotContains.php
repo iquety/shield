@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
-use Iquety\Shield\Assertion;
-use Iquety\Shield\HasValueNormalizer;
+use Iquety\Shield\AssertionSearchNot;
 use Iquety\Shield\Message;
 
-class NotContains extends Assertion
+class NotContains extends AssertionSearchNot
 {
-    use HasValueNormalizer;
-
     /** @param array<mixed>|string $value */
     public function __construct(
         mixed $value,
@@ -22,62 +19,25 @@ class NotContains extends Assertion
         $this->setAssertValue($needle);
     }
 
-    public function isValid(): bool
+    protected function isMatches(string $value, mixed $needle): bool
     {
-        $value = $this->normalize($this->getValue());
-
-        if (is_array($value) === true) {
-            return $this->isValidInArray($value, $this->getAssertValue());
+        if ($needle === null) {
+            $needle = 'null';
         }
 
-        if (is_bool($value) === true || is_null($value) === true) {
-            return true;
+        if ($needle === false) {
+            $needle = 'false';
         }
 
-        return str_contains((string)$value, (string)$this->getAssertValue()) === false;
+        if ($needle === true) {
+            $needle = 'true';
+        }
 
-        // $value = $this->getValue();
-
-        // if ($value instanceof ArrayAccess) {
-        //     return $this->isValidInAcessible($value, $this->getAssertValue());
-        // }
-
-        // if (is_object($value) === true && ! $value instanceof Stringable) {
-        //     return $this->isValidInStdClass($value, $this->getAssertValue());
-        // }
-
-        // if (is_bool($value) === true || is_null($value) === true) {
-        //     return true;
-        // }
-
-        // if (is_array($this->getValue()) === true) {
-        //     return $this->isValidInArray($this->getValue(), $this->getAssertValue());
-        // }
-
-        // return str_contains((string)$value, $this->getAssertValue()) === false;
+        return str_contains($value, (string)$needle) === true;
     }
 
-    // /** @param ArrayAccess<string,mixed> $list */
-    // private function isValidInAcessible(ArrayAccess $list, mixed $element): bool
-    // {
-    //     $list = (array)$list;
-
-    //     // o primeiro nível é o nome da classe serializada
-    //     // "ArrayAccess@anonymous/application/tests/Assertions/ContainsTest.php:84$21values"
-    //     $normalizedList = current($list);
-
-    //     return $this->isValidInArray($normalizedList, $element);
-    // }
-
-    // private function isValidInStdClass(object $list, mixed $element): bool
-    // {
-    //     $normalizedList = (array)$list;
-
-    //     return $this->isValidInArray($normalizedList, $element);
-    // }
-
     /** @param array<string,mixed> $list */
-    private function isValidInArray(array $list, mixed $element): bool
+    protected function isValidInArray(array $list, mixed $element): bool
     {
         return array_search($element, $list, true) === false;
     }

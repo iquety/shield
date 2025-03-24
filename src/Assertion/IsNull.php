@@ -16,7 +16,7 @@ class IsNull extends Assertion
 
     public function isValid(): bool
     {
-        return is_null($this->getValue()) === true;
+        return $this->getValue() === null;
     }
 
     public function getDefaultMessage(): Message

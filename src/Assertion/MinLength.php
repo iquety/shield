@@ -24,7 +24,7 @@ class MinLength extends Assertion
     {
         $value = $this->getValue();
 
-        if (is_null($value) === true || $value === true || $value === false) {
+        if ($value === null || $value === true || $value === false) {
             return false;
         }
 

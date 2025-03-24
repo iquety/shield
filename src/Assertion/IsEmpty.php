@@ -30,7 +30,7 @@ class IsEmpty extends Assertion
         if (
             $value === false
             || is_object($value) === true
-            || is_null($value) === true
+            || $value === null
         ) {
             return true;
         }

@@ -23,7 +23,7 @@ abstract class AssertionSearch extends Assertion
             return $this->isValidInArray($value, $this->getAssertValue());
         }
 
-        if (is_null($value) === true) {
+        if ($value === null) {
             return $this->isMatches('null', $this->getAssertValue()) === true
                 || $this->isMatches('NULL', $this->getAssertValue()) === true;
         }

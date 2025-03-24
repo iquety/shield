@@ -23,7 +23,7 @@ class IsDateTime extends Assertion
         if (
             is_bool($value) === true
             || is_object($value) === true
-            || is_null($value) === true
+            || $value === null
             || is_array($value) === true
             || empty(trim($value)) === true
         ) {

@@ -24,7 +24,7 @@ class IsTime extends Assertion
             is_bool($value) === true
             || is_object($value) === true
             || is_array($value) === true
-            || is_null($value) === true
+            || $value === null
             || empty(trim($value)) === true
         ) {
             return false;

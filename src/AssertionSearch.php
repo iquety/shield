@@ -19,7 +19,7 @@ abstract class AssertionSearch extends Assertion
     /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
     public function isValid(): bool
     {
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |
@@ -55,6 +55,7 @@ abstract class AssertionSearch extends Assertion
         return $this->isMatches($value, $needle) === true;
     }
 
+    /** @param array<string,mixed> $value */
     private function isValidList(array $value, mixed $needle): bool
     {
         if ($needle === null) {

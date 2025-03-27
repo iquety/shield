@@ -8,8 +8,10 @@ use InvalidArgumentException;
 use Iquety\Shield\Assertion\EndsWith;
 use stdClass;
 
+/** @SuppressWarnings(PHPMD.TooManyPublicMethods) */
 class EndsWithTest extends AssertionSearchCase
 {
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
@@ -19,7 +21,7 @@ class EndsWithTest extends AssertionSearchCase
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
         $list['false is invalid value']   = [false];
-        
+
         return $list;
     }
 
@@ -37,6 +39,7 @@ class EndsWithTest extends AssertionSearchCase
         $assertion->isValid();
     }
 
+    /** @return array<string,array<mixed>> */
     public function invalidNeedleProvider(): array
     {
         $list = [];
@@ -48,7 +51,7 @@ class EndsWithTest extends AssertionSearchCase
         $list['false is invalid needle for string']   = [false];
         $list['array is invalid needle for string']   = [['x']];
         $list['object is invalid needle for string']  = [new stdClass()];
-        
+
         return $list;
     }
 
@@ -76,7 +79,7 @@ class EndsWithTest extends AssertionSearchCase
 
         $assertion->isValid();
     }
-    
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array<string,array<int,mixed>>
@@ -85,7 +88,7 @@ class EndsWithTest extends AssertionSearchCase
     {
         $list = [];
 
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |
@@ -124,7 +127,7 @@ class EndsWithTest extends AssertionSearchCase
             $iteratorAggrValue = $this->makeIteratorAggregateObject($valueTypes);
             $list["IteratorAggregate ends with $label"] = [$iteratorAggrValue, $lastValue];
         }
-        
+
         return $list;
     }
 
@@ -159,7 +162,7 @@ class EndsWithTest extends AssertionSearchCase
     {
         $list = [];
 
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |

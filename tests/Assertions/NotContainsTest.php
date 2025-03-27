@@ -9,8 +9,10 @@ use Iquety\Shield\Assertion\NotContains;
 use stdClass;
 use Stringable;
 
+/** @SuppressWarnings(PHPMD.TooManyPublicMethods) */
 class NotContainsTest extends AssertionSearchCase
 {
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
@@ -20,7 +22,7 @@ class NotContainsTest extends AssertionSearchCase
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
         $list['false is invalid value']   = [false];
-        
+
         return $list;
     }
 
@@ -38,6 +40,7 @@ class NotContainsTest extends AssertionSearchCase
         $assertion->isValid();
     }
 
+    /** @return array<string,array<mixed>> */
     public function invalidNeedleProvider(): array
     {
         $list = [];
@@ -49,7 +52,7 @@ class NotContainsTest extends AssertionSearchCase
         $list['false is invalid needle for string']   = [false];
         $list['array is invalid needle for string']   = [['x']];
         $list['object is invalid needle for string']  = [new stdClass()];
-        
+
         return $list;
     }
 
@@ -86,7 +89,7 @@ class NotContainsTest extends AssertionSearchCase
     {
         $list = [];
 
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |
@@ -169,7 +172,7 @@ class NotContainsTest extends AssertionSearchCase
     {
         $list = [];
 
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |
@@ -217,7 +220,7 @@ class NotContainsTest extends AssertionSearchCase
             $list["IteratorAggregate contains $label"] = $this->makeIncorrectItem($iteratorAggrValue, $needle);
         }
 
-        
+
         return $list;
     }
 

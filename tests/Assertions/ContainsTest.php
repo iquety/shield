@@ -9,8 +9,10 @@ use Iquety\Shield\Assertion\Contains;
 use stdClass;
 use Stringable;
 
+/** @SuppressWarnings(PHPMD.TooManyPublicMethods) */
 class ContainsTest extends AssertionSearchCase
 {
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
@@ -20,7 +22,7 @@ class ContainsTest extends AssertionSearchCase
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
         $list['false is invalid value']   = [false];
-        
+
         return $list;
     }
 
@@ -38,6 +40,7 @@ class ContainsTest extends AssertionSearchCase
         $assertion->isValid();
     }
 
+    /** @return array<string,array<mixed>> */
     public function invalidNeedleProvider(): array
     {
         $list = [];
@@ -49,7 +52,7 @@ class ContainsTest extends AssertionSearchCase
         $list['false is invalid needle for string']   = [false];
         $list['array is invalid needle for string']   = [['x']];
         $list['object is invalid needle for string']  = [new stdClass()];
-        
+
         return $list;
     }
 
@@ -87,7 +90,7 @@ class ContainsTest extends AssertionSearchCase
     {
         $list = [];
 
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |
@@ -131,7 +134,7 @@ class ContainsTest extends AssertionSearchCase
             $iteratorAggrValue = $this->makeIteratorAggregateObject($valueTypes);
             $list["IteratorAggregate contains $label"] = [$iteratorAggrValue, $needle];
         }
-        
+
         return $list;
     }
 
@@ -172,7 +175,7 @@ class ContainsTest extends AssertionSearchCase
     {
         $list = [];
 
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |

@@ -7,7 +7,7 @@ O valor completo termina com o valor parcial.
 
 | Tipo completo     | Tipo parcial                    |
 |:--                |:--                              |
-| string            | string                          | 
+| string            | string                          |
 | Stringable        | string                          |
 | array             | string, int, float, true, false |
 | ArrayAccess       | string, int, float, true, false |

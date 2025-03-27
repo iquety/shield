@@ -85,10 +85,14 @@ class AssertionSearchCase extends AssertionCase
         };
     }
 
-    /** @param array<string,mixed> $value */
+    /**
+     * @param array<int|string,mixed> $value
+     * @return ArrayAccess<int|string,mixed>
+     */
     protected function makeArrayAccessObject(array $value): ArrayAccess
     {
         return new class ($value) implements ArrayAccess {
+            /** @param array<int|string,mixed> $value */
             public function __construct(private array $value)
             {
             }
@@ -115,16 +119,25 @@ class AssertionSearchCase extends AssertionCase
         };
     }
 
+    /**
+     * @param array<int|string,mixed> $value
+     * @return Iterator<int|string,mixed>
+     */
     protected function makeIteratorObject(array $value): Iterator
     {
         return new ArrayIterator($value);
     }
 
+    /**
+     * @param array<int|string,mixed> $value
+     * @return IteratorAggregate<int|string,mixed>
+     */
     protected function makeIteratorAggregateObject(array $value): IteratorAggregate
     {
         return new ArrayObject($value);
     }
 
+    /** @param array<int|string,mixed> $value */
     protected function makeStdObject(array $value): stdClass
     {
         return (object)$value;

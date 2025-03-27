@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
-use ArrayIterator;
-use ArrayObject;
 use InvalidArgumentException;
 use Iquety\Shield\Assertion\StartsWith;
 use stdClass;
 
+/** @SuppressWarnings(PHPMD.TooManyPublicMethods) */
 class StartsWithTest extends AssertionSearchCase
 {
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
@@ -21,7 +21,7 @@ class StartsWithTest extends AssertionSearchCase
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
         $list['false is invalid value']   = [false];
-        
+
         return $list;
     }
 
@@ -39,6 +39,7 @@ class StartsWithTest extends AssertionSearchCase
         $assertion->isValid();
     }
 
+    /** @return array<string,array<mixed>> */
     public function invalidNeedleProvider(): array
     {
         $list = [];
@@ -50,7 +51,7 @@ class StartsWithTest extends AssertionSearchCase
         $list['false is invalid needle for string']   = [false];
         $list['array is invalid needle for string']   = [['x']];
         $list['object is invalid needle for string']  = [new stdClass()];
-        
+
         return $list;
     }
 
@@ -78,7 +79,7 @@ class StartsWithTest extends AssertionSearchCase
 
         $assertion->isValid();
     }
-    
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array<string,array<int,mixed>>
@@ -87,7 +88,7 @@ class StartsWithTest extends AssertionSearchCase
     {
         $list = [];
 
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |
@@ -126,7 +127,7 @@ class StartsWithTest extends AssertionSearchCase
             $iteratorAggrValue = $this->makeIteratorAggregateObject($valueTypes);
             $list["IteratorAggregate starts with $label"] = [$iteratorAggrValue, $firstValue];
         }
-        
+
         return $list;
     }
 
@@ -161,7 +162,7 @@ class StartsWithTest extends AssertionSearchCase
     {
         $list = [];
 
-        // | string            | string                          | 
+        // | string            | string                          |
         // | Stringable        | string                          |
         // | array             | string, int, float, true, false |
         // | ArrayAccess       | string, int, float, true, false |
@@ -183,9 +184,14 @@ class StartsWithTest extends AssertionSearchCase
         }
 
         foreach ($valueTypesComparison as $label => $value) {
-            $label = $this->makeStdProperty($label);
+            $label = sprintf(
+                "stdClass not starts with value of property %s",
+                $this->makeStdProperty($label)
+            );
+
             $stdClassValue = $this->makeStdObject($valueTypes);
-            $list["stdClass not starts with value of property $label"] = $this->makeIncorrectItem($stdClassValue, $value);
+
+            $list[$label] = $this->makeIncorrectItem($stdClassValue, $value);
         }
 
         foreach ($valueTypesComparison as $label => $value) {

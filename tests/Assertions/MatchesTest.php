@@ -8,8 +8,10 @@ use InvalidArgumentException;
 use Iquety\Shield\Assertion\Matches;
 use stdClass;
 
+/** @SuppressWarnings(PHPMD.TooManyPublicMethods) */
 class MatchesTest extends AssertionSearchCase
 {
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
@@ -19,7 +21,7 @@ class MatchesTest extends AssertionSearchCase
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
         $list['false is invalid value']   = [false];
-        
+
         return $list;
     }
 
@@ -37,6 +39,7 @@ class MatchesTest extends AssertionSearchCase
         $assertion->isValid();
     }
 
+    /** @return array<string,array<mixed>> */
     public function invalidNeedleProvider(): array
     {
         $list = [];
@@ -48,7 +51,7 @@ class MatchesTest extends AssertionSearchCase
         $list['false is invalid needle for string']   = [false];
         $list['array is invalid needle for string']   = [['x']];
         $list['object is invalid needle for string']  = [new stdClass()];
-        
+
         return $list;
     }
 
@@ -77,6 +80,7 @@ class MatchesTest extends AssertionSearchCase
         $assertion->isValid();
     }
 
+    /** @return array<string,array<mixed>> */
     public function invalidPatternProvider(): array
     {
         $list = [];
@@ -87,7 +91,7 @@ class MatchesTest extends AssertionSearchCase
         $list['false is invalid pattern']   = [false];
         $list['array is invalid pattern']   = [['x']];
         $list['object is invalid pattern']  = [new stdClass()];
-        
+
         return $list;
     }
 
@@ -207,9 +211,11 @@ class MatchesTest extends AssertionSearchCase
 
         $list = [];
 
+        $stringableValue = $this->makeStringableObject('@Coração!#');
+
         $list['string @Coração!# matches @Co']       = $this->makeIncorrectItem('@Coração!#', '/life/');
         $list['string 123456 matches 123']           = $this->makeIncorrectItem('123456', '/000/');
-        $list['stringable @Coração!# matches @Co']   = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '/life/');
+        $list['stringable @Coração!# matches @Co']   = $this->makeIncorrectItem($stringableValue, '/life/');
 
         // arrays são permitidos apenas com valores string
         // os valores não-string são ignorados na busca
@@ -219,7 +225,7 @@ class MatchesTest extends AssertionSearchCase
             'stdObject'          => $this->makeStdObject(['@Coração!#'])
         ];
 
-        foreach ($arrayValue as $label => $value) {
+        foreach (array_keys($arrayValue) as $label) {
             $list["invalid value of type $label"] = $this->makeIncorrectItem($arrayValue, '/a/');
         }
 

@@ -30,14 +30,14 @@ class NotMatches extends AssertionSearchNot
         if (is_string($element) === false) {
             throw new InvalidArgumentException('Regular expressions must be string');
         }
-        
+
         $notMatched = true;
 
         foreach ($list as $item) {
             if (is_string($item) === false) {
                 continue;
             }
-            
+
             if ($this->isMatches((string)$item, $element) === true) {
                 $notMatched = false;
             }

@@ -22,6 +22,8 @@ class MaxLength extends Assertion
 
     public function isValid(): bool
     {
+        // TODO: deve suportar somente textos
+
         $value = $this->getValue();
 
         if ($value === null || $value === true || $value === false) {

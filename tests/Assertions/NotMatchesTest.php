@@ -8,8 +8,10 @@ use InvalidArgumentException;
 use Iquety\Shield\Assertion\NotMatches;
 use stdClass;
 
+/** @SuppressWarnings(PHPMD.TooManyPublicMethods) */
 class NotMatchesTest extends AssertionSearchCase
 {
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
@@ -19,7 +21,7 @@ class NotMatchesTest extends AssertionSearchCase
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
         $list['false is invalid value']   = [false];
-        
+
         return $list;
     }
 
@@ -37,6 +39,7 @@ class NotMatchesTest extends AssertionSearchCase
         $assertion->isValid();
     }
 
+    /** @return array<string,array<mixed>> */
     public function invalidNeedleProvider(): array
     {
         $list = [];
@@ -48,7 +51,7 @@ class NotMatchesTest extends AssertionSearchCase
         $list['false is invalid needle for string']   = [false];
         $list['array is invalid needle for string']   = [['x']];
         $list['object is invalid needle for string']  = [new stdClass()];
-        
+
         return $list;
     }
 
@@ -77,6 +80,7 @@ class NotMatchesTest extends AssertionSearchCase
         $assertion->isValid();
     }
 
+    /** @return array<string,array<mixed>> */
     public function invalidPatternProvider(): array
     {
         $list = [];
@@ -87,7 +91,7 @@ class NotMatchesTest extends AssertionSearchCase
         $list['false is invalid pattern']   = [false];
         $list['array is invalid pattern']   = [['x']];
         $list['object is invalid pattern']  = [new stdClass()];
-        
+
         return $list;
     }
 
@@ -104,7 +108,7 @@ class NotMatchesTest extends AssertionSearchCase
 
         $assertion->isValid();
     }
-    
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -132,7 +136,7 @@ class NotMatchesTest extends AssertionSearchCase
             'stdObject'          => $this->makeStdObject(['@Coração!#'])
         ];
 
-        foreach ($arrayValue as $label => $value) {
+        foreach (array_keys($arrayValue) as $label) {
             $list["invalid value of type $label"] = [$arrayValue, '/a/'];
         }
 
@@ -178,15 +182,17 @@ class NotMatchesTest extends AssertionSearchCase
 
         $list = [];
 
+        $stringableValue = $this->makeStringableObject('@Coração!#');
+
         $list['string @Coração!# matches @Co']       = $this->makeIncorrectItem('@Coração!#', '/@Co/');
         $list['string @Coração!# matches ra']        = $this->makeIncorrectItem('@Coração!#', '/ra/');
         $list['string @Coração!# matches ção!#']     = $this->makeIncorrectItem('@Coração!#', '/ção!#/');
         $list['string 123456 matches 123']           = $this->makeIncorrectItem('123456', '/123/');
         $list['string 123456 matches 345']           = $this->makeIncorrectItem('123456', '/345/');
         $list['string 123456 matches 456']           = $this->makeIncorrectItem('123456', '/456/');
-        $list['stringable @Coração!# matches @Co']   = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '/@Co/');
-        $list['stringable @Coração!# matches ra']    = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '/ra/');
-        $list['stringable @Coração!# matches ção!#'] = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '/ção!#/');
+        $list['stringable @Coração!# matches @Co']   = $this->makeIncorrectItem($stringableValue, '/@Co/');
+        $list['stringable @Coração!# matches ra']    = $this->makeIncorrectItem($stringableValue, '/ra/');
+        $list['stringable @Coração!# matches ção!#'] = $this->makeIncorrectItem($stringableValue, '/ção!#/');
 
         // arrays são permitidos apenas com valores string
         $arrayValue = [

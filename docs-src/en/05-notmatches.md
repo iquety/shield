@@ -2,34 +2,47 @@
 
 --page-nav--
 
-The full value does not match or does not contain a part of the regular expression.
+The full value does not match or does not contain a regular expression excerpt.
+
+| Full type                            |
+|:--                                   |
+| string                               |
+| Stringable                           |
+| array with string values ​​            |
+| ArrayAccess with string values ​​      |
+| Iterator with string values ​         ​|
+| IteratorAggregate with string values ​​|
+| stdClass with string values ​​         |
+
+Arguments with unsupported values ​​will throw an `InvalidArgumentException` exception.
 
 ```php
-// word does not contain the pattern
-new Matches('Lionheart', '/life/');
+// text does not contain the pattern
+new NotMatches('Lionheart', '/life/');
+new NotMatches('123-456-7890', '/(\d{3})-(\d{3})-(\d{9})/');
 
-// formatted text does not match the pattern
-new Matches('123-456-7890', '/(\d{3})-(\d{3})-(\d{9})/');
-
-// decimal number format does not match the pattern
-new Matches(123456.7891, '/(\d{6})\.(\d{9})/');
-
-// integer format does not match pattern
-new Matches(1234567890, '/(\d{5})(\d{9})/');
+// textual value of object of type \Stringable does not contain pattern
+new NotMatches(new CustomStringable('Heart'), '/life/');
 
 // array does not contain an element that matches pattern
-new Matches(['Heart', 'Hello World', 'Lion'], '/Life/');
+new NotMatches(['Heart', 'Hello World', 'Lion'], '/life/');
 
-// nulls can also be checked
-new Matches(null, '/nus/');
-```
+// object of type \ArrayAccess does not contain an element that matches pattern
+new NotMatches(new CustomArrayAccess(['Hello World', 'Lion']), '/life/');
 
-## Limitations
+// object of type \Iterator does not contain an element that matches pattern
+new NotMatches(new ArrayIterator(['Hello World', 'Lion']), '/life/');
 
-**Warning:** decimal numbers with a trailing zero will not work due to a limitation of PHP's type correction, which will remove the trailing zeros
+// object of type \IteratorAggregate does not contain an element that matches pattern
+new NotMatches(new ArrayObject(['Hello World', 'Lion']), '/life/');
 
-```php
-new Matches(123456.7890, '/(\d{6})\.(\d{9})/');
+// object of type \stdClass does not contain a property
+// with the value corresponding to the pattern
+$stdObject = new stdClass();
+$stdObject->one = 'Hello World';
+$stdObject->two = 'Lion';
+
+new NotMatches($stdObject, '/life/');
 ```
 
 --page-nav--

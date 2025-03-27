@@ -4,35 +4,42 @@
 
 The full value starts with the partial value.
 
+| Full type         | Partial type                    |
+|:--                |:--                              |
+| string            | string                          |
+| Stringable        | string                          |
+| array             | string, int, float, true, false |
+| ArrayAccess       | string, int, float, true, false |
+| Iterator          | string, int, float, true, false |
+| IteratorAggregate | string, int, float, true, false |
+| stdClass          | string, int, float, true, false |
+
+Arguments with unsupported values ​​will throw an `InvalidArgumentException` exception.
+
 ```php
 // string starts with the word 'My'
 new StartsWith('My text', 'My');
 
-// string starts with the number 123
-new StartsWith('123456', 123);
+// textual value of object of type \Stringable starts with the word 'My'
+new StartsWith(new CustomStringable('My text'), 'My');
 
-// number starts with the string 12.3
-new StartsWith(12.3456, '12.3');
-
-// number starts with the number 123
-new StartsWith(123456, 123);
-
-// first element of the Array is 'text'
+// first element of the Array is 'My'
 new StartsWith(['My', 'text'], 'My');
 
-// textual value of the object of type \Stringable starts with the word 'My'
-new StartsWith(new MyStringable('My text'), 'My');
+// first element of the object of type \ArrayAccess is 'My'
+new Contains(new CustomArrayAccess(['My', 'text']), 'My');
 
-// first element of the \IteratorAggregate object is 'My'
-new StartsWith(new ArrayObject(['My', 'text']), 'My');
-
-// first element of the \Iterator object is 'My'
+// first element of the object of type \Iterator is 'My'
 new StartsWith(new ArrayIterator(['My', 'text']), 'My');
 
-// last property of the \stdClass object has the value 'My'
+// first element of the object of type \IteratorAggregate is 'My'
+new StartsWith(new ArrayObject(['My', 'text']), 'My');
+
+// first property of the object \stdClass has the value 'My'
 $stdObject = new stdClass();
 $stdObject->one = 'My';
 $stdObject->two = 'Text';
+
 new StartsWith($stdObject, 'My');
 ```
 

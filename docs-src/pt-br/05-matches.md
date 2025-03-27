@@ -4,34 +4,45 @@
 
 O valor completo corresponde ou contém um trecho da expressão regular.
 
+| Tipo completo                        |
+|:--                                   |
+| string                               |
+| Stringable                           |
+| array com valores string             |
+| ArrayAccess com valores string       |
+| Iterator com valores string          |
+| IteratorAggregate com valores string |
+| stdClass com valores string          |
+
+Argumentos com valores não suportados lançarão uma exceção do tipo `InvalidArgumentException`.
+
 ```php
 
-// palavra contém o padrão
+// texto contém o padrão
 new Matches('Coração de Leão', '/oraç/');
-
-// formado texto corresponde ao padrão
 new Matches('123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/');
 
-// formato do número decimal corresponde ao padrão
-new Matches(123456.7891, '/(\d{6})\.(\d{4})/');
-
-// formato do número inteiro corresponde ao padrão
-new Matches(1234567890, '/(\d{5})(\d{5})/');
+// valor textual do objeto do tipo \Stringable contém o padrão
+new Matches(new CustomStringable('Coração'), '/oraç/');
 
 // array contém um elemento que corresponde ao padrão
 new Matches(['Coração', 'Hello World', 'Leão'], '/World/');
 
-// nulos também podem ser verificados
-new Matches(null, '/null/');
-new Matches(null, '/nu/');
-```
+// objeto do tipo \ArrayAccess contém um elemento que corresponde ao padrão
+new Matches(new CustomArrayAccess(['Hello World', 'Leão']), '/World/');
 
-## Limitações
+// objeto do tipo \Iterator contém um elemento que corresponde ao padrão
+new Matches(new ArrayIterator(['Hello World', 'Leão']), '/World/');
 
-**Atenção:** números decimais com zero no final não funcionarão por uma limitação da correção de tipos do PHP, que removerá os zeros do final
+// objeto do tipo \IteratorAggregate contém um elemento que corresponde ao padrão
+new Matches(new ArrayObject(['Hello World', 'Leão']), '/World/');
 
-```php
-new Matches(123456.7890, '/(\d{6})\.(\d{4})/');
+// objeto do tipo \stdClass contém uma propriedade
+// com o valor correpondente ao padrão
+$stdObject = new stdClass();
+$stdObject->one = 'Hello World';
+$stdObject->two = 'Leão';
+new Matches($stdObject, '/World/');
 ```
 
 --page-nav--

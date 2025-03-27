@@ -4,32 +4,44 @@
 
 O valor completo não corresponde ou não contém um trecho da expressão regular.
 
+| Tipo completo                        |
+|:--                                   |
+| string                               |
+| Stringable                           |
+| array com valores string             |
+| ArrayAccess com valores string       |
+| Iterator com valores string          |
+| IteratorAggregate com valores string |
+| stdClass com valores string          |
+
+Argumentos com valores não suportados lançarão uma exceção do tipo `InvalidArgumentException`.
+
 ```php
-// palavra não contém o padrão
-new Matches('Coração de Leão', '/life/');
+// texto não contém o padrão
+new NotMatches('Coração de Leão', '/life/');
+new NotMatches('123-456-7890', '/(\d{3})-(\d{3})-(\d{9})/');
 
-// formado texto não corresponde ao padrão
-new Matches('123-456-7890', '/(\d{3})-(\d{3})-(\d{9})/');
-
-// formato do número decimal não corresponde ao padrão
-new Matches(123456.7891, '/(\d{6})\.(\d{9})/');
-
-// formato do número inteiro não corresponde ao padrão
-new Matches(1234567890, '/(\d{5})(\d{9})/');
+// valor textual do objeto do tipo \Stringable não contém o padrão
+new NotMatches(new CustomStringable('Coração'), '/life/');
 
 // array não contém um elemento que corresponde ao padrão
-new Matches(['Coração', 'Hello World', 'Leão'], '/Life/');
+new NotMatches(['Coração', 'Hello World', 'Leão'], '/life/');
 
-// nulos também podem ser verificados
-new Matches(null, '/nus/');
-```
+// objeto do tipo \ArrayAccess não contém um elemento que corresponde ao padrão
+new NotMatches(new CustomArrayAccess(['Hello World', 'Leão']), '/life/');
 
-## Limitações
+// objeto do tipo \Iterator não contém um elemento que corresponde ao padrão
+new NotMatches(new ArrayIterator(['Hello World', 'Leão']), '/life/');
 
-**Atenção:** números decimais com zero no final não funcionarão por uma limitação da correção de tipos do PHP, que removerá os zeros do final
+// objeto do tipo \IteratorAggregate não contém um elemento que corresponde ao padrão
+new NotMatches(new ArrayObject(['Hello World', 'Leão']), '/life/');
 
-```php
-new Matches(123456.7890, '/(\d{6})\.(\d{9})/');
+// objeto do tipo \stdClass não contém uma propriedade
+// com o valor correpondente ao padrão
+$stdObject = new stdClass();
+$stdObject->one = 'Hello World';
+$stdObject->two = 'Leão';
+new NotMatches($stdObject, '/life/');
 ```
 
 --page-nav--

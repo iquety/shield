@@ -5,35 +5,42 @@
 
 The full value ends with the partial value.
 
+| Full type         | Partial type                    |
+|:--                |:--                              |
+| string            | string                          |
+| Stringable        | string                          |
+| array             | string, int, float, true, false |
+| ArrayAccess       | string, int, float, true, false |
+| Iterator          | string, int, float, true, false |
+| IteratorAggregate | string, int, float, true, false |
+| stdClass          | string, int, float, true, false |
+
+Arguments with unsupported values ​​will throw an `InvalidArgumentException` exception.
+
 ```php
 // string ends with the word 'text'
 new EndsWith('My text', 'text');
 
-// string ends with the number 456
-new EndsWith('123456', 456);
-
-// number ends with the string 456
-new EndsWith(12.3456, '456');
-
-// number ends with the number 456
-new EndsWith(123456, 456);
+// textual value of the \Stringable object ends with the word 'text'
+new EndsWith(new CustomStringable('My text'), 'text');
 
 // last element of the Array is 'text'
 new EndsWith(['My', 'text'], 'text');
 
-// textual value of the object of type \Stringable ends with the word 'text'
-new EndsWith(new MyStringable('My text'), 'text');
-
-// last element of the \IteratorAggregate object is 'text'
-new EndsWith(new ArrayObject(['My', 'text']), 'text');
+// last element of the \ArrayAccess object is 'text'
+new Contains(new CustomArrayAccess(['My', 'text']), 'text');
 
 // last element of the \Iterator object is 'text'
 new EndsWith(new ArrayIterator(['My', 'text']), 'text');
 
+// last element of the \IteratorAggregate object is 'text'
+new EndsWith(new ArrayObject(['My', 'text']), 'text');
+
 // last property of the \stdClass object has the value 'text'
 $stdObject = new stdClass();
 $stdObject->one = 'My';
-$stdObject->two = 'Text';
+$stdObject->two = 'text';
+
 new EndsWith($stdObject, 'text');
 ```
 

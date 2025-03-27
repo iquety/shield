@@ -38,12 +38,6 @@ trait HasValueNormalizer
             return (array)$value;
         }
 
-        // decimais com casas vazias perdem as casas quando convertidas para string
-        if (is_float($value) === true) {
-            $value = (string)$value;
-            $value = strpos($value, '.') === false ? $value . '.0' : $value;
-        }
-
         return $value;
     }
 }

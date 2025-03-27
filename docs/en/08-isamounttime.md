@@ -1,6 +1,6 @@
 # IsAmountTime
 
-[◂ Length](06-minlength.md) | [Documentation Summary](index.md) | [IsDate ▸](07-isdate.md)
+[◂ MinLength](07-minlength.md) | [Documentation Summary](index.md) | [IsDate ▸](08-isdate.md)
 -- | -- | --
 
 Hours, minutes and seconds format without 24-hour limit:
@@ -13,5 +13,5 @@ new IsAmountTime('00:00:00');
 new IsAmountTime('99:59:59');
 ```
 
-[◂ Length](06-minlength.md) | [Documentation Summary](index.md) | [IsDate ▸](07-isdate.md)
+[◂ MinLength](07-minlength.md) | [Documentation Summary](index.md) | [IsDate ▸](08-isdate.md)
 -- | -- | --

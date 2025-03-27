@@ -10,10 +10,8 @@ use Iquety\Shield\Message;
 class NotContains extends AssertionSearchNot
 {
     /** @param array<mixed>|string $value */
-    public function __construct(
-        mixed $value,
-        null|bool|float|int|string $needle
-    ) {
+    public function __construct(mixed $value, mixed $needle)
+    {
         $this->setValue($value);
 
         $this->setAssertValue($needle);
@@ -21,19 +19,7 @@ class NotContains extends AssertionSearchNot
 
     protected function isMatches(string $value, mixed $needle): bool
     {
-        if ($needle === null) {
-            $needle = 'null';
-        }
-
-        if ($needle === false) {
-            $needle = 'false';
-        }
-
-        if ($needle === true) {
-            $needle = 'true';
-        }
-
-        return str_contains($value, (string)$needle) === true;
+        return str_contains($value, (string)$needle) === false;
     }
 
     /** @param array<string,mixed> $list */

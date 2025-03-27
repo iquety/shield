@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
+use InvalidArgumentException;
 use Iquety\Shield\AssertionSearchNot;
 use Iquety\Shield\Message;
 
 class NotMatches extends AssertionSearchNot
 {
     /** @param array<mixed>|string $value */
-    public function __construct(
-        mixed $value,
-        string $pattern
-    ) {
+    public function __construct(mixed $value, mixed $pattern)
+    {
         $this->setValue($value);
 
         $this->setAssertValue($pattern);
@@ -21,15 +20,24 @@ class NotMatches extends AssertionSearchNot
 
     protected function isMatches(string $value, mixed $needle): bool
     {
-        return preg_match($needle, $value) === 1;
+        return preg_match($needle, $value) === 0;
     }
 
     /** @param array<string,mixed> $list */
     protected function isValidInArray(array $list, mixed $element): bool
     {
+        // padrões são sempre strings
+        if (is_string($element) === false) {
+            throw new InvalidArgumentException('Regular expressions must be string');
+        }
+
         $notMatched = true;
 
         foreach ($list as $item) {
+            if (is_string($item) === false) {
+                continue;
+            }
+
             if ($this->isMatches((string)$item, $element) === true) {
                 $notMatched = false;
             }

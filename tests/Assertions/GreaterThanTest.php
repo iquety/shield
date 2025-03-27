@@ -6,43 +6,64 @@ namespace Tests\Assertions;
 
 use ArrayIterator;
 use ArrayObject;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion\GreaterThan;
 use stdClass;
 
 class GreaterThanTest extends AssertionCase
 {
-    /** @return array<string,array<int,mixed>> */
-    public function correctValueProvider(): array
+    /** @return array<string,array<mixed>> */
+    public function invalidValueProvider(): array
     {
         $list = [];
 
-        $list['string 7 chars is greater than 6'] = ['Palavra', 6];
-        $list['string utf8 7 chars is greater than 6'] = ['coração', 6];
-
-        $list['integer 9 is greater than 8'] = [9, 8];
-        $list['float 9.9 is greater than 9.0'] = [9.9, 9.0];
-        $list['float 9.8 is greater than integer 9'] = [9.8, 9];
-
-        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
-
-        $list['array with 7 elements is greater than 6'] = [$arrayValue, 6];
-
-        $list['countable with 7 elements is greater than 6'] = [new ArrayObject($arrayValue), 6];
-
-        $list['countable with 7 elements is greater than 5'] = [new ArrayIterator($arrayValue), 5];
-
-        $stdObject        = new stdClass();
-        $stdObject->one   = 'Meu';
-        $stdObject->two   = 'Texto';
-        $stdObject->three = 'Legal';
-        $list['stdClass with 3 public properties is greater than 2'] = [$stdObject, 2];
+        $list['null is invalid value']      = [null];
+        $list['stdObject is invalid value'] = [new stdClass()];
+        $list['true is invalid value']      = [true];
+        $list['false is invalid value']     = [false];
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider correctValueProvider
+     * @dataProvider invalidValueProvider
+     */
+    public function valueIsInvalid(mixed $value): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value is not valid');
+
+        $assertion = new GreaterThan($value, 1);
+
+        $assertion->isValid();
+    }
+
+    /** @return array<string,array<int,mixed>> */
+    public function validProvider(): array
+    {
+        $list = [];
+
+        $list['string numeric 9 is greater than 8']  = ['9', 8];
+        $list['integer 9 is greater than 8']         = [9, 8];
+        $list['float 9.9 is greater than 9.0']       = [9.9, 9.0];
+        $list['float 9.8 is greater than integer 9'] = [9.8, 9];
+
+        $arrayValue = [1, 2, 3, 4, 5, 6, 7];
+
+        $list['array with 7 elements is greater than 6']       = [$arrayValue, 6];
+        $list['array with 7 elements is greater than 6.5']     = [$arrayValue, 6.5];
+        $list['countable with 7 elements is greater than 6']   = [new ArrayObject($arrayValue), 6];
+        $list['countable with 7 elements is greater than 6.5'] = [new ArrayObject($arrayValue), 6.5];
+        $list['countable with 7 elements is greater than 5']   = [new ArrayIterator($arrayValue), 5];
+        $list['countable with 7 elements is greater than 5.5'] = [new ArrayIterator($arrayValue), 5.5];
+
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider validProvider
      */
     public function valueGreaterThanLength(mixed $value, float|int $length): void
     {
@@ -64,15 +85,12 @@ class GreaterThanTest extends AssertionCase
     }
 
     /** @return array<string,array<int,mixed>> */
-    public function incorrectValueProvider(): array
+    public function invalidProvider(): array
     {
         $list = [];
 
-        $list['string 7 chars is not greater than 7'] = $this->makeIncorrectItem('Palavra', 7);
-        $list['string 7 chars is not greater than 8'] = $this->makeIncorrectItem('Palavra', 8);
-
-        $list['string utf8 7 chars is not greater than 7'] = $this->makeIncorrectItem('Coração', 7);
-        $list['string utf8 7 chars is not greater than 8'] = $this->makeIncorrectItem('Coração', 8);
+        $list['numeric string 9 is not greater than 9'] = $this->makeIncorrectItem('9', 9);
+        $list['numeric string 9 is not greater than 10'] = $this->makeIncorrectItem('9', 10);
 
         $list['integer 9 is not greater than 9'] = $this->makeIncorrectItem(9, 9);
         $list['integer 9 is not greater than 10'] = $this->makeIncorrectItem(9, 10);
@@ -83,43 +101,35 @@ class GreaterThanTest extends AssertionCase
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements is not greater than 7'] = $this->makeIncorrectItem($arrayValue, 7);
+        $list['array with 7 elements is not greater than 7.5'] = $this->makeIncorrectItem($arrayValue, 7.5);
         $list['array with 7 elements is not greater than 8'] = $this->makeIncorrectItem($arrayValue, 8);
 
         $list['countable with 7 elements is not greater than 7']
             = $this->makeIncorrectItem(new ArrayObject($arrayValue), 7);
+        $list['countable with 7 elements is not greater than 7.5']
+            = $this->makeIncorrectItem(new ArrayObject($arrayValue), 7.5);
 
         $list['countable with 7 elements is not greater than 8']
             = $this->makeIncorrectItem(new ArrayObject($arrayValue), 8);
+        $list['countable with 7 elements is not greater than 8.5']
+            = $this->makeIncorrectItem(new ArrayObject($arrayValue), 8.5);
 
         $list['countable iterator with 7 elements is not greater than 7']
             = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 7);
+        $list['countable iterator with 7 elements is not greater than 7.5']
+            = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 7.5);
 
         $list['countable iterator with 7 elements is not greater than 8']
             = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 8);
-
-        $stdObject        = new stdClass();
-        $stdObject->one   = 'Meu';
-        $stdObject->two   = 'Texto';
-        $stdObject->three = 'Legal';
-
-        $list['stdClass with 3 public properties is not greater than 3']
-            = $this->makeIncorrectItem($stdObject, 3);
-
-        $list['stdClass with 3 public properties is not greater than 4']
-            = $this->makeIncorrectItem($stdObject, 4);
-
-        $list['stdClass is not greater than 0'] = $this->makeIncorrectItem(new stdClass(), 0);
-
-        $list['null is invalid']  = $this->makeIncorrectItem(null, 0);
-        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
-        $list['true is invalid']  = $this->makeIncorrectItem(true, 0);
+        $list['countable iterator with 7 elements is not greater than 8.5']
+            = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 8.5);
 
         return $list;
     }
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotGreaterThanLength(mixed $value, float|int $length): void
     {
@@ -135,7 +145,7 @@ class GreaterThanTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotGreaterThanLength(mixed $value, float|int $length): void
     {
@@ -153,7 +163,7 @@ class GreaterThanTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function namedValueNotGreaterThanLengthAndCustomMessage(
         mixed $value,
@@ -173,7 +183,7 @@ class GreaterThanTest extends AssertionCase
 
     /**
      * @test
-     * @dataProvider incorrectValueProvider
+     * @dataProvider invalidProvider
      */
     public function valueNotGreaterThanLengthAndCustomMessage(
         mixed $value,

@@ -1,6 +1,6 @@
 # IsIp
 
-[◂ IsTime](07-istime.md) | [Documentation Summary](index.md) | [IsMacAddress ▸](08-ismacaddress.md)
+[◂ IsTime](08-istime.md) | [Documentation Summary](index.md) | [IsMacAddress ▸](09-ismacaddress.md)
 -- | -- | --
 
 IP formats:
@@ -28,5 +28,5 @@ new IsIp('::1');
 new IsIp('::');
 ```
 
-[◂ IsTime](07-istime.md) | [Documentation Summary](index.md) | [IsMacAddress ▸](08-ismacaddress.md)
+[◂ IsTime](08-istime.md) | [Documentation Summary](index.md) | [IsMacAddress ▸](09-ismacaddress.md)
 -- | -- | --

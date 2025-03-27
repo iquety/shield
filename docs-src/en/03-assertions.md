@@ -22,41 +22,46 @@ The following assertions are used to validate the value of a variable:
 | [NotMatches](05-notmatches.md)   | Value does not match pattern               |
 | [StartsWith](05-startswith.md)   | Value starts with the other value          |
 
+## Numbers
+
+| Assertion                                          | Description                                |
+| :--                                                | :--                                        |
+| [GreaterThan](06-greaterthan.md)                   | Number is greater than expected             |
+| [GreaterThanOrEqualTo](06-greaterthanorequalto.md) | Number is greater than or equal to expected |
+| [LessThan](06-lessthan.md)                         | Number is less than expected                |
+| [LessThanOrEqualTo](06-lessthanorequalto.md)       | Number is less than or equal to other value |
+
 ## Count
 
 | Assertion                                          | Description                                |
 | :--                                                | :--                                        |
-| [GreaterThan](06-greaterthan.md)                   | Value is greater than expected             |
-| [GreaterThanOrEqualTo](06-greaterthanorequalto.md) | Value is greater than or equal to expected |
-| [Length](06-length.md)                             | Value is the expected length               |
-| [LessThan](06-lessthan.md)                         | Value is less than expected                |
-| [LessThanOrEqualTo](06-lessthanorequalto.md)       | Value is less than or equal to other value |
-| [MaxLength](06-maxlength.md)                       | The value has the maximum length           |
-| [MinLength](06-minlength.md)                       | The value has the minimum length           |
+| [Length](07-length.md)                             | Value is the expected length               |
+| [MaxLength](07-maxlength.md)                       | The value has the maximum length           |
+| [MinLength](07-minlength.md)                       | The value has the minimum length           |
 
 ## Dates and times
 
 | Assertion                          | Description                    |
 | :--                                | :--                            |
-| [IsDate](07-isdate.md)             | Date formats                   |
-| [IsDateTime](07-isdatetime.md)     | Date + time formats            |
-| [IsTime](07-istime.md)             | Time format with 24-hour limit |
-| [IsAmountTime](07-isamounttime.md) | Time format with no hour limit |
+| [IsDate](08-isdate.md)             | Date formats                   |
+| [IsDateTime](08-isdatetime.md)     | Date + time formats            |
+| [IsTime](08-istime.md)             | Time format with 24-hour limit |
+| [IsAmountTime](08-isamounttime.md) | Time format with no hour limit |
 
 ## Internet
 
 | Assertion                          | Description                                    |
 | :--                                | :--                                            |
 | IsEmail                            | Electronic address (e.g. **fulano@gmail.com**) |
-| [IsIp](08-isip.md)                 | Is an IP address                               |
-| [IsMacAddress](08-ismacaddress.md) | Is a MAC address                               |
-| [IsUrl](08-isurl.md)               | Is a URL                                       |
+| [IsIp](09-isip.md)                 | Is an IP address                               |
+| [IsMacAddress](09-ismacaddress.md) | Is a MAC address                               |
+| [IsUrl](09-isurl.md)               | Is a URL                                       |
 
 ## Brazilian formats
 
 | Assertion        | Description                                                       |
 | :--              | :--                                                               |
-| [IsBrPhoneNumber](09-isbrphonenumber.md) | The value is a Brazilian telephone number |
+| [IsBrPhoneNumber](10-isbrphonenumber.md) | The value is a Brazilian telephone number |
 | IsCep            | Postal code (e.g. **12.380-315**)                                 |
 | IsCpf            | Individual taxpayer registration number (e.g. **742.143.120-90**) |
 

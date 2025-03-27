@@ -5,36 +5,42 @@
 
 O valor completo não contém o valor parcial.
 
+| Tipo completo     | Tipo parcial                    |
+|:--                |:--                              |
+| string            | string                          |
+| Stringable        | string                          |
+| array             | string, int, float, true, false |
+| ArrayAccess       | string, int, float, true, false |
+| Iterator          | string, int, float, true, false |
+| IteratorAggregate | string, int, float, true, false |
+| stdClass          | string, int, float, true, false |
+
+Argumentos com valores não suportados lançarão uma exceção do tipo `InvalidArgumentException`.
+
 ```php
-// string não contém a palavra 'legal'
-new Contains('Meu texto', 'legal');
-
-// string não contém o número 777
-new Contains('123456', 777);
-
-// número não contém a string 77.3
-new Contains(12.3456, '77.3');
-
-// número não contém o número 777
-new Contains(123456, 777);
-
-// Array não contém o elemento 'legal'
-new Contains(['Meu', 'texto'], 'legal');
+// texto não contém a palavra 'legal'
+new NotContains('Meu texto', 'legal');
 
 // Objetos do tipo \Stringable não contém a palavra 'legal'
-new Contains(new Exception('Meu texto'), 'legal');
+new NotContains(new Exception('Meu texto'), 'legal');
 
-// Objetos do tipo \IteratorAggregate não contém o elemento 'legal'
-new Contains(new ArrayObject(['Meu', 'texto']), 'legal');
+// Array não contém o elemento 'legal'
+new NotContains(['Meu', 'texto'], 'legal');
+
+// Objetos do tipo \ArrayAccess contém o elemento 'legal'
+new NotContains(new CustomArrayAccess(['Meu', 'texto']), 'legal');
 
 // Objetos do tipo \Iterator não contém o elemento 'legal'
-new Contains(new ArrayIterator(['Meu', 'texto']), 'legal');
+new NotContains(new ArrayIterator(['Meu', 'texto']), 'legal');
+
+// Objetos do tipo \IteratorAggregate não contém o elemento 'legal'
+new NotContains(new ArrayObject(['Meu', 'texto']), 'legal');
 
 // Objetos do tipo \stdClass não contém uma propriedade pública com o valor 'legal'
 $stdObject = new stdClass();
 $stdObject->one = 'Meu';
 $stdObject->two = 'Texto';
-new Contains($stdObject, 'legal');
+new NotContains($stdObject, 'legal');
 ```
 
 [◂ Matches](05-matches.md) | [Sumário da Documentação](indice.md) | [NotMatches ▸](05-notmatches.md)

@@ -1,6 +1,6 @@
 # IsUrl
 
-[◂ IsMacAddress](08-ismacaddress.md) | [Documentation Summary](index.md) | [IsTime ▸](09-isbrphonenumber.md)
+[◂ IsMacAddress](09-ismacaddress.md) | [Documentation Summary](index.md) | [IsTime ▸](10-isbrphonenumber.md)
 -- | -- | --
 
 Valid URL formats:
@@ -37,5 +37,5 @@ new IsUrl('http://www.example.com:8080');
 new IsUrl('http://www.example.museum');
 ```
 
-[◂ IsMacAddress](08-ismacaddress.md) | [Documentation Summary](index.md) | [IsTime ▸](09-isbrphonenumber.md)
+[◂ IsMacAddress](09-ismacaddress.md) | [Documentation Summary](index.md) | [IsTime ▸](10-isbrphonenumber.md)
 -- | -- | --

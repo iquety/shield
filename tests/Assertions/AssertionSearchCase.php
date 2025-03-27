@@ -4,6 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use ArrayAccess;
+use ArrayIterator;
+use ArrayObject;
+use Iterator;
+use IteratorAggregate;
+use stdClass;
 use Stringable;
 
 class AssertionSearchCase extends AssertionCase
@@ -16,7 +22,6 @@ class AssertionSearchCase extends AssertionCase
     protected function makeValueTypeList(): array
     {
         return [
-            'null'           => null,
             'false'          => false,
             'true'           => true,
             'integer 111'    => 111,      // inteiro
@@ -36,14 +41,13 @@ class AssertionSearchCase extends AssertionCase
     protected function makeValueComparisonList(): array
     {
         return [
-            'null'           => 'null', // null em forma de string
-            'false'          => 'false',// false em forma de string
-            'true'           => 'true', // true em forma de string
-            'integer 111'    => '111',  // inteiro em forma de string
-            'string 222'     => 222,    // inteiro string em forma de inteiro
-            'decimal 22.5'   => '22.5', // decimal em forma de string
-            'string 11.5'    => 11.5,   // decimal string em forma de decimal
-            'partial string' => 'ção'   // falta o !#
+            'false'          => 'false',   // false em forma de string
+            'true'           => 'true',    // true em forma de string
+            'integer 111'    => '111',     // inteiro em forma de string
+            'string 222'     => 222,       // inteiro string em forma de inteiro
+            'decimal 22.5'   => '22.5',    // decimal em forma de string
+            'string 11.5'    => 11.5,      // decimal string em forma de decimal
+            'partial string' => 'ção'      // falta o !#
         ];
     }
 
@@ -67,156 +71,6 @@ class AssertionSearchCase extends AssertionCase
         return 'prop_' . preg_replace('/[^0-9a-z]/', '_', $key);
     }
 
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function popArrayValue(array &$values, array &$comparison = []): mixed
-    {
-        $lastValue = $comparison !== []
-            ? $comparison[array_key_last($comparison)]
-            : $values[array_key_last($values)];
-
-        array_pop($values);
-
-        return $lastValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function popStdValue(array &$values, array &$comparison = []): mixed
-    {
-        $lastValue = $comparison !== []
-            ? $comparison[array_key_last($comparison)]
-            : $values[array_key_last($values)];
-
-        array_pop($values);
-
-        return $lastValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function popArrayAccessValue(array &$values, array &$comparison = []): mixed
-    {
-        $lastValue = $comparison !== []
-            ? $comparison[array_key_last($comparison)]
-            : $values[array_key_last($values)];
-
-        array_pop($values);
-
-        return $lastValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function popIteratorAggrValue(array &$values, array &$comparison = []): mixed
-    {
-        $lastValue = $comparison !== []
-            ? $comparison[array_key_last($comparison)]
-            : $values[array_key_last($values)];
-
-        array_pop($values);
-
-        return $lastValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function popIteratorValue(array &$values, array &$comparison = []): mixed
-    {
-        $lastValue = $comparison !== []
-            ? $comparison[array_key_last($comparison)]
-            : $values[array_key_last($values)];
-
-        array_pop($values);
-
-        return $lastValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function shiftArrayValue(array &$values, array &$comparison = []): mixed
-    {
-        $firstValue = $comparison !== []
-            ? $comparison[array_key_first($comparison)]
-            : $values[array_key_first($values)];
-
-        array_shift($values);
-
-        return $firstValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function shiftStdValue(array &$values, array &$comparison = []): mixed
-    {
-        $firstValue = $comparison !== []
-            ? $comparison[array_key_first($comparison)]
-            : $values[array_key_first($values)];
-
-        array_shift($values);
-
-        return $firstValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function shiftArrayAccessValue(array &$values, array &$comparison = []): mixed
-    {
-        $firstValue = $comparison !== []
-            ? $comparison[array_key_first($comparison)]
-            : $values[array_key_first($values)];
-
-        array_shift($values);
-
-        return $firstValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function shiftIteratorAggrValue(array &$values, array &$comparison = []): mixed
-    {
-        $firstValue = $comparison !== []
-            ? $comparison[array_key_first($comparison)]
-            : $values[array_key_first($values)];
-
-        array_shift($values);
-
-        return $firstValue;
-    }
-
-    /**
-     * @param array<string,mixed> $values
-     * @param array<string,mixed> $comparison
-     */
-    protected function shiftIteratorValue(array &$values, array &$comparison = []): mixed
-    {
-        $firstValue = $comparison !== []
-            ? $comparison[array_key_first($comparison)]
-            : $values[array_key_first($values)];
-
-        array_shift($values);
-
-        return $firstValue;
-    }
-
     protected function makeStringableObject(string $value): Stringable
     {
         return new class ($value) implements Stringable {
@@ -229,5 +83,63 @@ class AssertionSearchCase extends AssertionCase
                 return $this->value;
             }
         };
+    }
+
+    /**
+     * @param array<int|string,mixed> $value
+     * @return ArrayAccess<int|string,mixed>
+     */
+    protected function makeArrayAccessObject(array $value): ArrayAccess
+    {
+        return new class ($value) implements ArrayAccess {
+            /** @param array<int|string,mixed> $value */
+            public function __construct(private array $value)
+            {
+            }
+
+            public function offsetExists($offset): bool
+            {
+                return isset($this->value[$offset]);
+            }
+
+            public function offsetGet($offset): mixed
+            {
+                return $this->value[$offset] ?? null;
+            }
+
+            public function offsetSet($offset, $value): void
+            {
+                $this->value[$offset] = $value;
+            }
+
+            public function offsetUnset($offset): void
+            {
+                unset($this->value[$offset]);
+            }
+        };
+    }
+
+    /**
+     * @param array<int|string,mixed> $value
+     * @return Iterator<int|string,mixed>
+     */
+    protected function makeIteratorObject(array $value): Iterator
+    {
+        return new ArrayIterator($value);
+    }
+
+    /**
+     * @param array<int|string,mixed> $value
+     * @return IteratorAggregate<int|string,mixed>
+     */
+    protected function makeIteratorAggregateObject(array $value): IteratorAggregate
+    {
+        return new ArrayObject($value);
+    }
+
+    /** @param array<int|string,mixed> $value */
+    protected function makeStdObject(array $value): stdClass
+    {
+        return (object)$value;
     }
 }

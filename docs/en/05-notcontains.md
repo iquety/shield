@@ -5,36 +5,43 @@
 
 The full value does not contain the partial value.
 
+| Full type         | Partial type                    |
+|:--                |:--                              |
+| string            | string                          |
+| Stringable        | string                          |
+| array             | string, int, float, true, false |
+| ArrayAccess       | string, int, float, true, false |
+| Iterator          | string, int, float, true, false |
+| IteratorAggregate | string, int, float, true, false |
+| stdClass          | string, int, float, true, false |
+
+Arguments with unsupported values ​​will throw an `InvalidArgumentException` exception.
+
 ```php
-// string does not contain the word 'cool'
-new Contains('My text', 'cool');
+// text does not contain the word 'legal'
+new NotContains('My text', 'legal');
 
-// string does not contain the number 777
-new Contains('123456', 777);
+// Objects of type \Stringable do not contain the word 'legal'
+new NotContains(new Exception('My text'), 'legal');
 
-// number does not contain the string 77.3
-new Contains(12.3456, '77.3');
+// Array does not contain the element 'legal'
+new NotContains(['My', 'text'], 'legal');
 
-// number does not contain the number 777
-new Contains(123456, 777);
+// Objects of type \ArrayAccess contain the element 'legal'
+new NotContains(new CustomArrayAccess(['My', 'text']), 'legal');
 
-// Array does not contain the element 'cool'
-new Contains(['My', 'text'], 'cool');
+// Objects of type \Iterator do not contain the element 'legal'
+new NotContains(new ArrayIterator(['My', 'text']), 'legal');
 
-// Objects of type \Stringable do not contain the word 'cool'
-new Contains(new Exception('My text'), 'cool');
+// Objects of type \IteratorAggregate do not contain the element 'legal'
+new NotContains(new ArrayObject(['My', 'text']), 'legal');
 
-// Objects of type \IteratorAggregate do not contain the element 'cool'
-new Contains(new ArrayObject(['My', 'text']), 'cool');
-
-// Objects of type \Iterator do not contain the element 'cool'
-new Contains(new ArrayIterator(['My', 'text']), 'cool');
-
-// Objects of type \stdClass do not contain a public property with the value 'cool'
+// Objects of type \stdClass do not contain a public property with the value 'legal'
 $stdObject = new stdClass();
 $stdObject->one = 'My';
-$stdObject->two = 'Text';
-new Contains($stdObject, 'cool');
+$stdObject->two = 'text';
+
+new NotContains($stdObject, 'legal');
 ```
 
 [◂ Matches](05-matches.md) | [Documentation Summary](index.md) | [NotMatches ▸](05-notmatches.md)

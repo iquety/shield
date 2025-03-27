@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace Iquety\Shield\Assertion;
 
 use Countable;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class MaxLength extends Assertion
 {
-    /** @param array<int|string,mixed>|float|int|string $value */
-    public function __construct(
-        mixed $value,
-        float|int $maxLength,
-    ) {
+    /** @param array<int|string,mixed>|string $value */
+    public function __construct(mixed $value, int $maxLength)
+    {
         $this->setValue($value);
 
         $this->setAssertValue($maxLength);
@@ -24,27 +23,19 @@ class MaxLength extends Assertion
     {
         $value = $this->getValue();
 
-        if ($value === null || $value === true || $value === false) {
-            return false;
-        }
-
-        if ($value instanceof Countable) {
-            return $this->isValidCountable($value, $this->getAssertValue());
-        }
-
-        if (is_object($value) === true) {
-            $value = (array)$value;
+        if (is_string($value) === true) {
+            return $this->isValidString($value, $this->getAssertValue());
         }
 
         if (is_array($value) === true) {
             return $this->isValidArray($value, $this->getAssertValue());
         }
 
-        if (is_string($value) === true) {
-            return $this->isValidString($value, $this->getAssertValue());
+        if ($value instanceof Countable) {
+            return $this->isValidCountable($value, $this->getAssertValue());
         }
 
-        return $this->isValidNumber($value, $this->getAssertValue());
+        throw new InvalidArgumentException("The value is not valid");
     }
 
     private function isValidCountable(Countable $value, float|int $length): bool
@@ -56,11 +47,6 @@ class MaxLength extends Assertion
     private function isValidArray(array $value, float|int $length): bool
     {
         return count($value) <= (int)$length;
-    }
-
-    private function isValidNumber(float|int $value, float|int $maxLength): bool
-    {
-        return $value <= $maxLength;
     }
 
     private function isValidString(string $value, float|int $maxLength): bool

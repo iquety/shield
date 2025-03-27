@@ -6,11 +6,41 @@ namespace Tests\Assertions;
 
 use ArrayIterator;
 use ArrayObject;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion\MaxLength;
 use stdClass;
 
 class MaxLengthTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function invalidValueProvider(): array
+    {
+        $list = [];
+
+        $list['null is invalid value']      = [null];
+        $list['stdObject is invalid value'] = [new stdClass()];
+        $list['true is invalid value']      = [true];
+        $list['false is invalid value']     = [false];
+        $list['integer is invalid value']   = [33];
+        $list['float is invalid value']     = [3.3];
+
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidValueProvider
+     */
+    public function valueIsInvalid(mixed $value): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value is not valid');
+
+        $assertion = new MaxLength($value, 1);
+
+        $assertion->isValid();
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -18,9 +48,6 @@ class MaxLengthTest extends AssertionCase
 
         $list['string'] = ['Palavra', 10];
         $list['string utf8'] = ['coração', 7]; // exatamente 7 caracteres
-        $list['int'] = [9, 10];
-        $list['float'] = [9.9, 10];
-        $list['float + int'] = [9.8, 9.9];
 
         $list['array with 3 elements is max 3 length'] = [[1, 2, 3], 3];
         $list['array with 3 elements is max 4 length'] = [[1, 2, 3], 4];
@@ -31,13 +58,6 @@ class MaxLengthTest extends AssertionCase
         $list['countable interator with 3 elements is max 3 length'] = [new ArrayIterator([1, 2, 3]), 3];
         $list['countable interator with 3 elements is max 4 length'] = [new ArrayIterator([1, 2, 3]), 4];
 
-        $stdObject        = new stdClass();
-        $stdObject->one   = 'Meu';
-        $stdObject->two   = 'Texto';
-        $stdObject->three = 'Legal';
-        $list['stdClass with 3 public properties is max than 3 length'] = [$stdObject, 3];
-        $list['stdClass with 3 public properties is max than 4 length'] = [$stdObject, 4];
-
         return $list;
     }
 
@@ -45,7 +65,7 @@ class MaxLengthTest extends AssertionCase
      * @test
      * @dataProvider validProvider
      */
-    public function valueIsMaxLength(mixed $value, float|int $maxLength): void
+    public function valueIsMaxLength(mixed $value, int $maxLength): void
     {
         $assertion = new MaxLength($value, $maxLength);
 
@@ -53,7 +73,7 @@ class MaxLengthTest extends AssertionCase
     }
 
     /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, float|int $length): array
+    private function makeIncorrectItem(mixed $value, int $length): array
     {
         $messageValue = $this->makeMessageValue($value);
 
@@ -70,9 +90,6 @@ class MaxLengthTest extends AssertionCase
         $list = [];
 
         $list['string']      = $this->makeIncorrectItem('Palavra', 5);
-        $list['int']         = $this->makeIncorrectItem(9, 5);
-        $list['float']       = $this->makeIncorrectItem(9.9, 5);
-        $list['float + int'] = $this->makeIncorrectItem(9.9, 9.8);
 
         $list['array with 3 elements is not max 2 length'] = $this->makeIncorrectItem([1, 2, 3], 2);
 
@@ -82,16 +99,6 @@ class MaxLengthTest extends AssertionCase
         $list['countable interator with 3 elements is not max 2 length']
             = $this->makeIncorrectItem(new ArrayIterator([1, 2, 3]), 2);
 
-        $stdObject        = new stdClass();
-        $stdObject->one   = 'Meu';
-        $stdObject->two   = 'Texto';
-        $stdObject->three = 'Legal';
-        $list['stdClass with 3 public properties is not max than 2 length'] = $this->makeIncorrectItem($stdObject, 2);
-
-        $list['null is invalid'] = $this->makeIncorrectItem(null, 0);
-        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
-        $list['true is invalid'] = $this->makeIncorrectItem(true, 0);
-
         return $list;
     }
 
@@ -100,10 +107,8 @@ class MaxLengthTest extends AssertionCase
      * @dataProvider invalidProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function valueIsNotMaxLength(
-        mixed $value,
-        float|int $maxLength
-    ): void {
+    public function valueIsNotMaxLength(mixed $value, int $maxLength): void
+    {
         $assertion = new MaxLength($value, $maxLength);
 
         $this->assertFalse($assertion->isValid());
@@ -117,10 +122,8 @@ class MaxLengthTest extends AssertionCase
      * @test
      * @dataProvider invalidProvider
      */
-    public function namedValueIsNotMaxLength(
-        mixed $value,
-        float|int $maxLength
-    ): void {
+    public function namedValueIsNotMaxLength(mixed $value, int $maxLength): void
+    {
         $assertion = new MaxLength($value, $maxLength);
 
         $assertion->setFieldName('name');
@@ -138,7 +141,7 @@ class MaxLengthTest extends AssertionCase
      */
     public function namedValueIsNotMaxLengthWithCustomMessage(
         mixed $value,
-        float|int $maxLength,
+        int $maxLength,
         string $message
     ): void {
         $assertion = new MaxLength($value, $maxLength);
@@ -157,7 +160,7 @@ class MaxLengthTest extends AssertionCase
      */
     public function valueIsNotMaxLengthWithCustomMessage(
         mixed $value,
-        float|int $maxLength,
+        int $maxLength,
         string $message
     ): void {
         $assertion = new MaxLength($value, $maxLength);

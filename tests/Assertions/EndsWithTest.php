@@ -4,12 +4,79 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
-use ArrayIterator;
-use ArrayObject;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion\EndsWith;
+use stdClass;
 
 class EndsWithTest extends AssertionSearchCase
 {
+    public function invalidValueProvider(): array
+    {
+        $list = [];
+
+        $list['null is invalid value']    = [null];
+        $list['integer is invalid value'] = [123];
+        $list['float is invalid value']   = [12.3];
+        $list['true is invalid value']    = [true];
+        $list['false is invalid value']   = [false];
+        
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidValueProvider
+     */
+    public function valueIsInvalid(mixed $value): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value is not valid');
+
+        $assertion = new EndsWith($value, 'string');
+
+        $assertion->isValid();
+    }
+
+    public function invalidNeedleProvider(): array
+    {
+        $list = [];
+
+        $list['null is invalid needle for string']    = [null];
+        $list['integer is invalid needle for string'] = [123];
+        $list['float is invalid needle for string']   = [12.3];
+        $list['true is invalid needle for string']    = [true];
+        $list['false is invalid needle for string']   = [false];
+        $list['array is invalid needle for string']   = [['x']];
+        $list['object is invalid needle for string']  = [new stdClass()];
+        
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidNeedleProvider
+     */
+    public function needleForStringIsInvalid(mixed $needle): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value needle is not a valid search value for a string');
+
+        $assertion = new EndsWith('string', $needle);
+
+        $assertion->isValid();
+    }
+
+    /** @test */
+    public function needleForListIsInvalid(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Null is not a valid search value for a list');
+
+        $assertion = new EndsWith(['x'], null);
+
+        $assertion->isValid();
+    }
+    
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array<string,array<int,mixed>>
@@ -18,107 +85,46 @@ class EndsWithTest extends AssertionSearchCase
     {
         $list = [];
 
-        $list['string ends with !#'] = ['@Coração!#', '!#'];
+        // | string            | string                          | 
+        // | Stringable        | string                          |
+        // | array             | string, int, float, true, false |
+        // | ArrayAccess       | string, int, float, true, false |
+        // | Iterator          | string, int, float, true, false |
+        // | IteratorAggregate | string, int, float, true, false |
+        // | stdClass          | string, int, float, true, false |
 
-        $list['string 123456 ends with string 456']   = ['123456', '456'];
-        $list['string 123456 ends with integer 456']  = ['123456', 456];
-        $list['integer 123456 ends with string 456']  = [123456, '456'];
-        $list['integer 123456 ends with integer 456'] = [123456, 456];
+        $list['string @Coração!# ends with ção!#']     = ['@Coração!#', 'ção!#'];
+        $list['string 123456 ends with 456']           = ['123456', '456'];
+        $list['stringable @Coração!# ends with ção!#'] = [$this->makeStringableObject('@Coração!#'), 'ção!#'];
 
-        $list['string 12345.0 ends with string 45.0']   = ['12345.0', '45.0'];
-        $list['decimal 12345.0 ends with string 45.0']  = [12345.0, '45.0'];
-        $list['string 12345.0 ends with decimal 45.0']  = ['12345.0', 45.0];
-        $list['decimal 12345.0 ends with decimal 45.0'] = [12345.0, 45.0];
-
-        $list['string 12345.6 ends with string 45.6']   = ['12345.6', '45.6'];
-        $list['string 12345.6 ends with decimal 45.6']  = ['12345.6', 45.6];
-        $list['decimal 12345.6 ends with string 45.6']  = [12345.6, '45.6'];
-        $list['decimal 12345.6 ends with decimal 45.6'] = [12345.6, 45.6];
-
-        $list['boolean true ends with boolean true']   = [true, true];
-        $list['boolean true ends with lower true']   = [true, 'true'];
-        $list['boolean true ends with lower ue']     = [true, 'ue'];
-        $list['string true ends with lower true']    = ['true', 'true'];
-        $list['string true ends with lower ue']      = ['true', 'ue'];
-
-        $list['boolean true ends with upper TRUE']   = [true, 'TRUE'];
-        $list['boolean true ends with upper UE']     = [true, 'UE'];
-        $list['string TRUE ends with upper TRUE']    = ['TRUE', 'TRUE'];
-        $list['string TRUE ends with upper UE']      = ['TRUE', 'UE'];
-
-        $list['boolean false ends with lower false'] = [false, 'false'];
-        $list['boolean false ends with lower se']    = [false, 'se'];
-        $list['string false ends with lower false']  = ['false', 'false'];
-        $list['string false ends with lower se']     = ['false', 'se'];
-
-        $list['boolean false ends with upper FALSE'] = [false, 'FALSE'];
-        $list['boolean false ends with upper SE']    = [false, 'SE'];
-        $list['string false ends with upper FALSE']  = ['FALSE', 'FALSE'];
-        $list['string false ends with upper SE']     = ['FALSE', 'SE'];
-
-        $list['null ends with null']              = [null, null];
-        $list['null ends with lower ll']          = [null, 'll'];
-        $list['null ends with lower null']        = [null, 'null'];
-        $list['string null ends with lower null'] = ['null', 'null'];
-        $list['string null ends with lower ll']   = ['null', 'll'];
-        $list['string null ends with lower null'] = ['null', 'null'];
-
-        $list['null ends with upper LL']          = [null, 'LL'];
-        $list['null ends with upper NULL']        = [null, 'NULL'];
-        $list['string null ends with upper NULL'] = ['NULL', 'NULL'];
-        $list['string null ends with upper LL']   = ['NULL', 'LL'];
-        $list['string null ends with upper NULL'] = ['NULL', 'NULL'];
-
-        $list['stringable @Coração!# ends with o!#'] = [
-            $this->makeStringableObject('@Coração!#'),
-            'o!#'
-        ];
-
-        // lista de valores de diversos tipos
         $valueTypes = $this->makeValueTypeList();
+        $lastValue = $valueTypes[array_key_last($valueTypes)];
 
-        $arrayValues = $valueTypes;
         foreach (array_keys($valueTypes) as $label) {
-            $list["array ends with $label"] = [
-                $arrayValues,
-                $this->popArrayValue($arrayValues)
-            ];
+            $list["array ends with $label"] = [$valueTypes, $lastValue];
         }
 
-        $stdValues = $valueTypes;
-        foreach (array_keys($stdValues) as $label) {
+        foreach (array_keys($valueTypes) as $label) {
             $label = $this->makeStdProperty($label);
-
-            $list["stdClass ends with value of property $label"] = [
-                $stdValues,
-                $this->popStdValue($stdValues)
-            ];
+            $stdClassValue = $this->makeStdObject($valueTypes);
+            $list["stdClass ends with value of property $label"] = [$stdClassValue, $lastValue];
         }
 
-        $arrayAccessValues = $valueTypes;
         foreach (array_keys($valueTypes) as $label) {
-            $list["ArrayAccess ends with $label"] = [
-                $arrayAccessValues,
-                $this->popArrayAccessValue($arrayAccessValues)
-            ];
+            $arrayAccessValue = $this->makeArrayAccessObject($valueTypes);
+            $list["ArrayAccess ends with $label"] = [$arrayAccessValue, $lastValue];
         }
 
-        $iteratorAggrValues = $valueTypes;
         foreach (array_keys($valueTypes) as $label) {
-            $list["IteratorAggregate ends with $label"] = [
-                new ArrayObject($iteratorAggrValues),
-                $this->popIteratorAggrValue($iteratorAggrValues)
-            ];
+            $iteratorValue = $this->makeIteratorObject($valueTypes);
+            $list["Iterator ends with $label"] = [$iteratorValue, $lastValue];
         }
 
-        $iteratorValues = $valueTypes;
         foreach (array_keys($valueTypes) as $label) {
-            $list["Iterator ends with $label"] = [
-                new ArrayIterator($iteratorValues),
-                $this->popIteratorValue($iteratorValues)
-            ];
+            $iteratorAggrValue = $this->makeIteratorAggregateObject($valueTypes);
+            $list["IteratorAggregate ends with $label"] = [$iteratorAggrValue, $lastValue];
         }
-
+        
         return $list;
     }
 
@@ -153,74 +159,46 @@ class EndsWithTest extends AssertionSearchCase
     {
         $list = [];
 
-        $list['string not end with $']   = $this->makeIncorrectItem('@Coração!#', '$');
-        $list['string not end with @Cr'] = $this->makeIncorrectItem('@Coração!#', '@Cr');
+        // | string            | string                          | 
+        // | Stringable        | string                          |
+        // | array             | string, int, float, true, false |
+        // | ArrayAccess       | string, int, float, true, false |
+        // | Iterator          | string, int, float, true, false |
+        // | IteratorAggregate | string, int, float, true, false |
+        // | stdClass          | string, int, float, true, false |
 
-        $list['boolean true not ends with lower tr']   = $this->makeIncorrectItem(true, 'tr');
-        $list['boolean false not ends with lower fal'] = $this->makeIncorrectItem(false, 'fal');
-        $list['string true not ends with lower tr']    = $this->makeIncorrectItem('true', 'tr');
-        $list['string false not ends with lower fal']  = $this->makeIncorrectItem('false', 'fal');
+        $stringable = $this->makeStringableObject('@Coração!#');
 
-        $list['boolean true not ends with upper TR']   = $this->makeIncorrectItem(true, 'TR');
-        $list['boolean false not ends with upper FAL'] = $this->makeIncorrectItem(false, 'FAL');
-        $list['string TRUE not ends with upper TR']    = $this->makeIncorrectItem('TRUE', 'TR');
-        $list['string FALSE not ends with upper FAL']  = $this->makeIncorrectItem('TRUE', 'FAL');
-
-        $list['null not ends with lower nu']   = $this->makeIncorrectItem(null, 'nu');
-        $list['string null not ends with lower nu']   = $this->makeIncorrectItem('null', 'nu');
-
-        $list['null not ends with upper NU']   = $this->makeIncorrectItem(null, 'NU');
-        $list['string NULL not ends with upper NU']   = $this->makeIncorrectItem('NULL', 'NU');
+        $list['string @Coração!# not ends with $']     = $this->makeIncorrectItem('@Coração!#', '$');
+        $list['stringable @Coração!# not ends with $'] = $this->makeIncorrectItem($stringable, '$');
 
         $valueTypes = $this->makeValueTypeList();
 
         $valueTypesComparison = $this->makeValueComparisonList();
 
-        $arrayValues = $valueTypes;
-        $arrayComparison = $valueTypesComparison;
-        foreach (array_keys($valueTypes) as $label) {
-            $list["array not ends with $label"] = $this->makeIncorrectItem(
-                $arrayValues,
-                $this->popArrayValue($arrayComparison)
-            );
+        foreach ($valueTypesComparison as $label => $value) {
+            $list["array not ends with $label"] = $this->makeIncorrectItem($valueTypes, $value);
         }
 
-        $stdValues = $valueTypes;
-        $stdComparison = $valueTypesComparison;
-        foreach (array_keys($stdValues) as $label) {
+        foreach ($valueTypesComparison as $label => $value) {
             $label = $this->makeStdProperty($label);
-
-            $list["stdClass not ends with value of property $label"] = $this->makeIncorrectItem(
-                $stdValues,
-                $this->popStdValue($stdComparison)
-            );
+            $stdClassValue = $this->makeStdObject($valueTypes);
+            $list["stdClass not ends with value of property $label"] = $this->makeIncorrectItem($stdClassValue, $value);
         }
 
-        $arrayAccessValues = $valueTypes;
-        $arrayAccessComparison = $valueTypesComparison;
-        foreach (array_keys($valueTypes) as $label) {
-            $list["ArrayAccess not ends with $label"] = $this->makeIncorrectItem(
-                $arrayAccessValues,
-                $this->popArrayAccessValue($arrayAccessComparison)
-            );
+        foreach ($valueTypesComparison as $label => $value) {
+            $arrayAccessValue = $this->makeArrayAccessObject($valueTypes);
+            $list["ArrayAccess not ends with $label"] = $this->makeIncorrectItem($arrayAccessValue, $value);
         }
 
-        $iteratorAggrValues = $valueTypes;
-        $iteratorAggrComparison = $valueTypesComparison;
-        foreach (array_keys($valueTypes) as $label) {
-            $list["IteratorAggregate not ends with $label"] = $this->makeIncorrectItem(
-                new ArrayObject($iteratorAggrValues),
-                $this->popIteratorAggrValue($iteratorAggrComparison)
-            );
+        foreach ($valueTypesComparison as $label => $value) {
+            $iteratorValue = $this->makeIteratorObject($valueTypes);
+            $list["Iterator not ends with $label"] = $this->makeIncorrectItem($iteratorValue, $value);
         }
 
-        $iteratorValues = $valueTypes;
-        $iteratorComparison = $valueTypesComparison;
-        foreach (array_keys($valueTypes) as $label) {
-            $list["Iterator not ends with $label"] = $this->makeIncorrectItem(
-                new ArrayIterator($iteratorValues),
-                $this->popIteratorValue($iteratorComparison)
-            );
+        foreach ($valueTypesComparison as $label => $value) {
+            $iteratorAggrValue = $this->makeIteratorAggregateObject($valueTypes);
+            $list["IteratorAggregate not ends with $label"] = $this->makeIncorrectItem($iteratorAggrValue, $value);
         }
 
         return $list;

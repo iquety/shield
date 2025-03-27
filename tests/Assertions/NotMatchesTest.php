@@ -4,21 +4,137 @@ declare(strict_types=1);
 
 namespace Tests\Assertions;
 
+use InvalidArgumentException;
 use Iquety\Shield\Assertion\NotMatches;
 use stdClass;
 
-class NotMatchesTest extends AssertionCase
+class NotMatchesTest extends AssertionSearchCase
 {
-    /** @return array<string,array<int,mixed>> */
-    public function validProvider(): array
+    public function invalidValueProvider(): array
     {
         $list = [];
 
-        $list['utf8'] = ['Coração de Leão', '/orax/'];
-        $list['array'] = [['Coração', 'Hello World', 'Leão'], '/Worlx/'];
-        $list['decimal'] = [123456.7891, '/(\d{3})456\.7899/'];
-        $list['integer'] = [1234567890, '/(\d{5})67899/'];
-        $list['object not valid'] = [new stdClass(), '/x/'];
+        $list['null is invalid value']    = [null];
+        $list['integer is invalid value'] = [123];
+        $list['float is invalid value']   = [12.3];
+        $list['true is invalid value']    = [true];
+        $list['false is invalid value']   = [false];
+        
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidValueProvider
+     */
+    public function valueIsInvalid(mixed $value): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value is not valid');
+
+        $assertion = new NotMatches($value, 'string');
+
+        $assertion->isValid();
+    }
+
+    public function invalidNeedleProvider(): array
+    {
+        $list = [];
+
+        $list['null is invalid needle for string']    = [null];
+        $list['integer is invalid needle for string'] = [123];
+        $list['float is invalid needle for string']   = [12.3];
+        $list['true is invalid needle for string']    = [true];
+        $list['false is invalid needle for string']   = [false];
+        $list['array is invalid needle for string']   = [['x']];
+        $list['object is invalid needle for string']  = [new stdClass()];
+        
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidNeedleProvider
+     */
+    public function needleForStringIsInvalid(mixed $needle): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Value needle is not a valid search value for a string');
+
+        $assertion = new NotMatches('string', $needle);
+
+        $assertion->isValid();
+    }
+
+    /** @test */
+    public function needleForListIsInvalid(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Null is not a valid search value for a list');
+
+        $assertion = new NotMatches(['x'], null);
+
+        $assertion->isValid();
+    }
+
+    public function invalidPatternProvider(): array
+    {
+        $list = [];
+
+        $list['integer is invalid pattern'] = [123];
+        $list['float is invalid pattern']   = [12.3];
+        $list['true is invalid pattern']    = [true];
+        $list['false is invalid pattern']   = [false];
+        $list['array is invalid pattern']   = [['x']];
+        $list['object is invalid pattern']  = [new stdClass()];
+        
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidPatternProvider
+     */
+    public function patternIsInvalid(mixed $pattern): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Regular expressions must be string');
+
+        $assertion = new NotMatches(['x'], $pattern);
+
+        $assertion->isValid();
+    }
+    
+    /** @return array<string,array<int,mixed>> */
+    public function validProvider(): array
+    {
+        // | Tipo completo                        |
+        // |:--                                   |
+        // | string                               |
+        // | Stringable                           |
+        // | array com valores string             |
+        // | ArrayAccess com valores string       |
+        // | Iterator com valores string          |
+        // | IteratorAggregate com valores string |
+        // | stdClass com valores string          |
+
+        $list = [];
+
+        $list['string @Coração!# matches @Co']       = ['@Coração!#', '/life/'];
+        $list['string 123456 matches 123']           = ['123456', '/000/'];
+        $list['stringable @Coração!# matches @Co']   = [$this->makeStringableObject('@Coração!#'), '/life/'];
+
+        // arrays são permitidos apenas com valores string
+        // os valores não-string são ignorados na busca
+        $arrayValue = [
+            'iterator'           => $this->makeIteratorObject(['@Coração!#']),
+            'iterator aggregate' => $this->makeIteratorAggregateObject(['@Coração!#']),
+            'stdObject'          => $this->makeStdObject(['@Coração!#'])
+        ];
+
+        foreach ($arrayValue as $label => $value) {
+            $list["invalid value of type $label"] = [$arrayValue, '/a/'];
+        }
 
         return $list;
     }
@@ -50,37 +166,62 @@ class NotMatchesTest extends AssertionCase
     /** @return array<string,array<int,string>> */
     public function invalidProvider(): array
     {
+        // | Tipo completo                        |
+        // |:--                                   |
+        // | string                               |
+        // | Stringable                           |
+        // | array com valores string             |
+        // | ArrayAccess com valores string       |
+        // | Iterator com valores string          |
+        // | IteratorAggregate com valores string |
+        // | stdClass com valores string          |
+
         $list = [];
 
-        $list['utf8']         = $this->makeIncorrectItem('Coração de Leão', '/oraç/');
-        $list['numeric']      = $this->makeIncorrectItem('123-456-7890', '/(\d{3})-(\d{3})-(\d{4})/');
-        $list['decimal']      = $this->makeIncorrectItem(123456.7891, '/(\d{6})\.(\d{4})/');
-        // coerção de tipo remove o zero
-        //$list['decimal'] = $this->makeIncorrectItem(123456.7890, '/(\d{6})\.(\d{4})/');
-        $list['integer']      = $this->makeIncorrectItem(1234567890, '/(\d{5})(\d{5})/');
-        $list['latin']        = $this->makeIncorrectItem('Hello World', '/World/');
-        $list['array']        = $this->makeIncorrectItem(['Coração', 'Hello World', 'Leão'], '/World/');
+        $list['string @Coração!# matches @Co']       = $this->makeIncorrectItem('@Coração!#', '/@Co/');
+        $list['string @Coração!# matches ra']        = $this->makeIncorrectItem('@Coração!#', '/ra/');
+        $list['string @Coração!# matches ção!#']     = $this->makeIncorrectItem('@Coração!#', '/ção!#/');
+        $list['string 123456 matches 123']           = $this->makeIncorrectItem('123456', '/123/');
+        $list['string 123456 matches 345']           = $this->makeIncorrectItem('123456', '/345/');
+        $list['string 123456 matches 456']           = $this->makeIncorrectItem('123456', '/456/');
+        $list['stringable @Coração!# matches @Co']   = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '/@Co/');
+        $list['stringable @Coração!# matches ra']    = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '/ra/');
+        $list['stringable @Coração!# matches ção!#'] = $this->makeIncorrectItem($this->makeStringableObject('@Coração!#'), '/ção!#/');
 
-        $list['true matches lower true']   = $this->makeIncorrectItem(true, '/true/');
-        $list['true matches lower tr']     = $this->makeIncorrectItem(true, '/tr/');
-        $list['true matches lower ue']     = $this->makeIncorrectItem(true, '/ue/');
-        $list['true matches upper TRUE']   = $this->makeIncorrectItem(true, '/TRUE/');
-        $list['true matches upper TR']     = $this->makeIncorrectItem(true, '/TR/');
-        $list['true matches upper UE']     = $this->makeIncorrectItem(true, '/UE/');
+        // arrays são permitidos apenas com valores string
+        $arrayValue = [
+            '@Coração!#',
+            '@Coração!#',
+            '@Coração!#',
+            '123456',
+            '123456',
+            '123456',
+            $this->makeStringableObject('@Coração!#'),
+            $this->makeStringableObject('@Coração!#'),
+            $this->makeStringableObject('@Coração!#'),
+        ];
 
-        $list['false matches lower false'] = $this->makeIncorrectItem(false, '/false/');
-        $list['false matches lower fa']    = $this->makeIncorrectItem(false, '/fa/');
-        $list['false matches lower se']    = $this->makeIncorrectItem(false, '/se/');
-        $list['false matches upper FALSE'] = $this->makeIncorrectItem(false, '/FALSE/');
-        $list['false matches upper FA']    = $this->makeIncorrectItem(false, '/FA/');
-        $list['false matches upper SE']    = $this->makeIncorrectItem(false, '/SE/');
+        $arrayPatterns = [
+            '/@Co/',
+            '/ra/',
+            '/ção!#/',
+            '/123/',
+            '/345/',
+            '/456/',
+            '/@Co/',
+            '/ra/',
+            '/ção!#/'
+        ];
 
-        $list['null matches lower null'] = $this->makeIncorrectItem(null, '/null/');
-        $list['null matches lower nu']   = $this->makeIncorrectItem(null, '/nu/');
-        $list['null matches lower ll']   = $this->makeIncorrectItem(null, '/ll/');
-        $list['null matches upper NULL'] = $this->makeIncorrectItem(null, '/NULL/');
-        $list['null matches upper nu']   = $this->makeIncorrectItem(null, '/NU/');
-        $list['null matches upper ll']   = $this->makeIncorrectItem(null, '/LL/');
+        foreach ($arrayValue as $index => $value) {
+            $pattern = $arrayPatterns[$index];
+
+            $label = is_object($value) === true
+                ? "stringable @Coração!# matches $pattern"
+                : "string $value matches $pattern";
+
+            $list[$label] = $this->makeIncorrectItem($arrayValue, $pattern);
+        }
 
         return $list;
     }
@@ -107,7 +248,7 @@ class NotMatchesTest extends AssertionCase
      * @dataProvider invalidProvider
      * @param array<mixed>|string $value
      */
-    public function namedValueNotMatchesPattern(mixed $value, string $pattern): void
+    public function namedValueMatchesPattern(mixed $value, string $pattern): void
     {
         $assertion = new NotMatches($value, $pattern);
 

@@ -21,13 +21,6 @@ new Length([1, 2, 3], 3);
 
 // objeto \Countable com 3 elementos tem o tamanho 3
 new Length(new CustomCountable([1, 2, 3]), 3);
-
-// objeto do tipo \stdClass com 3 propriedades públicas tem o tamanho 3
-$stdObject = new stdClass();
-$stdObject->one = 'Meu';
-$stdObject->two = 'Texto';
-$stdObject->three = 'Legal';
-new Length($stdObject, 3);
 ```
 
 --page-nav--

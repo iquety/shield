@@ -10,10 +10,8 @@ use Iquety\Shield\Message;
 class Contains extends AssertionSearch
 {
     /** @param array<int|string,mixed>|string $value */
-    public function __construct(
-        mixed $value,
-        null|bool|float|int|string $needle
-    ) {
+    public function __construct(mixed $value, mixed $needle)
+    {
         $this->setValue($value);
 
         $this->setAssertValue($needle);
@@ -21,18 +19,6 @@ class Contains extends AssertionSearch
 
     protected function isMatches(string $value, mixed $needle): bool
     {
-        if ($needle === null) {
-            $needle = 'null';
-        }
-
-        if ($needle === false) {
-            $needle = 'false';
-        }
-
-        if ($needle === true) {
-            $needle = 'true';
-        }
-
         return str_contains($value, (string)$needle) === true;
     }
 

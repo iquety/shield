@@ -9,10 +9,8 @@ use Iquety\Shield\Message;
 
 class EndsWith extends AssertionSearch
 {
-    public function __construct(
-        mixed $value,
-        null|bool|float|int|string $needle
-    ) {
+    public function __construct(mixed $value, mixed $needle)
+    {
         $this->setValue($value);
 
         $this->setAssertValue($needle);
@@ -20,18 +18,6 @@ class EndsWith extends AssertionSearch
 
     protected function isMatches(string $value, mixed $needle): bool
     {
-        if ($needle === null) {
-            $needle = 'null';
-        }
-
-        if ($needle === false) {
-            $needle = 'false';
-        }
-
-        if ($needle === true) {
-            $needle = 'true';
-        }
-
         return str_ends_with($value, (string)$needle);
     }
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Iquety\Shield;
 
+use InvalidArgumentException;
+
 /** @SuppressWarnings(PHPMD.NumberOfChildren) */
 abstract class AssertionSearch extends Assertion
 {
@@ -17,29 +19,50 @@ abstract class AssertionSearch extends Assertion
     /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
     public function isValid(): bool
     {
+        // | string            | string                          | 
+        // | Stringable        | string                          |
+        // | array             | string, int, float, true, false |
+        // | ArrayAccess       | string, int, float, true, false |
+        // | Iterator          | string, int, float, true, false |
+        // | IteratorAggregate | string, int, float, true, false |
+        // | stdClass          | string, int, float, true, false |
+
+        // transforma ArrayAccess, Iterator, IteratorAggregate e stdClass em arrays
+        // mantém como estão os outros valores
         $value = $this->normalize($this->getValue());
 
+        if (is_string($value) === true) {
+            $assertValue = $this->normalize($this->getAssertValue());
+
+            return $this->isValidString($value, $assertValue);
+        }
+
         if (is_array($value) === true) {
-            return $this->isValidInArray($value, $this->getAssertValue());
+            return $this->isValidList($value, $this->getAssertValue());
         }
 
-        if ($value === null) {
-            return $this->isMatches('null', $this->getAssertValue()) === true
-                || $this->isMatches('NULL', $this->getAssertValue()) === true;
+        throw new InvalidArgumentException("The value is not valid");
+    }
+
+    private function isValidString(string $value, mixed $needle): bool
+    {
+        if (is_string($needle) === false) {
+            throw new InvalidArgumentException(
+                "Value needle is not a valid search value for a string"
+            );
         }
 
-        if (is_bool($value) === true && $value === true) {
-            return $this->isMatches('true', $this->getAssertValue()) === true
-                || $this->isMatches('TRUE', $this->getAssertValue()) === true;
+        return $this->isMatches($value, $needle) === true;
+    }
+
+    private function isValidList(array $value, mixed $needle): bool
+    {
+        if ($needle === null) {
+            throw new InvalidArgumentException(
+                "Null is not a valid search value for a list"
+            );
         }
 
-        if (is_bool($value) === true && $value === false) {
-            return $this->isMatches('false', $this->getAssertValue()) === true
-                || $this->isMatches('FALSE', $this->getAssertValue()) === true;
-        }
-
-        $assertValue = $this->normalize($this->getAssertValue());
-
-        return $this->isMatches((string)$value, $assertValue) === true;
+        return $this->isValidInArray($value, $needle);
     }
 }

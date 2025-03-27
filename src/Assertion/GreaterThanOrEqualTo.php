@@ -22,6 +22,8 @@ class GreaterThanOrEqualTo extends Assertion
 
     public function isValid(): bool
     {
+        // TODO: deve suportar somente números
+        
         $value = $this->getValue();
 
         if ($value === null || $value === true || $value === false) {

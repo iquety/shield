@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace Iquety\Shield\Assertion;
 
 use Countable;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
 class Length extends Assertion
 {
-    public function __construct(
-        mixed $value,
-        float|int $length,
-    ) {
+    public function __construct(mixed $value, int $length)
+    {
         $this->setValue($value);
 
         $this->setAssertValue($length);
@@ -21,52 +20,37 @@ class Length extends Assertion
 
     public function isValid(): bool
     {
-        // TODO: deve suportar somente textos
-
         $value = $this->getValue();
 
-        if ($value === null || $value === true || $value === false) {
-            return false;
-        }
-
-        if ($value instanceof Countable) {
-            return $this->isValidCountable($value, $this->getAssertValue());
-        }
-
-        if (is_object($value) === true) {
-            $value = (array)$value;
+        if (is_string($value) === true) {
+            return $this->isValidString($value, $this->getAssertValue());
         }
 
         if (is_array($value) === true) {
             return $this->isValidArray($value, $this->getAssertValue());
         }
 
-        if (is_string($value) === true) {
-            return $this->isValidString($value, $this->getAssertValue());
+        if ($value instanceof Countable) {
+            return $this->isValidCountable($value, $this->getAssertValue());
         }
 
-        return $this->isValidNumber($value, $this->getAssertValue());
+        throw new InvalidArgumentException("The value is not valid");
     }
 
-    private function isValidCountable(Countable $value, float|int $length): bool
+    private function isValidCountable(Countable $value, int $length): bool
     {
-        return $value->count() === (int)$length;
+        return $value->count() === $length;
     }
 
     /** @param array<int|string,mixed> $value */
-    private function isValidArray(array $value, float|int $length): bool
+    private function isValidArray(array $value, int $length): bool
     {
-        return count($value) === (int)$length;
+        return count($value) === $length;
     }
 
-    private function isValidNumber(float|int $value, float|int $length): bool
+    private function isValidString(string $value, int $length): bool
     {
-        return $value === $length;
-    }
-
-    private function isValidString(string $value, float|int $length): bool
-    {
-        return mb_strlen($value) === (int)$length;
+        return mb_strlen($value) === $length;
     }
 
     public function getDefaultMessage(): Message

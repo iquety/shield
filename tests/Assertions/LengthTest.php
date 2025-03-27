@@ -6,11 +6,41 @@ namespace Tests\Assertions;
 
 use ArrayIterator;
 use ArrayObject;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion\Length;
 use stdClass;
 
 class LengthTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function invalidValueProvider(): array
+    {
+        $list = [];
+
+        $list['null is invalid value']      = [null];
+        $list['stdObject is invalid value'] = [new stdClass()];
+        $list['true is invalid value']      = [true];
+        $list['false is invalid value']     = [false];
+        $list['integer is invalid value']   = [33];
+        $list['float is invalid value']     = [3.3];
+
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidValueProvider
+     */
+    public function valueIsInvalid(mixed $value): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value is not valid');
+
+        $assertion = new Length($value, 1);
+
+        $assertion->isValid();
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -18,9 +48,6 @@ class LengthTest extends AssertionCase
 
         $list['string 7 chars has length 7']      = ['Palavra', 7];
         $list['string utf8 7 chars has length 7'] = ['coração', 7];
-
-        $list['integer 9 has length 9']   = [9, 9];
-        $list['float 9.9 has length 9.9'] = [9.9, 9.9];
 
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
@@ -30,12 +57,6 @@ class LengthTest extends AssertionCase
 
         $list['countable iterator with 7 elements is length 7'] = [new ArrayIterator($arrayValue), 7];
 
-        $stdObject        = new stdClass();
-        $stdObject->one   = 'Meu';
-        $stdObject->two   = 'Texto';
-        $stdObject->three = 'Legal';
-        $list['stdClass with 3 public properties is lenght 3'] = [$stdObject, 3];
-
         return $list;
     }
 
@@ -43,7 +64,7 @@ class LengthTest extends AssertionCase
      * @test
      * @dataProvider validProvider
      */
-    public function valueHasLength(mixed $value, float|int $length): void
+    public function valueHasLength(mixed $value, int $length): void
     {
         $assertion = new Length($value, $length);
 
@@ -51,7 +72,7 @@ class LengthTest extends AssertionCase
     }
 
     /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, float|int $length): array
+    private function makeIncorrectItem(mixed $value, int $length): array
     {
         $messageValue = $this->makeMessageValue($value);
 
@@ -73,12 +94,6 @@ class LengthTest extends AssertionCase
         $list['string utf8 7 chars has not length 8'] = $this->makeIncorrectItem('coração', 8);
         $list['string utf8 7 chars has not length 6'] = $this->makeIncorrectItem('coração', 6);
 
-        $list['integer 9 has not length 10'] = $this->makeIncorrectItem(9, 10);
-        $list['integer 9 has not length 8']  = $this->makeIncorrectItem(9, 8);
-
-        $list['float 9.9 has not length 10.1'] = $this->makeIncorrectItem(9.9, 10.1);
-        $list['float 9.9 has not length 9.8']  = $this->makeIncorrectItem(9.9, 9.8);
-
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements has not length 8'] = $this->makeIncorrectItem($arrayValue, 8);
@@ -93,17 +108,6 @@ class LengthTest extends AssertionCase
         $list['countable iterator with 7 elements has length 6']
             = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 6);
 
-        $stdObject        = new stdClass();
-        $stdObject->one   = 'Meu';
-        $stdObject->two   = 'Texto';
-        $stdObject->three = 'Legal';
-        $list['stdClass with 3 public properties is lenght 4'] = $this->makeIncorrectItem($stdObject, 4);
-        $list['stdClass with 3 public properties is lenght 2'] = $this->makeIncorrectItem($stdObject, 2);
-
-        $list['null is invalid']  = $this->makeIncorrectItem(null, 0);
-        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
-        $list['true is invalid']  = $this->makeIncorrectItem(true, 0);
-
         return $list;
     }
 
@@ -111,7 +115,7 @@ class LengthTest extends AssertionCase
      * @test
      * @dataProvider invalidProvider
      */
-    public function valueNotHasLength(mixed $value, float|int $length): void
+    public function valueNotHasLength(mixed $value, int $length): void
     {
         $assertion = new Length($value, $length);
 
@@ -127,7 +131,7 @@ class LengthTest extends AssertionCase
      * @test
      * @dataProvider invalidProvider
      */
-    public function namedValueNotHasLength(mixed $value, float|int $length): void
+    public function namedValueNotHasLength(mixed $value, int $length): void
     {
         $assertion = new Length($value, $length);
 
@@ -146,7 +150,7 @@ class LengthTest extends AssertionCase
      */
     public function namedValueHasLengthAndCustomMessage(
         mixed $value,
-        float|int $length,
+        int $length,
         string $message
     ): void {
         $assertion = new Length($value, $length);
@@ -165,7 +169,7 @@ class LengthTest extends AssertionCase
      */
     public function valueHasLengthAndCustomMessage(
         mixed $value,
-        float|int $length,
+        int $length,
         string $message
     ): void {
         $assertion = new Length($value, $length);

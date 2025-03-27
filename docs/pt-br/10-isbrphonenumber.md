@@ -1,6 +1,6 @@
 # IsTime
 
-[◂ IsUrl](08-isurl.md) | [Sumário da Documentação ▸](indice.md)
+[◂ IsUrl](09-isurl.md) | [Sumário da Documentação ▸](indice.md)
 -- | --
 
 Formatos de telefones utilizados no Brasil:
@@ -46,5 +46,5 @@ new IsBrPhoneNumber('4003 9999');
 new IsBrPhoneNumber('4003-9999');
 ```
 
-[◂ IsUrl](08-isurl.md) | [Sumário da Documentação ▸](indice.md)
+[◂ IsUrl](09-isurl.md) | [Sumário da Documentação ▸](indice.md)
 -- | --

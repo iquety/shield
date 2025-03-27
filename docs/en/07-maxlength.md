@@ -1,6 +1,6 @@
 # Length
 
-[◂ LessThanOrEqualTo](06-lessthanorequalto.md) | [Documentation Summary](index.md) | [Length ▸](06-minlength.md)
+[◂ Length](07-length.md) | [Documentation Summary](index.md) | [Length ▸](07-minlength.md)
 -- | -- | --
 
 The value has the maximum expected length.
@@ -30,5 +30,5 @@ $stdObject->three = 'Legal';
 new MaxLength($stdObject, 3);
 ```
 
-[◂ LessThanOrEqualTo](06-lessthanorequalto.md) | [Documentation Summary](index.md) | [Length ▸](06-minlength.md)
+[◂ Length](07-length.md) | [Documentation Summary](index.md) | [Length ▸](07-minlength.md)
 -- | -- | --

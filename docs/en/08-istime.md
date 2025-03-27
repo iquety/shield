@@ -1,6 +1,6 @@
 # IsTime
 
-[◂ IsDateTime](07-isdatetime.md) | [Documentation Summary](index.md) | [IsIp ▸](08-isip.md)
+[◂ IsDateTime](08-isdatetime.md) | [Documentation Summary](index.md) | [IsIp ▸](09-isip.md)
 -- | -- | --
 
 Hours, minutes and seconds format with 24-hour limit:
@@ -13,5 +13,5 @@ new IsTime('00:00:00');
 new IsTime('23:59:59');
 ```
 
-[◂ IsDateTime](07-isdatetime.md) | [Documentation Summary](index.md) | [IsIp ▸](08-isip.md)
+[◂ IsDateTime](08-isdatetime.md) | [Documentation Summary](index.md) | [IsIp ▸](09-isip.md)
 -- | -- | --

@@ -23,41 +23,46 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 | [NotMatches](05-notmatches.md)   | O valor não corresponde ao padrão |
 | [StartsWith](05-startswith.md)   | O valor começa com o outro valor  |
 
+## Números
+
+| Asserção                                     | Descrição                                   |
+| :--                                          | :--                                         |
+| [GreaterThan](06-greaterthan.md)             | O número é maior do que o esperado          |
+| [GreaterThanOrEqualTo](06-greaterthanorequalto.md) | O número é maior ou igual ao esperado |
+| [LessThan](06-lessthan.md)                   | O número é menor do que o esperado          |
+| [LessThanOrEqualTo](06-lessthanorequalto.md) | O número é menor ou igual ao outro valor    |
+
 ## Contagem
 
 | Asserção                                     | Descrição                                  |
 | :--                                          | :--                                        |
-| [GreaterThan](06-greaterthan.md)             | O valor é maior do que o esperado          |
-| [GreaterThanOrEqualTo](06-greaterthanorequalto.md) | O valor é maior ou igual ao esperado |
-| [Length](06-length.md)                       | O valor possui o tamanho esperado          |
-| [LessThan](06-lessthan.md)                   | O valor é menor do que o esperado          |
-| [LessThanOrEqualTo](06-lessthanorequalto.md) | O valor é menor ou igual ao outro valor    |
-| [MaxLength](06-maxlength.md)                 | O valor possui o tamanho máximo            |
-| [MinLength](06-minlength.md)                 | O valor possui o tamanho mínimo            |
+| [Length](07-length.md)                       | O valor possui o tamanho esperado          |
+| [MaxLength](07-maxlength.md)                 | O valor possui o tamanho máximo            |
+| [MinLength](07-minlength.md)                 | O valor possui o tamanho mínimo            |
 
 ## Datas e tempo
 
 | Asserção                           | Descrição                               |
 | :--                                | :--                                     |
-| [IsDate](07-isdate.md)             | Formatos de data                        |
-| [IsDateTime](07-isdatetime.md)     | Formatos de data + hora                 |
-| [IsTime](07-istime.md)             | Formato de hora com limite de 24 horas) |
-| [IsAmountTime](07-isamounttime.md) | Formato de hora sem limite de horas     |
+| [IsDate](08-isdate.md)             | Formatos de data                        |
+| [IsDateTime](08-isdatetime.md)     | Formatos de data + hora                 |
+| [IsTime](08-istime.md)             | Formato de hora com limite de 24 horas) |
+| [IsAmountTime](08-isamounttime.md) | Formato de hora sem limite de horas     |
 
 ## Internet
 
 | Asserção                           | Descrição                                        |
 | :--                                | :--                                              |
 | IsEmail                            | Endereço eletrônico (ex.: **fulano@gmail.com**)  |
-| [IsIp](08-isip.md)                 | É um endereço IP                                 |
-| [IsMacAddress](08-ismacaddress.md) | É um endereço MAC                                |
-| [IsUrl](08-isurl.md)               | É uma URL                                        |
+| [IsIp](09-isip.md)                 | É um endereço IP                                 |
+| [IsMacAddress](09-ismacaddress.md) | É um endereço MAC                                |
+| [IsUrl](09-isurl.md)               | É uma URL                                        |
 
 ## Formatos brasileiros
 
 | Asserção           | Descrição                                              |
 | :--                | :--                                                    |
-| [IsBrPhoneNumber](09-isbrphonenumber.md) | O valor é um telefone brasileiro |
+| [IsBrPhoneNumber](10-isbrphonenumber.md) | O valor é um telefone brasileiro |
 | IsCep              | Código de endereçamento postal (ex.: **12.380-315**)   |
 | IsCpf              | Cadastro de pessoa física (ex.: **742.143.120-90**)    |
 

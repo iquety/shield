@@ -1,6 +1,6 @@
 # Length
 
-[◂ GreaterThanOrEqualTo](06-greaterthanorequalto.md) | [Documentation Summary](index.md) | [LessThan ▸](06-lessthan.md)
+[◂ LessThanOrEqualTo](06-lessthanorequalto.md) | [Documentation Summary](index.md) | [Length ▸](07-maxlength.md)
 -- | -- | --
 
 The value has the expected length.
@@ -30,5 +30,5 @@ $stdObject->three = 'Cool';
 new Length($stdObject, 3);
 ```
 
-[◂ GreaterThanOrEqualTo](06-greaterthanorequalto.md) | [Documentation Summary](index.md) | [LessThan ▸](06-lessthan.md)
+[◂ LessThanOrEqualTo](06-lessthanorequalto.md) | [Documentation Summary](index.md) | [Length ▸](07-maxlength.md)
 -- | -- | --

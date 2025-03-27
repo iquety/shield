@@ -1,6 +1,6 @@
 # IsDateTime
 
-[◂ IsDate](07-isdate.md) | [Sumário da Documentação](indice.md) | [IsTime ▸](07-istime.md)
+[◂ IsDate](08-isdate.md) | [Sumário da Documentação](indice.md) | [IsTime ▸](08-istime.md)
 -- | -- | --
 
 Os formatos de data suportados são:
@@ -34,5 +34,5 @@ new IsDateTime('December 31, 2024 23:59:59');
 new IsDateTime('12/31/2024 23:59:59');
 ```
 
-[◂ IsDate](07-isdate.md) | [Sumário da Documentação](indice.md) | [IsTime ▸](07-istime.md)
+[◂ IsDate](08-isdate.md) | [Sumário da Documentação](indice.md) | [IsTime ▸](08-istime.md)
 -- | -- | --

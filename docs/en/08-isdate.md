@@ -1,6 +1,6 @@
 # IsDate
 
-[◂ IsAmountTime](07-isamounttime.md) | [Documentation Summary](index.md) | [IsDateTime ▸](07-isdatetime.md)
+[◂ IsAmountTime](08-isamounttime.md) | [Documentation Summary](index.md) | [IsDateTime ▸](08-isdatetime.md)
 -- | -- | --
 
 The supported date formats are:
@@ -34,5 +34,5 @@ new IsDate('December 31, 2024');
 new IsDate('12/31/2024');
 ```
 
-[◂ IsAmountTime](07-isamounttime.md) | [Documentation Summary](index.md) | [IsDateTime ▸](07-isdatetime.md)
+[◂ IsAmountTime](08-isamounttime.md) | [Documentation Summary](index.md) | [IsDateTime ▸](08-isdatetime.md)
 -- | -- | --

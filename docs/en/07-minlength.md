@@ -1,6 +1,6 @@
 # Length
 
-[◂ Length](06-maxlength.md) | [Documentation Summary](index.md) | [IsAmountTime ▸](07-isamounttime.md)
+[◂ Length](07-maxlength.md) | [Documentation Summary](index.md) | [IsAmountTime ▸](08-isamounttime.md)
 -- | -- | --
 
 The value has the minimum expected length.
@@ -29,5 +29,5 @@ $stdObject->three = 'Cool';
 new MinLength($stdObject, 2);
 ```
 
-[◂ Length](06-maxlength.md) | [Documentation Summary](index.md) | [IsAmountTime ▸](07-isamounttime.md)
+[◂ Length](07-maxlength.md) | [Documentation Summary](index.md) | [IsAmountTime ▸](08-isamounttime.md)
 -- | -- | --

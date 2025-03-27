@@ -1,6 +1,6 @@
 # IsTime
 
-[◂ IsUrl](08-isurl.md) | [Documentation Summary ▸](index.md)
+[◂ IsUrl](09-isurl.md) | [Documentation Summary ▸](index.md)
 -- | --
 
 Telephone formats used in Brazil:
@@ -46,5 +46,5 @@ new IsBrPhoneNumber('4003-9999');
 new IsBrPhoneNumber('4003-9999');
 ```
 
-[◂ IsUrl](08-isurl.md) | [Documentation Summary ▸](index.md)
+[◂ IsUrl](09-isurl.md) | [Documentation Summary ▸](index.md)
 -- | --

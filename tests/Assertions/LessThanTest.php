@@ -6,36 +6,59 @@ namespace Tests\Assertions;
 
 use ArrayIterator;
 use ArrayObject;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion\LessThan;
 use stdClass;
 
 class LessThanTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function invalidValueProvider(): array
+    {
+        $list = [];
+
+        $list['null is invalid value']      = [null];
+        $list['stdObject is invalid value'] = [new stdClass()];
+        $list['true is invalid value']      = [true];
+        $list['false is invalid value']     = [false];
+
+        return $list;
+    }
+
+    /**
+     * @test
+     * @dataProvider invalidValueProvider
+     */
+    public function valueIsInvalid(mixed $value): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value is not valid');
+
+        $assertion = new LessThan($value, 1);
+
+        $assertion->isValid();
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
         $list = [];
 
-        $list['string 7 chars is less than 8'] = ['Palavra', 8];
-        $list['string utf8 7 chars is less than 8'] = ['coração', 8];
-
-        $list['integer 9 is less than 10'] = [9, 10];
-        $list['float 9.8 is less than 9.9'] = [9.8, 9.9];
+        $list['numeric string 9 is less than 10']  = ['9', 10];
+        $list['integer 9 is less than 10']         = [9, 10];
+        $list['float 9.8 is less than 9.9']        = [9.8, 9.9];
         $list['float 9.8 is less than integer 10'] = [9.8, 10];
 
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
+        $list['array with 7 elements is less than 7.5'] = [$arrayValue, 7.5];
         $list['array with 7 elements is less than 8'] = [$arrayValue, 8];
 
+        $list['countable with 7 elements is less than 7.5'] = [new ArrayObject($arrayValue), 7.5];
         $list['countable with 7 elements is less than 8'] = [new ArrayObject($arrayValue), 8];
 
+        $list['countable iterator with 7 elements is less than 7.5'] = [new ArrayIterator($arrayValue), 7.5];
         $list['countable iterator with 7 elements is less than 8'] = [new ArrayIterator($arrayValue), 8];
-
-        $stdObject        = new stdClass();
-        $stdObject->one   = 'Meu';
-        $stdObject->two   = 'Texto';
-        $stdObject->three = 'Legal';
-        $list['stdClass with 3 public properties is less than 4'] = [$stdObject, 4];
 
         return $list;
     }
@@ -68,13 +91,12 @@ class LessThanTest extends AssertionCase
     {
         $list = [];
 
-        $list['string 7 chars is not less than 7'] = $this->makeIncorrectItem('Palavra', 7);
-        $list['string 7 chars is not less than 6'] = $this->makeIncorrectItem('Palavra', 6);
-
-        $list['string utf8 7 chars is not less than 7'] = $this->makeIncorrectItem('Coração', 7);
-        $list['string utf8 7 chars is not less than 6'] = $this->makeIncorrectItem('Coração', 6);
+        $list['numeric string 9 is not less than 9'] = $this->makeIncorrectItem('9', 9);
+        $list['numeric string 9 is not less than 8.5'] = $this->makeIncorrectItem('9', 8.5);
+        $list['numeric string 9 is not less than 8'] = $this->makeIncorrectItem('9', 8);
 
         $list['integer 9 is not less than 9'] = $this->makeIncorrectItem(9, 9);
+        $list['integer 9 is not less than 8.5'] = $this->makeIncorrectItem(9, 8.5);
         $list['integer 9 is not less than 8'] = $this->makeIncorrectItem(9, 8);
 
         $list['float 9.8 is not less than 9.8'] = $this->makeIncorrectItem(9.8, 9.8);
@@ -83,37 +105,22 @@ class LessThanTest extends AssertionCase
         $arrayValue = [1, 2, 3, 4, 5, 6, 7];
 
         $list['array with 7 elements is not less than 7'] = $this->makeIncorrectItem($arrayValue, 7);
+        $list['array with 7 elements is not less than 6.5'] = $this->makeIncorrectItem($arrayValue, 6.5);
         $list['array with 7 elements is not less than 6'] = $this->makeIncorrectItem($arrayValue, 6);
 
         $list['countable with 7 elements is not less than 7']
             = $this->makeIncorrectItem(new ArrayObject($arrayValue), 7);
-
+        $list['countable with 7 elements is not less than 6.5']
+            = $this->makeIncorrectItem(new ArrayObject($arrayValue), 6.5);
         $list['countable with 7 elements is not less than 6']
             = $this->makeIncorrectItem(new ArrayObject($arrayValue), 6);
 
         $list['countable iterator with 7 elements is less than 7']
             = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 7);
-
+        $list['countable iterator with 7 elements is less than 6.5']
+            = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 6.5);
         $list['countable iterator with 7 elements is less than 6']
             = $this->makeIncorrectItem(new ArrayIterator($arrayValue), 6);
-
-        $stdObject        = new stdClass();
-        $stdObject->one   = 'Meu';
-        $stdObject->two   = 'Texto';
-        $stdObject->three = 'Legal';
-
-        $list['stdClass with 3 public properties is less than 3']
-            = $this->makeIncorrectItem($stdObject, 3);
-
-        $list['stdClass with 3 public properties is less than 2']
-            = $this->makeIncorrectItem($stdObject, 2);
-
-        $list['stdClass with 0 public properties is less than 2']
-            = $this->makeIncorrectItem(new stdClass(), 0);
-
-        $list['null is invalid'] = $this->makeIncorrectItem(null, 0);
-        $list['false is invalid'] = $this->makeIncorrectItem(false, 0);
-        $list['true is invalid'] = $this->makeIncorrectItem(true, 0);
 
         return $list;
     }

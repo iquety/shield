@@ -6,6 +6,7 @@ namespace Iquety\Shield\Assertion;
 
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsAlpha extends Assertion
 {
@@ -18,11 +19,11 @@ class IsAlpha extends Assertion
     {
         $value = $this->getValue();
 
-        if (
-            is_bool($value) === true
-            || is_object($value) === true
-            || is_array($value) === true
-        ) {
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
+
+        if (is_bool($value) === true || is_object($value) === true || is_array($value) === true) {
             return false;
         }
 

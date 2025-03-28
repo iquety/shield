@@ -5,11 +5,23 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use ArrayObject;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion\IsEmpty;
 use stdClass;
 
 class IsEmptyTest extends AssertionCase
 {
+    /** @test */
+    public function valueIsInvalid(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value is not valid');
+
+        $assertion = new IsEmpty(new stdClass());
+
+        $assertion->isValid();
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -22,11 +34,9 @@ class IsEmptyTest extends AssertionCase
         $list['int']               = [0];
         $list['float']             = [0.0];
         $list['array']             = [[]];
-        $list['boolean'] = [false];
+        $list['boolean']           = [false];
         $list['empty countable']   = [new ArrayObject()];
-
-        // não contável é considerado vazio
-        $list['uncontable'] = [new stdClass()];
+        $list['empty stringable']  = [$this->makeStringableObject('')];
 
         return $list;
     }
@@ -58,12 +68,13 @@ class IsEmptyTest extends AssertionCase
     {
         $list = [];
 
-        $list['string']    = $this->makeIncorrectItem('x');
-        $list['int']       = $this->makeIncorrectItem(1);
-        $list['float']     = $this->makeIncorrectItem(1.0);
-        $list['array']     = $this->makeIncorrectItem(['x']);
-        $list['boolean']   = $this->makeIncorrectItem(true);
-        $list['countable'] = $this->makeIncorrectItem(new ArrayObject(['value']));
+        $list['string']     = $this->makeIncorrectItem('x');
+        $list['int']        = $this->makeIncorrectItem(1);
+        $list['float']      = $this->makeIncorrectItem(1.0);
+        $list['array']      = $this->makeIncorrectItem(['x']);
+        $list['boolean']    = $this->makeIncorrectItem(true);
+        $list['countable']  = $this->makeIncorrectItem(new ArrayObject(['value']));
+        $list['stringable'] = $this->makeIncorrectItem($this->makeStringableObject('x'));
 
         return $list;
     }

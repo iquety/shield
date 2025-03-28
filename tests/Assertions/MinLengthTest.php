@@ -89,7 +89,7 @@ class MinLengthTest extends AssertionCase
     {
         $list = [];
 
-        $list['string']           = $this->makeIncorrectItem('Palavra', 10);
+        $list['string'] = $this->makeIncorrectItem('Palavra', 10);
 
         $list['array with 3 elements is not min 4 length']
             = $this->makeIncorrectItem([1, 2, 3], 4);

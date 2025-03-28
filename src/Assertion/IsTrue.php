@@ -6,6 +6,7 @@ namespace Iquety\Shield\Assertion;
 
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsTrue extends Assertion
 {
@@ -18,6 +19,10 @@ class IsTrue extends Assertion
     {
         $value = $this->getValue();
 
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
+
         if (is_string($value) === true) {
             $value = trim($value);
         }
@@ -25,7 +30,8 @@ class IsTrue extends Assertion
         return $value === true
             || $value === 'true'
             || $value === 1
-            || $value === '1';
+            || $value === '1'
+            || $value === 'on';
     }
 
     public function getDefaultMessage(): Message

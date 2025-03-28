@@ -7,6 +7,7 @@ namespace Iquety\Shield\Assertion;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\CreditCardBrand;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsCreditCardBrand extends Assertion
 {
@@ -29,6 +30,10 @@ class IsCreditCardBrand extends Assertion
     private function resolvedBrand(): CreditCardBrand
     {
         $creditCardNumber = $this->getValue();
+
+        if ($creditCardNumber instanceof Stringable) {
+            $creditCardNumber = (string)$creditCardNumber;
+        }
 
         if (
             is_bool($creditCardNumber) === true

@@ -13,10 +13,11 @@ class IsMacAddressTest extends AssertionCase
     public function validProvider(): array
     {
         return [
-            'valid mac - colon separated' => ['00:1A:2B:3C:4D:5E'],
+            'valid mac - colon separated'  => ['00:1A:2B:3C:4D:5E'],
             'valid mac - hyphen separated' => ['00-1A-2B-3C-4D-5E'],
-            'valid mac - uppercase' => ['00:1A:2B:3C:4D:5E'],
-            'valid mac - lowercase' => ['00:1a:2b:3c:4d:5e'],
+            'valid mac - uppercase'        => ['00:1A:2B:3C:4D:5E'],
+            'valid mac - lowercase'        => ['00:1a:2b:3c:4d:5e'],
+            'valid stringable mac'         => [$this->makeStringableObject('00:1a:2b:3c:4d:5e')],
         ];
     }
 
@@ -61,6 +62,7 @@ class IsMacAddressTest extends AssertionCase
             'false'                            => $this->makeIncorrectItem(false),
             'true'                             => $this->makeIncorrectItem(true),
             'null'                             => $this->makeIncorrectItem(null),
+            'invalid stringable mac' => $this->makeIncorrectItem($this->makeStringableObject('00:1A:2B:3C:4D')),
         ];
     }
 

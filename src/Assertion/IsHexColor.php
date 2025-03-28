@@ -6,6 +6,7 @@ namespace Iquety\Shield\Assertion;
 
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsHexColor extends Assertion
 {
@@ -18,6 +19,10 @@ class IsHexColor extends Assertion
     {
         $value = $this->getValue();
 
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
+
         if (
             is_bool($value) === true
             || is_object($value) === true
@@ -26,7 +31,7 @@ class IsHexColor extends Assertion
             return false;
         }
 
-        $pattern = '/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/';
+        $pattern = '/^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/';
 
         return preg_match($pattern, (string)$value) === 1;
     }

@@ -25,6 +25,8 @@ class IsHexadecimalTest extends AssertionCase
         $list['valid hexadecimal 9'] = ['1234567890ABCDEFabcdef0123456789ABCDEF'];
         $list['valid hexadecimal 10'] = ['0123456789abcdefABCDEF0123456789ABCDEF'];
 
+        $list['valid stringable hexadecimal'] = [$this->makeStringableObject('1234567890abcdef')];
+
         return $list;
     }
 
@@ -73,6 +75,8 @@ class IsHexadecimalTest extends AssertionCase
         $list['false']                  = $this->makeIncorrectItem(false);
         $list['true']                   = $this->makeIncorrectItem(true);
         $list['null']                   = $this->makeIncorrectItem(null);
+        $list['invalid stringable hexadecimal']
+            = $this->makeIncorrectItem($this->makeStringableObject('1234567890g'));
 
         return $list;
     }

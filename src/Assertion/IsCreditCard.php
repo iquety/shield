@@ -7,6 +7,7 @@ namespace Iquety\Shield\Assertion;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\CreditCardBrand;
 use Iquety\Shield\Message;
+use Stringable;
 use ValueError;
 
 class IsCreditCard extends Assertion
@@ -20,6 +21,10 @@ class IsCreditCard extends Assertion
     public function isValid(): bool
     {
         $value = $this->getValue();
+
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
 
         if (is_object($value) === true || is_array($value) === true) {
             return false;

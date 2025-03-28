@@ -22,6 +22,7 @@ class IsFalseTest extends AssertionCase
         $list['empty string']        = [''];
         $list['one space string']    = [' '];
         $list['two spaces string']   = ['  '];
+        $list['off']                 = ['off'];
 
         return $list;
     }
@@ -61,6 +62,7 @@ class IsFalseTest extends AssertionCase
         $list['object']             = $this->makeIncorrectItem(new stdClass());
         $list['countable']          = $this->makeIncorrectItem(new ArrayObject());
         $list['null']               = $this->makeIncorrectItem(null);
+        $list['on']               = $this->makeIncorrectItem('on');
 
         return $list;
     }

@@ -8,6 +8,7 @@ use Countable;
 use InvalidArgumentException;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class Length extends Assertion
 {
@@ -21,6 +22,10 @@ class Length extends Assertion
     public function isValid(): bool
     {
         $value = $this->getValue();
+
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
 
         if (is_string($value) === true) {
             return $this->isValidString($value, $this->getAssertValue());

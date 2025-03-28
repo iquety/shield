@@ -14,16 +14,17 @@ class IsBase64Test extends AssertionCase
     {
         $list = [];
 
-        $list['Base64 Text 1'] = [base64_encode('Texto123')];
-        $list['Base64 Text 2'] = [base64_encode('abc123')];
-        $list['Base64 Text 3'] = [base64_encode('123xyz')];
-        $list['Base64 Text 4'] = [base64_encode('TextoABC123')];
-        $list['Base64 Text 5'] = [base64_encode('123XYZTexto')];
-        $list['Base64 Text 6'] = [base64_encode('Texto123XYZ')];
-        $list['Base64 Text 7'] = [base64_encode('TextoABC')];
-        $list['Base64 Text 8'] = [base64_encode('abc123xyz')];
-        $list['Base64 Text 9'] = [base64_encode('123')];
-        $list['Base64 Text 10'] = [base64_encode('texto')];
+        $list['base64 text 1']  = [base64_encode('Texto123')];
+        $list['base64 text 2']  = [base64_encode('abc123')];
+        $list['base64 text 3']  = [base64_encode('123xyz')];
+        $list['base64 text 4']  = [base64_encode('TextoABC123')];
+        $list['base64 text 5']  = [base64_encode('123XYZTexto')];
+        $list['base64 text 6']  = [base64_encode('Texto123XYZ')];
+        $list['base64 text 7']  = [base64_encode('TextoABC')];
+        $list['base64 text 8']  = [base64_encode('abc123xyz')];
+        $list['base64 text 9']  = [base64_encode('123')];
+        $list['base64 text 10'] = [base64_encode('texto')];
+        $list['stringable']     = [$this->makeStringableObject(base64_encode('texto'))];
 
         return $list;
     }
@@ -80,6 +81,7 @@ class IsBase64Test extends AssertionCase
         $list['false']              = $this->makeIncorrectItem(false);
         $list['true']               = $this->makeIncorrectItem(true);
         $list['null']               = $this->makeIncorrectItem(null);
+        $list['stringable']         = $this->makeIncorrectItem($this->makeStringableObject('&+/=='));
 
         return $list;
     }

@@ -66,6 +66,22 @@ The following assertions are used to validate the value of a variable:
 | IsCep            | Postal code (e.g. **12.380-315**)                                 |
 | IsCpf            | Individual taxpayer registration number (e.g. **742.143.120-90**) |
 
+## Booleans
+
+| Assertion         | Description                                                                   |
+| :--               | :--                                                                           |
+| IsFalse           | The value is false (false, 0, 'false', '0', 'false', '', ' ')                 |
+| IsTrue            | The value is true (true, 1, 'true', '1', 'on')                                |
+
+## Empty
+
+| Assertion         | Description                                                                   |
+| :--               | :--                                                                           |
+| IsEmpty           | The value is empty (false, null, '', 0, [], empty Countable)                  |
+| IsNotEmpty        | The value is not empty (different of false, null, '', 0, [], empty Countable) |
+| IsNotNull         | The value is not null                                                         |
+| IsNull            | The value is null                                                             |
+
 ## Other formats
 
 | Assertion         | Description                                                                   |
@@ -76,14 +92,8 @@ The following assertions are used to validate the value of a variable:
 | IsCreditCard      | Credit card number: (e.g. **5279 6901 2297 4109** or **5279-6901-2297-4109**) |
 | IsCreditCardBrand | A credit card brand                                                           |
 | IsCvv             | Credit card security code (e.g. **345**)                                      |
-| IsEmpty           | The value is empty                                                            |
-| IsFalse           | The value is false                                                            |
 | IsHexadecimal     | Hexadecimal characters (e.g. **1234567890abcdef**)                            |
 | IsHexColor        | Is a hexadecimal color (e.g. **#ff00ee** or **#FF00EE**)                      |
-| IsNotEmpty        | The value is not empty                                                        |
-| IsNotNull         | The value is not null                                                         |
-| IsNull            | The value is null                                                             |
-| IsTrue            | The value is true                                                             |
 | IsUuid            | Is a UUID (e.g. **3f2504e0-4f89-41d3-9a0c-0305e82c3301**)                     |
 
 [◂ Shield object](02-shield.md) | [Documentation Summary](index.md) | [EqualTo ▸](04-equalto.md)

@@ -19,6 +19,7 @@ class IsTrueTest extends AssertionCase
         $list['string true']        = ['true'];
         $list['binary true']        = [1];
         $list['string binary true'] = ['1'];
+        $list['string on']          = ['on'];
 
         return $list;
     }
@@ -62,6 +63,7 @@ class IsTrueTest extends AssertionCase
         $list['object']              = $this->makeIncorrectItem(new stdClass());
         $list['countable']           = $this->makeIncorrectItem(new ArrayObject());
         $list['null']                = $this->makeIncorrectItem(null);
+        $list['off']                = $this->makeIncorrectItem('off');
 
         return $list;
     }

@@ -14,13 +14,14 @@ class IsDateTimeTest extends AssertionCase
     {
         $list = [];
 
-        $list['iso 8601'] = ['2024-12-31 23:59:59'];
-        $list['european format'] = ['31/12/2024 23:59:59'];
-        $list['us format am'] = ['12/31/2024 11:59:59 AM'];
-        $list['us format pm'] = ['12/31/2024 11:59:59 PM'];
-        $list['alternative format'] = ['2024.12.31 23:59:59'];
+        $list['iso 8601']               = ['2024-12-31 23:59:59'];
+        $list['european format']        = ['31/12/2024 23:59:59'];
+        $list['us format am']           = ['12/31/2024 11:59:59 AM'];
+        $list['us format pm']           = ['12/31/2024 11:59:59 PM'];
+        $list['alternative format']     = ['2024.12.31 23:59:59'];
         $list['abbreviated month name'] = ['31-Dec-2024 23:59:59'];
-        $list['full month name'] = ['December 31, 2024 23:59:59'];
+        $list['full month name']        = ['December 31, 2024 23:59:59'];
+        $list['stringable']             = [$this->makeStringableObject('December 31, 2024 23:59:59')];
 
         return $list;
     }
@@ -100,6 +101,9 @@ class IsDateTimeTest extends AssertionCase
         $list['full month name hour']   = $this->makeIncorrectItem('December 31, 2024 27:59:59');
         $list['full month name minute'] = $this->makeIncorrectItem('December 31, 2024 23:62:59');
         $list['full month name second'] = $this->makeIncorrectItem('December 31, 2024 23:59:62');
+
+        $list['stringable invalid']
+            = $this->makeIncorrectItem($this->makeStringableObject('December 31, 2024 23:59:62'));
 
         $list['empty string']      = $this->makeIncorrectItem('');
         $list['one space string']  = $this->makeIncorrectItem(' ');

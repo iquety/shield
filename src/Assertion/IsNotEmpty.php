@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Iquety\Shield\Assertion;
 
 use Countable;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsNotEmpty extends Assertion
 {
@@ -19,12 +21,16 @@ class IsNotEmpty extends Assertion
     {
         $value = $this->getValue();
 
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
+
         if ($value instanceof Countable) {
             return $value->count() > 0;
         }
 
         if (is_object($value) === true) {
-            return false;
+            throw new InvalidArgumentException("The value is not valid");
         }
 
         if (is_array($value) === true) {

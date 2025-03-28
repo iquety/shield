@@ -1,9 +1,14 @@
 # IsUrl
 
-[◂ IsMacAddress](09-ismacaddress.md) | [Documentation Summary](index.md) | [IsTime ▸](10-isbrphonenumber.md)
+[◂ IsMacAddress](09-ismacaddress.md) | [Documentation Summary](index.md) | [IsBrPhoneNumber ▸](10-isbrphonenumber.md)
 -- | -- | --
 
-Valid URL formats:
+Valid URL formats.
+
+| Verifiable types |
+|:--               |
+| string           |
+| Stringable       |
 
 ```php
 // http         
@@ -35,7 +40,10 @@ new IsUrl('http://www.example.com:8080');
 
 // long TLD  
 new IsUrl('http://www.example.museum');
+
+// Stringable object
+new IsUrl(new CustomStringable('http://www.exemplo.com'));
 ```
 
-[◂ IsMacAddress](09-ismacaddress.md) | [Documentation Summary](index.md) | [IsTime ▸](10-isbrphonenumber.md)
+[◂ IsMacAddress](09-ismacaddress.md) | [Documentation Summary](index.md) | [IsBrPhoneNumber ▸](10-isbrphonenumber.md)
 -- | -- | --

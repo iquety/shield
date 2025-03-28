@@ -14,29 +14,31 @@ class IsCreditCardTest extends AssertionCase
     {
         $list = [];
 
-        $list['Visa'] = ['4111111111111111'];
-        $list['MasterCard'] = ['5500000000000004'];
-        $list['American Express'] = ['340000000000009'];
-        $list['Diners Club'] = ['30000000000004'];
-        $list['Discover'] = ['6011000000000004'];
-        // $list['enRoute'] = ['201400000000009'];
-        $list['JCB'] = ['3088000000000009'];
+        $list['visa'] = ['4111111111111111'];
+        $list['mastercard'] = ['5500000000000004'];
+        $list['american express'] = ['340000000000009'];
+        $list['diners club'] = ['30000000000004'];
+        $list['discover'] = ['6011000000000004'];
+        // $list['enroute'] = ['201400000000009'];
+        $list['jcb'] = ['3088000000000009'];
 
-        $list['Visa numeric'] = [4111111111111111];
-        $list['MasterCard numeric'] = [5500000000000004];
-        $list['American Express numeric'] = [340000000000009];
-        $list['Diners Club numeric'] = [30000000000004];
-        $list['Discover numeric'] = [6011000000000004];
-        // $list['enRoute numeric'] = [201400000000009];
-        $list['JCB numeric'] = [3088000000000009];
+        $list['visa numeric'] = [4111111111111111];
+        $list['mastercard numeric'] = [5500000000000004];
+        $list['american express numeric'] = [340000000000009];
+        $list['diners club numeric'] = [30000000000004];
+        $list['discover numeric'] = [6011000000000004];
+        // $list['enroute numeric'] = [201400000000009];
+        $list['jcb numeric'] = [3088000000000009];
 
-        $list['Visa with signals'] = ['4111-1111-1111-1111'];
-        $list['MasterCard with signals'] = ['5500-0000-0000-0004'];
-        $list['American Express with signals'] = ['3400-000000-00009'];
-        $list['Diners Club with signals'] = ['3000-000000-0004'];
-        $list['Discover with signals'] = ['6011-0000-0000-0004'];
-        // $list['enRoute with signals'] = ['2014-0000-0000-009'];
-        $list['JCB with signals'] = ['3088-0000-0000-0009'];
+        $list['visa with signals'] = ['4111-1111-1111-1111'];
+        $list['mastercard with signals'] = ['5500-0000-0000-0004'];
+        $list['american express with signals'] = ['3400-000000-00009'];
+        $list['diners club with signals'] = ['3000-000000-0004'];
+        $list['discover with signals'] = ['6011-0000-0000-0004'];
+        // $list['enroute with signals'] = ['2014-0000-0000-009'];
+        $list['jcb with signals'] = ['3088-0000-0000-0009'];
+
+        $list['stringable with signals'] = [$this->makeStringableObject('3088-0000-0000-0009')];
 
         return $list;
     }
@@ -68,18 +70,19 @@ class IsCreditCardTest extends AssertionCase
     {
         $list = [];
 
-        $list['random number']     = $this->makeIncorrectItem('1234567890123456');
-        $list['too short']         = $this->makeIncorrectItem('4111111111111');
-        $list['too long']          = $this->makeIncorrectItem('55000000000000000000');
-        $list['non-numeric']       = $this->makeIncorrectItem('abcdefg');
-        $list['empty string']      = $this->makeIncorrectItem('');
-        $list['one space string']  = $this->makeIncorrectItem(' ');
-        $list['two spaces string'] = $this->makeIncorrectItem('  ');
-        $list['array']             = $this->makeIncorrectItem(['a']);
-        $list['object']            = $this->makeIncorrectItem(new stdClass());
-        $list['false']             = $this->makeIncorrectItem(false);
-        $list['true']              = $this->makeIncorrectItem(true);
-        $list['null']              = $this->makeIncorrectItem(null);
+        $list['random number']          = $this->makeIncorrectItem('1234567890123456');
+        $list['too short']              = $this->makeIncorrectItem('4111111111111');
+        $list['too long']               = $this->makeIncorrectItem('55000000000000000000');
+        $list['non-numeric']            = $this->makeIncorrectItem('abcdefg');
+        $list['empty string']           = $this->makeIncorrectItem('');
+        $list['one space string']       = $this->makeIncorrectItem(' ');
+        $list['two spaces string']      = $this->makeIncorrectItem('  ');
+        $list['array']                  = $this->makeIncorrectItem(['a']);
+        $list['object']                 = $this->makeIncorrectItem(new stdClass());
+        $list['false']                  = $this->makeIncorrectItem(false);
+        $list['true']                   = $this->makeIncorrectItem(true);
+        $list['null']                   = $this->makeIncorrectItem(null);
+        $list["stringable non-numeric"] = $this->makeIncorrectItem($this->makeStringableObject('abcdefg'));
 
         return $list;
     }

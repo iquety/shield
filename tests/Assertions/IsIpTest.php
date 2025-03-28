@@ -20,6 +20,7 @@ class IsIpTest extends AssertionCase
             'valid ip - ipv6 compressed'  => ['2001:db8:85a3::8a2e:370:7334'],
             'valid ip - ipv6 loopback'    => ['::1'],
             'valid ip - ipv6 unspecified' => ['::'],
+            'valid stringable ip'         => [$this->makeStringableObject('192.168.1.1')],
         ];
     }
 
@@ -68,6 +69,8 @@ class IsIpTest extends AssertionCase
             'false'                      => $this->makeIncorrectItem(false),
             'true'                       => $this->makeIncorrectItem(true),
             'null'                       => $this->makeIncorrectItem(null),
+
+            'invalid stringable ip' => $this->makeIncorrectItem($this->makeStringableObject('abc.def.ghi.jkl')),
         ];
     }
 

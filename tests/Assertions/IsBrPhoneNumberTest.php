@@ -9,7 +9,7 @@ use stdClass;
 
 class IsBrPhoneNumberTest extends AssertionCase
 {
-    /** @return array<string,array<int,int|string>> */
+    /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
         $list = [];
@@ -50,6 +50,8 @@ class IsBrPhoneNumberTest extends AssertionCase
         $list['mobile prefix 9']        = ["(11) 9 9985-0997"];
         $list['mobile prefix 9 dashes'] = ["11-9-9985-0997"];
         $list['mobile prefix 9 spaces'] = ["11 9 9985 0997"];
+
+        $list['stringable'] = [$this->makeStringableObject("11 9 9985 0997")];
 
         return $list;
     }
@@ -118,6 +120,8 @@ class IsBrPhoneNumberTest extends AssertionCase
             'false'             => $this->makeIncorrectItem(false),
             'true'              => $this->makeIncorrectItem(true),
             'null'              => $this->makeIncorrectItem(null),
+
+            'stringable' => $this->makeIncorrectItem($this->makeStringableObject('123@5-678'))
         ];
     }
 

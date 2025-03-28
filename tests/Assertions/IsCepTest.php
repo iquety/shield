@@ -13,14 +13,16 @@ class IsCepTest extends AssertionCase
     public function validProvider(): array
     {
         return [
-            'Valid CEP - format 1' => ['12345-678'],
-            'Valid CEP - format 2' => ['98765-432'],
-            'Valid CEP - format 3' => ['01000-000'],
-            'Valid CEP - format 4' => ['99999-999'],
-            'Valid CEP - format 5' => [12345678],
-            'Valid CEP - format 6' => [98765432],
-            'Valid CEP - format 7' => [11000000],
-            'Valid CEP - format 8' => [99999999],
+            'valid cep - format 1' => ['12345-678'],
+            'valid cep - format 2' => ['98765-432'],
+            'valid cep - format 3' => ['01000-000'],
+            'valid cep - format 4' => ['99999-999'],
+            'valid cep - format 5' => [12345678],
+            'valid cep - format 6' => [98765432],
+            'valid cep - format 7' => [11000000],
+            'valid cep - format 8' => [99999999],
+            'valid cep stringable' => [$this->makeStringableObject('12345-678')]
+
         ];
     }
 
@@ -50,15 +52,16 @@ class IsCepTest extends AssertionCase
     public function invalidProvider(): array
     {
         return [
-            'Invalid CEP - too short'          => $this->makeIncorrectItem('1234-567'),
-            'Invalid CEP - too long'           => $this->makeIncorrectItem('123456-789'),
-            'Invalid CEP - invalid characters' => $this->makeIncorrectItem('12A45-678'),
-            'Invalid CEP - missing separator'  => $this->makeIncorrectItem('12345678'),
-            'Invalid CEP - empty string'       => $this->makeIncorrectItem(''),
-            'Invalid CEP - spaces'             => $this->makeIncorrectItem('123 45-678'),
-            'Invalid CEP - special characters' => $this->makeIncorrectItem('123@5-678'),
-            'Invalid CEP - many numbers'       => $this->makeIncorrectItem(123567890),
-            'Invalid CEP - loss numbers'       => $this->makeIncorrectItem(123567),
+            'invalid cep - too short'          => $this->makeIncorrectItem('1234-567'),
+            'invalid cep - too long'           => $this->makeIncorrectItem('123456-789'),
+            'invalid cep - invalid characters' => $this->makeIncorrectItem('12A45-678'),
+            'invalid cep - missing separator'  => $this->makeIncorrectItem('12345678'),
+            'invalid cep - empty string'       => $this->makeIncorrectItem(''),
+            'invalid cep - spaces'             => $this->makeIncorrectItem('123 45-678'),
+            'invalid cep - special characters' => $this->makeIncorrectItem('123@5-678'),
+            'invalid cep - many numbers'       => $this->makeIncorrectItem(123567890),
+            'invalid cep - loss numbers'       => $this->makeIncorrectItem(123567),
+            'invalid cep stringable'           => $this->makeIncorrectItem($this->makeStringableObject('123@5-678')),
             'empty string'                     => $this->makeIncorrectItem(''),
             'one space string'                 => $this->makeIncorrectItem(' '),
             'two spaces string'                => $this->makeIncorrectItem('  '),

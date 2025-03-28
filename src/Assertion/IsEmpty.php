@@ -24,7 +24,7 @@ class IsEmpty extends Assertion
             return $value->count() === 0;
         }
 
-        if ( is_object($value) === true) {
+        if (is_object($value) === true) {
             throw new InvalidArgumentException("The value is not valid");
         }
 
@@ -32,7 +32,8 @@ class IsEmpty extends Assertion
             return count($value) === 0;
         }
 
-        if ($value === false || $value === null
+        if (
+            $value === false || $value === null
         ) {
             return true;
         }

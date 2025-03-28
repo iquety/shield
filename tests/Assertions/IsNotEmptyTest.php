@@ -21,7 +21,7 @@ class IsNotEmptyTest extends AssertionCase
 
         $assertion->isValid();
     }
-    
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {

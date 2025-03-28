@@ -1,6 +1,6 @@
 # Evoluindo a biblioteca
 
-[◂ IsTime](10-isbrphonenumber.md) | [Sumário da Documentação ▸](indice.md)
+[◂ IsBrPhoneNumber](10-isbrphonenumber.md) | [Sumário da Documentação ▸](indice.md)
 -- | --
 
 ## 1. Infraestrutura
@@ -80,5 +80,5 @@ gerar a documentação navegável no diretório `docs`:
 composer docmap
 ```
 
-[◂ IsTime](10-isbrphonenumber.md) | [Sumário da Documentação ▸](indice.md)
+[◂ IsBrPhoneNumber](10-isbrphonenumber.md) | [Sumário da Documentação ▸](indice.md)
 -- | --

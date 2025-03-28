@@ -1,9 +1,15 @@
-# IsTime
+# IsBrPhoneNumber
 
 [◂ IsUrl](09-isurl.md) | [Documentation Summary](index.md) | [Evolving the library ▸](99-evolution.md)
 -- | -- | --
 
-Telephone formats used in Brazil:
+Telephone formats used in Brazil.
+
+| Tipos verificáveis |
+|:--                 |
+| integer            |
+| string             |
+| Stringable         |
 
 ```php
 
@@ -44,6 +50,12 @@ new IsBrPhoneNumber('4003-9999');
 new IsBrPhoneNumber('4003-9999');
 
 new IsBrPhoneNumber('4003-9999');
+
+// integer value
+new IsBrPhoneNumber(40039999);
+
+// Stringable object
+new IsBrPhoneNumber(new CustomStringable('40039999'));
 ```
 
 [◂ IsUrl](09-isurl.md) | [Documentation Summary](index.md) | [Evolving the library ▸](99-evolution.md)

@@ -4,7 +4,7 @@
 
 The supported date formats.
 
-| Name                                   | Format                                    | Type               | 
+| Name                                   | Format                                    | Type               |
 |:--                                     |:--                                        | :--                |
 | ISO 8601 format                        | yyyy-mm-dd *(e.g. 2024-12-31)*            | string, Stringable |
 | Alternate ISO format                   | yyyy.mm.dd *(e.g. 2024.31.12)*            | string, Stringable |

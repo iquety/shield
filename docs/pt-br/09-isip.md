@@ -3,7 +3,12 @@
 [◂ IsTime](08-istime.md) | [Sumário da Documentação](indice.md) | [IsMacAddress ▸](09-ismacaddress.md)
 -- | -- | --
 
-Formatos de IP:
+Formatos de IP.
+
+| Tipos verificáveis |
+|:--                 |
+| string             |
+| Stringable         |
 
 ```php
 // ipv4
@@ -26,6 +31,9 @@ new IsIp('::1');
 
 // ipv6 não especificado' 
 new IsIp('::');
+
+// objeto Stringable
+new IsIp(new CustomStringable('192.168.1.1'));
 ```
 
 [◂ IsTime](08-istime.md) | [Sumário da Documentação](indice.md) | [IsMacAddress ▸](09-ismacaddress.md)

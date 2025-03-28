@@ -1,6 +1,6 @@
 # Evolving the library
 
-[◂ IsTime](10-isbrphonenumber.md) | [Documentation Summary ▸](index.md)
+[◂ IsBrPhoneNumber](10-isbrphonenumber.md) | [Documentation Summary ▸](index.md)
 -- | --
 
 ## 1. Infrastructure
@@ -80,5 +80,5 @@ browsable documentation in the `docs` directory:
 composer docmap
 ```
 
-[◂ IsTime](10-isbrphonenumber.md) | [Documentation Summary ▸](index.md)
+[◂ IsBrPhoneNumber](10-isbrphonenumber.md) | [Documentation Summary ▸](index.md)
 -- | --

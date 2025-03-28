@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Iquety\Shield\Assertion;
 
 use Countable;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 
@@ -24,7 +25,7 @@ class IsNotEmpty extends Assertion
         }
 
         if (is_object($value) === true) {
-            return false;
+            throw new InvalidArgumentException("The value is not valid");
         }
 
         if (is_array($value) === true) {

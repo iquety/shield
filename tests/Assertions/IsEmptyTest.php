@@ -5,11 +5,23 @@ declare(strict_types=1);
 namespace Tests\Assertions;
 
 use ArrayObject;
+use InvalidArgumentException;
 use Iquety\Shield\Assertion\IsEmpty;
 use stdClass;
 
 class IsEmptyTest extends AssertionCase
 {
+    /** @test */
+    public function valueIsInvalid(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('The value is not valid');
+
+        $assertion = new IsEmpty(new stdClass());
+
+        $assertion->isValid();
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -24,9 +36,6 @@ class IsEmptyTest extends AssertionCase
         $list['array']             = [[]];
         $list['boolean'] = [false];
         $list['empty countable']   = [new ArrayObject()];
-
-        // não contável é considerado vazio
-        $list['uncontable'] = [new stdClass()];
 
         return $list;
     }

@@ -34,8 +34,9 @@ class IsEmptyTest extends AssertionCase
         $list['int']               = [0];
         $list['float']             = [0.0];
         $list['array']             = [[]];
-        $list['boolean'] = [false];
+        $list['boolean']           = [false];
         $list['empty countable']   = [new ArrayObject()];
+        $list['empty stringable']  = [$this->makeStringableObject('')];
 
         return $list;
     }
@@ -67,12 +68,13 @@ class IsEmptyTest extends AssertionCase
     {
         $list = [];
 
-        $list['string']    = $this->makeIncorrectItem('x');
-        $list['int']       = $this->makeIncorrectItem(1);
-        $list['float']     = $this->makeIncorrectItem(1.0);
-        $list['array']     = $this->makeIncorrectItem(['x']);
-        $list['boolean']   = $this->makeIncorrectItem(true);
-        $list['countable'] = $this->makeIncorrectItem(new ArrayObject(['value']));
+        $list['string']     = $this->makeIncorrectItem('x');
+        $list['int']        = $this->makeIncorrectItem(1);
+        $list['float']      = $this->makeIncorrectItem(1.0);
+        $list['array']      = $this->makeIncorrectItem(['x']);
+        $list['boolean']    = $this->makeIncorrectItem(true);
+        $list['countable']  = $this->makeIncorrectItem(new ArrayObject(['value']));
+        $list['stringable'] = $this->makeIncorrectItem($this->makeStringableObject('x'));
 
         return $list;
     }

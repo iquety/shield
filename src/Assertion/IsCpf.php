@@ -6,6 +6,7 @@ namespace Iquety\Shield\Assertion;
 
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsCpf extends Assertion
 {
@@ -14,9 +15,14 @@ class IsCpf extends Assertion
         $this->setValue($value);
     }
 
+    /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
     public function isValid(): bool
     {
         $value = $this->getValue();
+
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
 
         if (
             is_bool($value) === true

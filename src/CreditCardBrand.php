@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Iquety\Shield;
 
+use Stringable;
 use ValueError;
 
 enum CreditCardBrand: string
@@ -67,9 +68,9 @@ enum CreditCardBrand: string
         };
     }
 
-    public static function fromNumber(int|string $creditCardNumber): self
+    public static function fromNumber(int|string|Stringable $creditCardNumber): self
     {
-        $originalNumber = $creditCardNumber;
+        $originalNumber = (string)$creditCardNumber;
 
         $creditCardNumber = (string)preg_replace('/\D/', '', (string)$creditCardNumber);
 

@@ -6,6 +6,7 @@ namespace Iquety\Shield\Assertion;
 
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 /**
  * Valida se o valor é um número de telefone válido no Brasil
@@ -27,9 +28,14 @@ class IsBrPhoneNumber extends Assertion
         $this->setValue($value);
     }
 
+    /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
     public function isValid(): bool
     {
         $value = $this->getValue();
+
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
 
         if (
             is_bool($value) === true

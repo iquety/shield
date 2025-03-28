@@ -8,6 +8,7 @@ use Countable;
 use InvalidArgumentException;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsNotEmpty extends Assertion
 {
@@ -19,6 +20,10 @@ class IsNotEmpty extends Assertion
     public function isValid(): bool
     {
         $value = $this->getValue();
+
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
 
         if ($value instanceof Countable) {
             return $value->count() > 0;

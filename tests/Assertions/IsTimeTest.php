@@ -6,6 +6,7 @@ namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsTime;
 use stdClass;
+use Stringable;
 
 class IsTimeTest extends AssertionCase
 {
@@ -14,9 +15,10 @@ class IsTimeTest extends AssertionCase
     {
         $list = [];
 
-        $list['ISO 8601']     = ['23:59:59'];
-        $list['US format am'] = ['11:59:59 AM'];
-        $list['US format pm'] = ['11:59:59 PM'];
+        $list['iso 8601']     = ['23:59:59'];
+        $list['us format am'] = ['11:59:59 AM'];
+        $list['us format pm'] = ['11:59:59 PM'];
+        $list['stringable']   = [$this->makeStringableObject('11:59:59 PM')];
 
         return $list;
     }
@@ -25,7 +27,7 @@ class IsTimeTest extends AssertionCase
      * @test
      * @dataProvider validProvider
      */
-    public function assertedCase(string $timeString): void
+    public function assertedCase(string|Stringable $timeString): void
     {
         $assertion = new IsTime($timeString);
 
@@ -48,21 +50,21 @@ class IsTimeTest extends AssertionCase
     {
         $list = [];
 
-        $list['ISO 8601 dirty']  = $this->makeIncorrectItem('xxx23:59:59');
-        $list['US format dirty'] = $this->makeIncorrectItem('xxx11:59:59 PM');
+        $list['iso 8601 dirty']  = $this->makeIncorrectItem('xxx23:59:59');
+        $list['us format dirty'] = $this->makeIncorrectItem('xxx11:59:59 PM');
 
-        $list['ISO 8601 invalid hour']   = $this->makeIncorrectItem('25:59:59');
-        $list['ISO 8601 invalid minute'] = $this->makeIncorrectItem('20:62:59');
-        $list['ISO 8601 invalid second'] = $this->makeIncorrectItem('20:59:62');
+        $list['iso 8601 invalid hour']   = $this->makeIncorrectItem('25:59:59');
+        $list['iso 8601 invalid minute'] = $this->makeIncorrectItem('20:62:59');
+        $list['iso 8601 invalid second'] = $this->makeIncorrectItem('20:59:62');
 
-        $list['US format hour am'] = $this->makeIncorrectItem('13:59:59 AM');
-        $list['US format hour pm'] = $this->makeIncorrectItem('13:59:59 PM');
+        $list['us format hour am'] = $this->makeIncorrectItem('13:59:59 AM');
+        $list['us format hour pm'] = $this->makeIncorrectItem('13:59:59 PM');
 
-        $list['US format minute am'] = $this->makeIncorrectItem('11:62:59 AM');
-        $list['US format minute pm'] = $this->makeIncorrectItem('11:62:59 PM');
+        $list['us format minute am'] = $this->makeIncorrectItem('11:62:59 AM');
+        $list['us format minute pm'] = $this->makeIncorrectItem('11:62:59 PM');
 
-        $list['US format second am'] = $this->makeIncorrectItem('11:59:62 AM');
-        $list['US format second pm'] = $this->makeIncorrectItem('11:59:62 PM');
+        $list['us format second am'] = $this->makeIncorrectItem('11:59:62 AM');
+        $list['us format second pm'] = $this->makeIncorrectItem('11:59:62 PM');
 
         $list['empty string']      = $this->makeIncorrectItem('');
         $list['one space string']  = $this->makeIncorrectItem(' ');
@@ -71,6 +73,8 @@ class IsTimeTest extends AssertionCase
         $list['array']             = $this->makeIncorrectItem(['a']);
         $list['object']            = $this->makeIncorrectItem(new stdClass());
         $list['null']              = $this->makeIncorrectItem(null);
+
+        $list['stringable']  = $this->makeIncorrectItem($this->makeStringableObject('xxx23:59:59'));
 
         return $list;
     }

@@ -6,6 +6,7 @@ namespace Tests\Assertions;
 
 use Iquety\Shield\Assertion\IsAmountTime;
 use stdClass;
+use Stringable;
 
 class IsAmountTimeTest extends AssertionCase
 {
@@ -14,11 +15,12 @@ class IsAmountTimeTest extends AssertionCase
     {
         $list = [];
 
-        $list['less time'] = ['00:01:01'];
-        $list['in time'] = ['23:59:59'];
-        $list['greater time'] = ['66:59:59'];
+        $list['less time']      = ['00:01:01'];
+        $list['in time']        = ['23:59:59'];
+        $list['greater time']   = ['66:59:59'];
         $list['greater time 2'] = ['999:59:59'];
         $list['greater time 3'] = ['9999:59:59'];
+        $list['stringable']     = [$this->makeStringableObject('9999:59:59')];
 
         return $list;
     }
@@ -27,7 +29,7 @@ class IsAmountTimeTest extends AssertionCase
      * @test
      * @dataProvider correctValueProvider
      */
-    public function valueIsAmountTime(string $timeValue): void
+    public function valueIsAmountTime(string|Stringable $timeValue): void
     {
         $assertion = new IsAmountTime($timeValue);
 
@@ -61,6 +63,7 @@ class IsAmountTimeTest extends AssertionCase
         $list['false']             = $this->makeIncorrectItem(false);
         $list['true']              = $this->makeIncorrectItem(true);
         $list['null']              = $this->makeIncorrectItem(null);
+        $list['stringable']        = $this->makeIncorrectItem($this->makeStringableObject('23:62:62'));
 
         return $list;
     }

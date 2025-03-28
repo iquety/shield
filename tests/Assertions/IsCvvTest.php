@@ -15,12 +15,21 @@ class IsCvvTest extends AssertionCase
     {
         $list = [];
 
-        $list['Amex valido'] = [CreditCardBrand::AMEX, 4442];
-        $list['MasterCard valido'] = [CreditCardBrand::MASTERCARD, 444];
-        $list['Visa valido'] = [CreditCardBrand::VISA, 444];
-        $list['Discover valido'] = [CreditCardBrand::DISCOVER, 444];
-        $list['JCB valido'] = [CreditCardBrand::JCB, 444];
-        $list['Diners Club valido'] = [CreditCardBrand::DINERS_CLUB, 444];
+        $list['amex valido']        = [CreditCardBrand::AMEX, 4442];
+        $list['mastercard valido']  = [CreditCardBrand::MASTERCARD, 444];
+        $list['visa valido']        = [CreditCardBrand::VISA, 444];
+        $list['discover valido']    = [CreditCardBrand::DISCOVER, 444];
+        $list['jcb valido']         = [CreditCardBrand::JCB, 444];
+        $list['diners club valido'] = [CreditCardBrand::DINERS_CLUB, 444];
+
+        $list['string amex valido']        = [CreditCardBrand::AMEX, '4442'];
+        $list['string mastercard valido']  = [CreditCardBrand::MASTERCARD, '444'];
+        $list['string visa valido']        = [CreditCardBrand::VISA, '444'];
+        $list['string discover valido']    = [CreditCardBrand::DISCOVER, '444'];
+        $list['string jcb valido']         = [CreditCardBrand::JCB, '444'];
+        $list['string diners club valido'] = [CreditCardBrand::DINERS_CLUB, '444'];
+
+        $list['stringable diners club'] = [CreditCardBrand::DINERS_CLUB, $this->makeStringableObject('444')];
 
         return $list;
     }
@@ -56,12 +65,22 @@ class IsCvvTest extends AssertionCase
     {
         $list = [];
 
-        $list['Amex invalido'] = $this->makeIncorrectItem(CreditCardBrand::AMEX, 444);
-        $list['MasterCard invalido'] = $this->makeIncorrectItem(CreditCardBrand::MASTERCARD, 4442);
-        $list['Visa invalido'] = $this->makeIncorrectItem(CreditCardBrand::VISA, 4442);
-        $list['Discover invalido'] = $this->makeIncorrectItem(CreditCardBrand::DISCOVER, 4442);
-        $list['JCB invalido'] = $this->makeIncorrectItem(CreditCardBrand::JCB, 4442);
-        $list['Diners Club invalido'] = $this->makeIncorrectItem(CreditCardBrand::DINERS_CLUB, 4442);
+        $list['amex invalido']        = $this->makeIncorrectItem(CreditCardBrand::AMEX, 444);
+        $list['mastercard invalido']  = $this->makeIncorrectItem(CreditCardBrand::MASTERCARD, 4442);
+        $list['visa invalido']        = $this->makeIncorrectItem(CreditCardBrand::VISA, 4442);
+        $list['discover invalido']    = $this->makeIncorrectItem(CreditCardBrand::DISCOVER, 4442);
+        $list['jcb invalido']         = $this->makeIncorrectItem(CreditCardBrand::JCB, 4442);
+        $list['diners club invalido'] = $this->makeIncorrectItem(CreditCardBrand::DINERS_CLUB, 4442);
+
+        $list['string amex invalido']        = $this->makeIncorrectItem(CreditCardBrand::AMEX, '444');
+        $list['string mastercard invalido']  = $this->makeIncorrectItem(CreditCardBrand::MASTERCARD, '4442');
+        $list['string visa invalido']        = $this->makeIncorrectItem(CreditCardBrand::VISA, '4442');
+        $list['string discover invalido']    = $this->makeIncorrectItem(CreditCardBrand::DISCOVER, '4442');
+        $list['string jcb invalido']         = $this->makeIncorrectItem(CreditCardBrand::JCB, '4442');
+        $list['string diners club invalido'] = $this->makeIncorrectItem(CreditCardBrand::DINERS_CLUB, '4442');
+
+        $list['stringable diners club']
+            = $this->makeIncorrectItem(CreditCardBrand::DINERS_CLUB, $this->makeStringableObject('4442'));
 
         foreach (CreditCardBrand::all() as $brand) {
             $list[$brand . ' empty string']      = $this->makeIncorrectItem(CreditCardBrand::from($brand), '');

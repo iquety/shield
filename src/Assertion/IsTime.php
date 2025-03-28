@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Iquety\Shield\Assertion;
 
-use DateTime;
-use Exception;
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsTime extends Assertion
 {
@@ -19,6 +18,10 @@ class IsTime extends Assertion
     public function isValid(): bool
     {
         $value = $this->getValue();
+
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
 
         if (
             is_bool($value) === true
@@ -36,7 +39,7 @@ class IsTime extends Assertion
             . '(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])'
             . '$/';
 
-        if (preg_match($regex, $this->getValue()) === 1) {
+        if (preg_match($regex, $value) === 1) {
             return true;
         }
 
@@ -46,7 +49,7 @@ class IsTime extends Assertion
             . '(0[0-9]|1[0-1]):([0-5][0-9]):([0-5][0-9]) ([AaPp][Mm])'
             . '$/';
 
-        if (preg_match($regex, $this->getValue()) === 1) {
+        if (preg_match($regex, $value) === 1) {
             return true;
         }
 

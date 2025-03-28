@@ -15,6 +15,10 @@ class IsEmailTest extends AssertionCase
         $assertion = new IsEmail('teste@teste.com');
 
         $this->assertTrue($assertion->isValid());
+
+        $assertion = new IsEmail($this->makeStringableObject('teste@teste.com'));
+
+        $this->assertTrue($assertion->isValid());
     }
 
     /** @return array<int,mixed> */
@@ -33,15 +37,16 @@ class IsEmailTest extends AssertionCase
     {
         $list = [];
 
-        $list['invalid']           = $this->makeIncorrectItem('testeteste.com');
-        $list['empty string']      = $this->makeIncorrectItem('');
-        $list['one space string']  = $this->makeIncorrectItem(' ');
-        $list['two spaces string'] = $this->makeIncorrectItem('  ');
-        $list['array']             = $this->makeIncorrectItem(['a']);
-        $list['object']            = $this->makeIncorrectItem(new stdClass());
-        $list['false']             = $this->makeIncorrectItem(false);
-        $list['true']              = $this->makeIncorrectItem(true);
-        $list['null']              = $this->makeIncorrectItem(null);
+        $list['invalid']            = $this->makeIncorrectItem('testeteste.com');
+        $list['stringable invalid'] = $this->makeIncorrectItem($this->makeStringableObject('testeteste.com'));
+        $list['empty string']       = $this->makeIncorrectItem('');
+        $list['one space string']   = $this->makeIncorrectItem(' ');
+        $list['two spaces string']  = $this->makeIncorrectItem('  ');
+        $list['array']              = $this->makeIncorrectItem(['a']);
+        $list['object']             = $this->makeIncorrectItem(new stdClass());
+        $list['false']              = $this->makeIncorrectItem(false);
+        $list['true']               = $this->makeIncorrectItem(true);
+        $list['null']               = $this->makeIncorrectItem(null);
 
         return $list;
     }

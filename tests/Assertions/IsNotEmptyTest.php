@@ -34,7 +34,8 @@ class IsNotEmptyTest extends AssertionCase
         // $list['uncontable']    = [new stdClass()]; // não contável é vazio
         $list['boolean true']  = [true];
         // $list['boolean false'] = [false];          // false é vazio
-        $list['countable']     = [new ArrayObject(['value'])];
+        $list['countable']  = [new ArrayObject(['value'])];
+        $list['stringable'] = [$this->makeStringableObject('x')];
 
         return $list;
     }
@@ -75,6 +76,7 @@ class IsNotEmptyTest extends AssertionCase
         $list['array']             = $this->makeIncorrectItem([]);
         $list['boolean']           = $this->makeIncorrectItem(false);
         $list['countable']         = $this->makeIncorrectItem(new ArrayObject());
+        $list['stringable']         = $this->makeIncorrectItem($this->makeStringableObject(''));
 
         return $list;
     }

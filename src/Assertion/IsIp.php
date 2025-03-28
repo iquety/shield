@@ -6,6 +6,7 @@ namespace Iquety\Shield\Assertion;
 
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
+use Stringable;
 
 class IsIp extends Assertion
 {
@@ -16,7 +17,13 @@ class IsIp extends Assertion
 
     public function isValid(): bool
     {
-        if (filter_var($this->getValue(), FILTER_VALIDATE_IP) === false) {
+        $value = $this->getValue();
+
+        if ($value instanceof Stringable) {
+            $value = (string)$value;
+        }
+
+        if (filter_var($value, FILTER_VALIDATE_IP) === false) {
             return false;
         }
 

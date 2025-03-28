@@ -14,12 +14,13 @@ class IsDateTest extends AssertionCase
     {
         $list = [];
 
-        $list['iso 8601'] = ['2024-12-31'];
-        $list['european format'] = ['31/12/2024'];
-        $list['us format'] = ['12/31/2024'];
-        $list['alternative format'] = ['2024.12.31'];
+        $list['iso 8601']               = ['2024-12-31'];
+        $list['european format']        = ['31/12/2024'];
+        $list['us format']              = ['12/31/2024'];
+        $list['alternative format']     = ['2024.12.31'];
         $list['abbreviated month name'] = ['31-Dec-2024'];
-        $list['full month name'] = ['December 31, 2024'];
+        $list['full month name']        = ['December 31, 2024'];
+        $list['stringable']             = [$this->makeStringableObject('December 31, 2024')];
 
         return $list;
     }
@@ -75,6 +76,8 @@ class IsDateTest extends AssertionCase
 
         $list['full month name month'] = $this->makeIncorrectItem('Invalid 31, 2024');
         $list['full month name day']   = $this->makeIncorrectItem('December 32, 2024');
+
+        $list['stringable invalid'] = $this->makeIncorrectItem($this->makeStringableObject('December 32, 2024'));
 
         $list['empty string']      = $this->makeIncorrectItem('');
         $list['one space string']  = $this->makeIncorrectItem(' ');

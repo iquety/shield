@@ -66,6 +66,22 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 | IsCep              | Código de endereçamento postal (ex.: **12.380-315**)   |
 | IsCpf              | Cadastro de pessoa física (ex.: **742.143.120-90**)    |
 
+## Booleanos
+
+| Asserção           | Descrição                                                                |
+| :--                | :--                                                                      |
+| IsFalse            | O valor é falso (false, 0, 'false', '0', 'false', '', ' ')               |
+| IsTrue             | O valor é verdadeiro (true, 1, 'true', '1', 'on')                        |
+
+## Vazios
+
+| Asserção           | Descrição                                                                |
+| :--                | :--                                                                      |
+| IsEmpty            | O valor é vazio (false, null, '', 0, [] e tipos Countable vazios)        |
+| IsNotEmpty         | O valor não é vazio (diferentes de false, null, '', 0, [] e tipos Countable vazios) |
+| IsNotNull          | O valor não é nulo                                                       |
+| IsNull             | O valor é nulo                                                           |
+
 ## Outros formatos
 
 | Asserção           | Descrição                                                                |
@@ -76,14 +92,8 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 | IsCreditCard       | Número de cartão de crédito: (ex.: **5279 6901 2297 4109** ou **5279-6901-2297-4109**) |
 | IsCreditCardBrand  | Uma bandeira de cartão de crédito                                        |
 | IsCvv              | Código de segurança de cartão de crédito (ex.: **345**)                  |
-| IsEmpty            | O valor é vazio (false, null, '', 0, [] e tipos Countable vazios)        |
-| IsFalse            | O valor é falso (false, 0, 'false', '0', 'false', '', ' ')               |
 | IsHexadecimal      | Caracteres hexadecimais (ex.: **1234567890abcdef**)                      |
 | IsHexColor         | É uma cor hexadecimal (ex.: **#ff00ee** ou **#FF00EE**)                  |
-| IsNotEmpty         | O valor não é vazio (diferentes de false, null, '', 0, [] e tipos Countable vazios) |
-| IsNotNull          | O valor não é nulo                                                       |
-| IsNull             | O valor é nulo                                                           |
-| IsTrue             | O valor é verdadeiro (true, 1, 'true', '1', 'on')                        |
 | IsUuid             | É um UUID (ex.: **3f2504e0-4f89-41d3-9a0c-0305e82c3301**)                |
 
 [◂ Objeto Shield](02-shield.md) | [Sumário da Documentação](indice.md) | [EqualTo ▸](04-equalto.md)

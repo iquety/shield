@@ -2,7 +2,12 @@
 
 --page-nav--
 
-IP formats:
+IP formats.
+
+| Verifiable types |
+|:--               |
+| string           |
+| Stringable       |
 
 ```php
 // ipv4
@@ -25,6 +30,9 @@ new IsIp('::1');
 
 // ipv6 unspecified'
 new IsIp('::');
+
+// Stringable object
+new IsIp(new CustomStringable('192.168.1.1'));
 ```
 
 --page-nav--

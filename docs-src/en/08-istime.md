@@ -2,7 +2,12 @@
 
 --page-nav--
 
-Hours, minutes and seconds format with 24-hour limit:
+Hours, minutes and seconds format with 24-hour limit.
+
+| Verifiable types |
+|:--               |
+| string           |
+| Stringable       |
 
 ```php
 // minimum hours allowed

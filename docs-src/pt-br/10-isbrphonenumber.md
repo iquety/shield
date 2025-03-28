@@ -1,8 +1,14 @@
-# IsTime
+# IsBrPhoneNumber
 
 --page-nav--
 
-Formatos de telefones utilizados no Brasil:
+Formatos de telefones utilizados no Brasil.
+
+| Tipos verificáveis |
+|:--                 |
+| integer            |
+| string             |
+| Stringable         |
 
 ```php
 
@@ -43,6 +49,12 @@ new IsBrPhoneNumber('4003-9999');
 
 new IsBrPhoneNumber('4003 9999');
 new IsBrPhoneNumber('4003-9999');
+
+// valor inteiro
+new IsBrPhoneNumber(40039999);
+
+// objeto Stringable
+new IsBrPhoneNumber(new CustomStringable('40039999'));
 ```
 
 --page-nav--

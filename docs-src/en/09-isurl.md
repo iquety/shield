@@ -2,7 +2,12 @@
 
 --page-nav--
 
-Valid URL formats:
+Valid URL formats.
+
+| Verifiable types |
+|:--               |
+| string           |
+| Stringable       |
 
 ```php
 // http         
@@ -34,6 +39,9 @@ new IsUrl('http://www.example.com:8080');
 
 // long TLD  
 new IsUrl('http://www.example.museum');
+
+// Stringable object
+new IsUrl(new CustomStringable('http://www.exemplo.com'));
 ```
 
 --page-nav--

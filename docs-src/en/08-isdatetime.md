@@ -2,16 +2,16 @@
 
 --page-nav--
 
-The supported date formats are:
+The supported date formats.
 
-| Type                     | Format                                              |
-|:--                       |:--                                                  |
-| ISO 8601 format          | yyyy-mm-dd *(e.g. 2024-12-31 23:59:59)*             |
-| Alternate ISO format     | yyyy.mm.dd *(e.g. 2024.31.12 23:59:59)*             |
-| US format                | dd-mm-yyyy *(e.g. 12/31/2024 23:59:59)*             |
-| Abbreviated month format | dd-Month-yyyy *(e.g. 31-Dec-2024 23:59:59)*         |
-| Full month               | Month dd, yyyy *(e.g.: December 31, 2024 23:59:59)* |
-| Brazilian date           | dd/mm/yyyy *(e.g.: 12/31/2024 23:59:59)*            |
+| Name                     | Format                                              | Type               |
+|:--                       |:--                                                  | :--                |
+| ISO 8601 format          | yyyy-mm-dd *(e.g. 2024-12-31 23:59:59)*             | string, Stringable |
+| Alternate ISO format     | yyyy.mm.dd *(e.g. 2024.31.12 23:59:59)*             | string, Stringable |
+| US format                | dd-mm-yyyy *(e.g. 12/31/2024 23:59:59)*             | string, Stringable |
+| Abbreviated month format | dd-Month-yyyy *(e.g. 31-Dec-2024 23:59:59)*         | string, Stringable |
+| Full month               | Month dd, yyyy *(e.g.: December 31, 2024 23:59:59)* | string, Stringable |
+| Brazilian date           | dd/mm/yyyy *(e.g.: 12/31/2024 23:59:59)*            | string, Stringable |
 
 ```php
 // ISO 8601 format
@@ -31,6 +31,9 @@ new IsDateTime('December 31, 2024 23:59:59');
 
 // usual Brazilian format
 new IsDateTime('12/31/2024 23:59:59');
+
+// Stringable object
+new IsDateTime(new CustomStringable('12/31/2024 23:59:59'));
 ```
 
 --page-nav--

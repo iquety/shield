@@ -26,6 +26,7 @@ class IsFalse extends Assertion
             || $value === 'false'
             || $value === 0
             || $value === '0'
+            || $value === 'off'
             || $value === '';
     }
 

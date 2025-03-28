@@ -25,7 +25,8 @@ class IsTrue extends Assertion
         return $value === true
             || $value === 'true'
             || $value === 1
-            || $value === '1';
+            || $value === '1'
+            || $value === 'on';
     }
 
     public function getDefaultMessage(): Message

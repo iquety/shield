@@ -37,3 +37,4 @@ disponíveis e usufruir ao máximo da biblioteca.
 - [IsMacAddress](09-ismacaddress.md)
 - [IsUrl](09-isurl.md)
 - [IsTime](10-isbrphonenumber.md)
+- [Evoluindo a biblioteca](99-evoluindo.md)

@@ -21,6 +21,7 @@ class LessThanOrEqualToTest extends AssertionCase
         $list['stdObject is invalid value'] = [new stdClass()];
         $list['true is invalid value']      = [true];
         $list['false is invalid value']     = [false];
+        $list['textual is invalid value']   = ['Coração#@!'];
 
         return $list;
     }
@@ -32,7 +33,7 @@ class LessThanOrEqualToTest extends AssertionCase
     public function valueIsInvalid(mixed $value): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The value is not valid');
+        $this->expectExceptionMessage('The value to be checked must be numeric');
 
         $assertion = new LessThanOrEqualTo($value, 1);
 

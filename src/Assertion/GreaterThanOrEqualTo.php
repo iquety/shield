@@ -37,7 +37,7 @@ class GreaterThanOrEqualTo extends Assertion
             return $this->isValidCountable($value, $this->getAssertValue());
         }
 
-        throw new InvalidArgumentException("The value is not valid");
+        throw new InvalidArgumentException("The value to be checked must be numeric");
     }
 
     private function isValidCountable(Countable $value, float|int $length): bool

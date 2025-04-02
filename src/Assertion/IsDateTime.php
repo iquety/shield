@@ -22,7 +22,10 @@ class IsDateTime extends Assertion
     {
         $value = $this->getValue();
 
-        if ($value instanceof Stringable) {
+        if (
+            is_numeric($value) === true
+            || $value instanceof Stringable
+        ) {
             $value = (string)$value;
         }
 

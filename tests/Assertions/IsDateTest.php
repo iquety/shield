@@ -87,6 +87,7 @@ class IsDateTest extends AssertionCase
         $list['false']             = $this->makeIncorrectItem(false);
         $list['true']              = $this->makeIncorrectItem(true);
         $list['null']              = $this->makeIncorrectItem(null);
+        $list['integer']           = $this->makeIncorrectItem(12345);
 
         return $list;
     }

@@ -31,12 +31,18 @@ class IsCep extends Assertion
             return false;
         }
 
-        if (is_string($value) === true) {
+        $size = mb_strlen((string)$value);
+
+        if (is_string($value) === true && $size === 9) {
             // Brazilian CEP format: 5 digits, a hyphen, and 3 digits (e.g., 12345-678)
             return preg_match('/^\d{5}-\d{3}$/', trim($value)) === 1;
         }
 
-        return mb_strlen((string)$value) === 8;
+        if (is_numeric($value) && $size === 8) {
+            return true;
+        }
+
+        return false;
     }
 
     public function getDefaultMessage(): Message

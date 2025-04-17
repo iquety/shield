@@ -21,6 +21,10 @@ class IsCepTest extends AssertionCase
             'valid cep - format 6' => [98765432],
             'valid cep - format 7' => [11000000],
             'valid cep - format 8' => [99999999],
+            'valid cep - format 9' => ['12345678'],
+            'valid cep - format 10' => ['98765432'],
+            'valid cep - format 11' => ['11000000'],
+            'valid cep - format 12' => ['99999999'],
             'valid cep stringable' => [$this->makeStringableObject('12345-678')]
 
         ];
@@ -55,7 +59,6 @@ class IsCepTest extends AssertionCase
             'invalid cep - too short'          => $this->makeIncorrectItem('1234-567'),
             'invalid cep - too long'           => $this->makeIncorrectItem('123456-789'),
             'invalid cep - invalid characters' => $this->makeIncorrectItem('12A45-678'),
-            'invalid cep - missing separator'  => $this->makeIncorrectItem('12345678'),
             'invalid cep - empty string'       => $this->makeIncorrectItem(''),
             'invalid cep - spaces'             => $this->makeIncorrectItem('123 45-678'),
             'invalid cep - special characters' => $this->makeIncorrectItem('123@5-678'),

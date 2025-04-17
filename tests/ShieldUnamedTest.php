@@ -23,13 +23,10 @@ class ShieldUnamedTest extends TestCase
 
         $this->assertCount(2, $instance->getErrorList());
 
-        $this->assertSame(
-            [
-                "Value must be equal to 'palavra diferente'",
-                "Value must be equal to 'palavra diferente'"
-            ],
-            $instance->getErrorList()
-        );
+        $this->assertSame([
+            "Value must be equal to 'palavra diferente'",
+            "Value must be equal to 'palavra diferente'"
+        ], $instance->getErrorList());
     }
 
     /** @test */

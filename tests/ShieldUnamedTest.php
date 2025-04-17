@@ -26,7 +26,7 @@ class ShieldUnamedTest extends TestCase
         $this->assertSame([
             "Value must be equal to 'palavra diferente'",
             "Value must be equal to 'palavra diferente'"
-        ],$instance->getErrorList());
+        ], $instance->getErrorList());
     }
 
     /** @test */

@@ -38,7 +38,7 @@ class IsTime extends Assertion
         }
 
         $value = (string)$value;
-        
+
         // ISO 8601 format : 23:59:59
         //                   hh:mm:ss
         $regex = '/^'

@@ -23,16 +23,22 @@ class IsTime extends Assertion
             $value = (string)$value;
         }
 
+        if (is_string($value) === true) {
+            $value = trim($value);
+        }
+
         if (
             is_bool($value) === true
             || is_object($value) === true
             || is_array($value) === true
             || $value === null
-            || empty(trim($value)) === true
+            || empty($value) === true
         ) {
             return false;
         }
 
+        $value = (string)$value;
+        
         // ISO 8601 format : 23:59:59
         //                   hh:mm:ss
         $regex = '/^'

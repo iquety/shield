@@ -66,6 +66,7 @@ class IsTimeTest extends AssertionCase
         $list['us format second am'] = $this->makeIncorrectItem('11:59:62 AM');
         $list['us format second pm'] = $this->makeIncorrectItem('11:59:62 PM');
 
+        $list['integer']           = $this->makeIncorrectItem(124);
         $list['empty string']      = $this->makeIncorrectItem('');
         $list['one space string']  = $this->makeIncorrectItem(' ');
         $list['two spaces string'] = $this->makeIncorrectItem('  ');

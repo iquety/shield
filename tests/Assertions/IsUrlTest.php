@@ -74,6 +74,7 @@ class IsUrlTest extends AssertionCase
         $list['object']      = $this->makeIncorrectItem(new stdClass());
         $list['countable']   = $this->makeIncorrectItem(new ArrayObject());
         $list['null']        = $this->makeIncorrectItem(null);
+        $list['integer']     = $this->makeIncorrectItem(1234);
 
         return $list;
     }

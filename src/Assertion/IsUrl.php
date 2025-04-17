@@ -27,21 +27,21 @@ class IsUrl extends Assertion
             $value = (string)$value;
         }
 
+        if (is_string($value) === true) {
+            $value = trim($value);
+        }
+
         if (
             is_bool($value) === true
             || is_object($value) === true
             || is_array($value) === true
             || $value === null
+            || $value === ''
         ) {
             return false;
         }
 
-        $value = trim($value);
-
-        // é vazio
-        if ($value === '') {
-            return false;
-        }
+        $value = (string)$value;
 
         // espaços não são permitidos
         if (strpos($value, ' ') !== false) {

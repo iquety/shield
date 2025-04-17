@@ -15,6 +15,7 @@ class IsTime extends Assertion
         $this->setValue($value);
     }
 
+    /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
     public function isValid(): bool
     {
         $value = $this->getValue();

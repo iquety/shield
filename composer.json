@@ -5,7 +5,7 @@
     "keywords": ["framework", "iquety", "security"],
     "license": "MIT",
     "require": {
-        "php": "^8.3.0"
+        "php": "^8.4"
     },
     "require-dev": {
         "behat/behat": "^3.14",

@@ -35,6 +35,6 @@ For detailed information, see [Documentation Summary](docs/en/index.md).
 - Implemented with unit tests using PHPUnit;
 - Made with :heart: &amp; :coffee:.
 
-## Creditos
+## Credits
 
 [Ricardo Pereira Dias](https://www.ricardopedias.com.br)

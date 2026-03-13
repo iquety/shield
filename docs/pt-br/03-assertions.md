@@ -78,7 +78,7 @@ As seguintes asserções são usadas para validar o valor de uma variável:
 | Asserção           | Descrição                                                                |
 | :--                | :--                                                                      |
 | IsEmpty            | O valor é vazio (false, null, '', 0, [] e tipos Countable vazios)        |
-| IsNotEmpty         | O valor não é vazio (diferentes de false, null, '', 0, [] e tipos Countable vazios) |
+| IsRequired         | O valor é considerado obrigatório                                        |
 | IsNotNull          | O valor não é nulo                                                       |
 | IsNull             | O valor é nulo                                                           |
 

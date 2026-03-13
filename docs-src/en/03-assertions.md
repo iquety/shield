@@ -77,7 +77,7 @@ The following assertions are used to validate the value of a variable:
 | Assertion         | Description                                                                   |
 | :--               | :--                                                                           |
 | IsEmpty           | The value is empty (false, null, '', 0, [], empty Countable)                  |
-| IsNotEmpty        | The value is not empty (different of false, null, '', 0, [], empty Countable) |
+| IsRequired        | The value is considered mandatory                                             |
 | IsNotNull         | The value is not null                                                         |
 | IsNull            | The value is null                                                             |
 

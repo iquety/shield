@@ -10,6 +10,29 @@ use Stringable;
 
 class IsTimeTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsTime($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -34,17 +57,6 @@ class IsTimeTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -67,13 +79,10 @@ class IsTimeTest extends AssertionCase
         $list['us format second pm'] = $this->makeIncorrectItem('11:59:62 PM');
 
         $list['integer']           = $this->makeIncorrectItem(124);
-        $list['empty string']      = $this->makeIncorrectItem('');
         $list['one space string']  = $this->makeIncorrectItem(' ');
         $list['two spaces string'] = $this->makeIncorrectItem('  ');
-        $list['boolean']           = $this->makeIncorrectItem(false);
         $list['array']             = $this->makeIncorrectItem(['a']);
         $list['object']            = $this->makeIncorrectItem(new stdClass());
-        $list['null']              = $this->makeIncorrectItem(null);
 
         $list['stringable']  = $this->makeIncorrectItem($this->makeStringableObject('xxx23:59:59'));
 
@@ -92,7 +101,7 @@ class IsTimeTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid time"
+            'Value must be a valid time'
         );
     }
 
@@ -144,5 +153,16 @@ class IsTimeTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

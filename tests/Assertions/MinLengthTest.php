@@ -10,17 +10,39 @@ use InvalidArgumentException;
 use Iquety\Shield\Assertion\MinLength;
 use stdClass;
 
+/** @SuppressWarnings(PHPMD.TooManyPublicMethods) */
 class MinLengthTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new MinLength($value, 5);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
 
-        $list['null is invalid value']      = [null];
         $list['stdObject is invalid value'] = [new stdClass()];
         $list['true is invalid value']      = [true];
-        $list['false is invalid value']     = [false];
         $list['integer is invalid value']   = [33];
         $list['float is invalid value']     = [3.3];
 
@@ -70,18 +92,6 @@ class MinLengthTest extends AssertionCase
         $assertion = new MinLength($value, $minLength);
 
         $this->assertTrue($assertion->isValid());
-    }
-
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, int $length): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            $length,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -166,5 +176,17 @@ class MinLengthTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, int $length): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $length,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

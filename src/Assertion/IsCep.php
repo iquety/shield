@@ -15,12 +15,17 @@ class IsCep extends Assertion
         $this->setValue($value);
     }
 
+    /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
     public function isValid(): bool
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (
@@ -31,7 +36,7 @@ class IsCep extends Assertion
             return false;
         }
 
-        $size = mb_strlen((string)$value);
+        $size = mb_strlen((string) $value);
 
         if (is_string($value) === true && $size === 9) {
             // Brazilian CEP format: 5 digits, a hyphen, and 3 digits (e.g., 12345-678)
@@ -47,7 +52,7 @@ class IsCep extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid CEP");
+        return new Message('Value must be a valid CEP');
     }
 
     public function getDefaultNamedMessage(): Message

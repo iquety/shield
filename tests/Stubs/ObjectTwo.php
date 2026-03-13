@@ -6,7 +6,5 @@ namespace Tests\Stubs;
 
 class ObjectTwo extends ObjectOne
 {
-    public function __construct(public string $name)
-    {
-    }
+    public function __construct(public string $name) {}
 }

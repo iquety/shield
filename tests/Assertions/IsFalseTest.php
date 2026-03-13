@@ -10,6 +10,26 @@ use stdClass;
 
 class IsFalseTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty array'   => [[]],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsFalse($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -19,9 +39,6 @@ class IsFalseTest extends AssertionCase
         $list['string false']        = ['false'];
         $list['binary false']        = [0];
         $list['string binary false'] = ['0'];
-        $list['empty string']        = [''];
-        $list['one space string']    = [' '];
-        $list['two spaces string']   = ['  '];
         $list['off']                 = ['off'];
 
         return $list;
@@ -37,17 +54,6 @@ class IsFalseTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -58,11 +64,12 @@ class IsFalseTest extends AssertionCase
         $list['binary true']        = $this->makeIncorrectItem(1);
         $list['string binary true'] = $this->makeIncorrectItem('1');
         $list['string']             = $this->makeIncorrectItem('x');
-        $list['empty array']        = $this->makeIncorrectItem([]);
         $list['object']             = $this->makeIncorrectItem(new stdClass());
         $list['countable']          = $this->makeIncorrectItem(new ArrayObject());
         $list['null']               = $this->makeIncorrectItem(null);
-        $list['on']               = $this->makeIncorrectItem('on');
+        $list['on']                 = $this->makeIncorrectItem('on');
+        $list['one space string']   = $this->makeIncorrectItem(' ');
+        $list['two spaces string']  = $this->makeIncorrectItem('  ');
 
         return $list;
     }
@@ -79,7 +86,7 @@ class IsFalseTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be false"
+            'Value must be false'
         );
     }
 
@@ -131,5 +138,16 @@ class IsFalseTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

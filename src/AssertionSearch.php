@@ -11,11 +11,6 @@ abstract class AssertionSearch extends Assertion
 {
     use HasValueNormalizer;
 
-    abstract protected function isMatches(string $value, mixed $needle): bool;
-
-    /** @param array<string,mixed> $list */
-    abstract protected function isValidInArray(array $list, mixed $element): bool;
-
     /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
     public function isValid(): bool
     {
@@ -31,6 +26,10 @@ abstract class AssertionSearch extends Assertion
         // mantém como estão os outros valores
         $value = $this->normalize($this->getValue());
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if (is_string($value) === true) {
             $assertValue = $this->normalize($this->getAssertValue());
 
@@ -41,14 +40,19 @@ abstract class AssertionSearch extends Assertion
             return $this->isValidList($value, $this->getAssertValue());
         }
 
-        throw new InvalidArgumentException("The value is not valid");
+        throw new InvalidArgumentException('The value is not valid');
     }
+
+    abstract protected function isMatches(string $value, mixed $needle): bool;
+
+    /** @param array<string,mixed> $list */
+    abstract protected function isValidInArray(array $list, mixed $element): bool;
 
     private function isValidString(string $value, mixed $needle): bool
     {
         if (is_string($needle) === false) {
             throw new InvalidArgumentException(
-                "Value needle is not a valid search value for a string"
+                'Value needle is not a valid search value for a string'
             );
         }
 
@@ -60,7 +64,7 @@ abstract class AssertionSearch extends Assertion
     {
         if ($needle === null) {
             throw new InvalidArgumentException(
-                "Null is not a valid search value for a list"
+                'Null is not a valid search value for a list'
             );
         }
 

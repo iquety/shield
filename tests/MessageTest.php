@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests;
 
 use Iquety\Shield\Message;
-use Tests\TestCase;
 
 class MessageTest extends TestCase
 {

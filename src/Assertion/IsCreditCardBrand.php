@@ -21,9 +21,25 @@ class IsCreditCardBrand extends Assertion
 
     public function isValid(): bool
     {
+        if (empty($this->getValue()) === true) {
+            return true;
+        }
+
         $brand = $this->getAssertValue();
 
         return $brand === $this->resolvedBrand();
+    }
+
+    public function getDefaultMessage(): Message
+    {
+        return new Message('Value must be a valid credit card brand');
+    }
+
+    public function getDefaultNamedMessage(): Message
+    {
+        return new Message(
+            "Value of the field '{{ field }}' must be a valid credit card brand",
+        );
     }
 
     /** @SuppressWarnings(PHPMD.StaticAccess) */
@@ -32,7 +48,7 @@ class IsCreditCardBrand extends Assertion
         $creditCardNumber = $this->getValue();
 
         if ($creditCardNumber instanceof Stringable) {
-            $creditCardNumber = (string)$creditCardNumber;
+            $creditCardNumber = (string) $creditCardNumber;
         }
 
         if (
@@ -43,7 +59,7 @@ class IsCreditCardBrand extends Assertion
             return CreditCardBrand::UNKNOWN;
         }
 
-        $creditCardNumber = (string)preg_replace('/\D/', '', (string)$creditCardNumber);
+        $creditCardNumber = (string) preg_replace('/\D/', '', (string) $creditCardNumber);
 
         $brandList = CreditCardBrand::all();
 
@@ -72,17 +88,5 @@ class IsCreditCardBrand extends Assertion
             CreditCardBrand::DINERS_CLUB->value => 14,
             default => 0
         };
-    }
-
-    public function getDefaultMessage(): Message
-    {
-        return new Message("Value must be a valid credit card brand");
-    }
-
-    public function getDefaultNamedMessage(): Message
-    {
-        return new Message(
-            "Value of the field '{{ field }}' must be a valid credit card brand",
-        );
     }
 }

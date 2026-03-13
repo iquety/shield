@@ -33,14 +33,14 @@ class AssertionCase extends TestCase
         return sprintf(
             '%s:%s',
             $object::class,
-            str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($state))
+            str_replace([':', '{', '}'], ['=>', '[', ']'], (string) json_encode($state))
         );
     }
 
     /** @param array<int|string,mixed> $value */
     protected function makeArrayMessage(array $value): string
     {
-        return str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($value));
+        return str_replace([':', '{', '}'], ['=>', '[', ']'], (string) json_encode($value));
     }
 
     protected function makeMessageValue(mixed $value): string
@@ -67,7 +67,7 @@ class AssertionCase extends TestCase
 
                 break;
             default:
-                $messageValue = (string)$value;
+                $messageValue = (string) $value;
         };
 
         return $messageValue;
@@ -81,9 +81,7 @@ class AssertionCase extends TestCase
     protected function makeStringableObject(string $value): Stringable
     {
         return new class ($value) implements Stringable {
-            public function __construct(protected string $value)
-            {
-            }
+            public function __construct(protected string $value) {}
 
             public function __toString(): string
             {
@@ -100,9 +98,7 @@ class AssertionCase extends TestCase
     {
         return new class ($value) implements ArrayAccess {
             /** @param array<int|string,mixed> $value */
-            public function __construct(private array $value)
-            {
-            }
+            public function __construct(private array $value) {}
 
             public function offsetExists($offset): bool
             {
@@ -147,6 +143,6 @@ class AssertionCase extends TestCase
     /** @param array<int|string,mixed> $value */
     protected function makeStdObject(array $value): stdClass
     {
-        return (object)$value;
+        return (object) $value;
     }
 }

@@ -9,7 +9,6 @@ use Iquety\Shield\Assertion\EqualTo;
 use Iquety\Shield\AssertionException;
 use Iquety\Shield\Shield;
 use ReflectionObject;
-use Tests\TestCase;
 
 class ShieldUnamedTest extends TestCase
 {
@@ -60,17 +59,17 @@ class ShieldUnamedTest extends TestCase
         // mensagem personalizada
         $instance
             ->assert(new EqualTo('palavra', 'palavra diferente'))
-            ->message("Primeira mensagem personalizada");
+            ->message('Primeira mensagem personalizada');
 
         // mensagem personalizada
         $instance
             ->assert(new EqualTo('palavra', 'palavra diferente'))
-            ->message("Segunda mensagem personalizada");
+            ->message('Segunda mensagem personalizada');
 
         $this->assertSame([
             "Value must be equal to 'palavra diferente'",
-            "Primeira mensagem personalizada",
-            "Segunda mensagem personalizada"
+            'Primeira mensagem personalizada',
+            'Segunda mensagem personalizada'
         ], $instance->getErrorList());
     }
 
@@ -85,20 +84,20 @@ class ShieldUnamedTest extends TestCase
         // mensagem personalizada
         $instance
             ->assert(new EqualTo('palavra', 'palavra diferente'))
-            ->message("Primeira mensagem personalizada");
+            ->message('Primeira mensagem personalizada');
 
         // mensagem personalizada
         $instance
             ->assert(new EqualTo('palavra', 'palavra diferente'))
-            ->message("Segunda mensagem personalizada");
+            ->message('Segunda mensagem personalizada');
 
         try {
             $instance->validOrThrow();
         } catch (AssertionException $exception) {
             $this->assertSame([
                 "Value must be equal to 'palavra diferente'",
-                "Primeira mensagem personalizada",
-                "Segunda mensagem personalizada"
+                'Primeira mensagem personalizada',
+                'Segunda mensagem personalizada'
             ], $exception->getErrorList());
 
             $this->assertSame(
@@ -119,12 +118,12 @@ class ShieldUnamedTest extends TestCase
         // mensagem personalizada
         $instance
             ->assert(new EqualTo('palavra', 'palavra diferente'))
-            ->message("Primeira mensagem personalizada");
+            ->message('Primeira mensagem personalizada');
 
         // mensagem personalizada
         $instance
             ->assert(new EqualTo('palavra', 'palavra diferente'))
-            ->message("Segunda mensagem personalizada");
+            ->message('Segunda mensagem personalizada');
 
         try {
             $instance->validOrThrow(Exception::class);

@@ -10,6 +10,29 @@ use stdClass;
 
 class IsUrlTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsUrl($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -38,17 +61,6 @@ class IsUrlTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -63,17 +75,14 @@ class IsUrlTest extends AssertionCase
         $list['Invalid URL - IP without scheme'] = $this->makeIncorrectItem('192.168.1.1');
         $list['Invalid URL - missing slashes'] = $this->makeIncorrectItem('http:example.com');
         $list['Invalid URL - double dots'] = $this->makeIncorrectItem('http://example..com');
-        $list['Invalid URL - empty string'] = $this->makeIncorrectItem('');
         $list['Invalid URL chars 1'] = $this->makeIncorrectItem('http://&example.com/捦挺挎/bar');
         $list['Invalid URL chars 2'] = $this->makeIncorrectItem([
             'www.hti.umich.edu/cgi/t/text/pageviewer-idx'
             . '?c=umhistmath;cc=umhistmath;rgn=full%20text;'
             . 'idno=ABS3153.0001.001;didno=ABS3153.0001.001;view=image;seq=00000140'
         ]);
-        $list['empty array'] = $this->makeIncorrectItem([]);
         $list['object']      = $this->makeIncorrectItem(new stdClass());
         $list['countable']   = $this->makeIncorrectItem(new ArrayObject());
-        $list['null']        = $this->makeIncorrectItem(null);
         $list['integer']     = $this->makeIncorrectItem(1234);
 
         return $list;
@@ -91,7 +100,7 @@ class IsUrlTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid URL"
+            'Value must be a valid URL'
         );
     }
 
@@ -145,5 +154,16 @@ class IsUrlTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

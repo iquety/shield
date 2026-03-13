@@ -19,8 +19,12 @@ class IsTrue extends Assertion
     {
         $value = $this->getValue();
 
+        if ($value === '' || $value === []) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_string($value) === true) {
@@ -37,7 +41,7 @@ class IsTrue extends Assertion
     public function getDefaultMessage(): Message
     {
         return new Message(
-            "Value must be true"
+            'Value must be true'
         );
     }
 

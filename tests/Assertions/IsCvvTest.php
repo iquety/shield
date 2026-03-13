@@ -10,6 +10,29 @@ use stdClass;
 
 class IsCvvTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsCvv($value, CreditCardBrand::VISA);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -45,18 +68,6 @@ class IsCvvTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(CreditCardBrand $brand, mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $brand,
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /**
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @return array<string,array<int,mixed>>
@@ -83,16 +94,11 @@ class IsCvvTest extends AssertionCase
             = $this->makeIncorrectItem(CreditCardBrand::DINERS_CLUB, $this->makeStringableObject('4442'));
 
         foreach (CreditCardBrand::all() as $brand) {
-            $list[$brand . ' empty string']      = $this->makeIncorrectItem(CreditCardBrand::from($brand), '');
             $list[$brand . ' one space string']  = $this->makeIncorrectItem(CreditCardBrand::from($brand), ' ');
             $list[$brand . ' two spaces string'] = $this->makeIncorrectItem(CreditCardBrand::from($brand), '  ');
-
-            $list[$brand . ' boolean'] = $this->makeIncorrectItem(CreditCardBrand::from($brand), false);
             $list[$brand . ' array']   = $this->makeIncorrectItem(CreditCardBrand::from($brand), ['a']);
             $list[$brand . ' object']  = $this->makeIncorrectItem(CreditCardBrand::from($brand), new stdClass());
-            $list[$brand . ' false']   = $this->makeIncorrectItem(CreditCardBrand::from($brand), false);
             $list[$brand . ' true']    = $this->makeIncorrectItem(CreditCardBrand::from($brand), true);
-            $list[$brand . ' null']    = $this->makeIncorrectItem(CreditCardBrand::from($brand), null);
         }
 
         return $list;
@@ -108,7 +114,7 @@ class IsCvvTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid card verification code"
+            'Value must be a valid card verification code'
         );
     }
 
@@ -166,5 +172,17 @@ class IsCvvTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(CreditCardBrand $brand, mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $brand,
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

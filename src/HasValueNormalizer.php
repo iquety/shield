@@ -14,7 +14,7 @@ trait HasValueNormalizer
     protected function normalize(mixed $value): mixed
     {
         if ($value instanceof Stringable) {
-            return (string)$value;
+            return (string) $value;
         }
 
         if ($value instanceof IteratorAggregate) {
@@ -26,7 +26,7 @@ trait HasValueNormalizer
         }
 
         if ($value instanceof ArrayAccess) {
-            $list = (array)$value;
+            $list = (array) $value;
 
             // o primeiro nível é o nome da classe serializada
             // "ArrayAccess@anonymous/application/tests/Assertions/ContainsTest.php:84$21values"
@@ -35,7 +35,7 @@ trait HasValueNormalizer
 
         // stdClass
         if (is_object($value) === true) {
-            return (array)$value;
+            return (array) $value;
         }
 
         return $value;

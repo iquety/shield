@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Iquety\Shield;
 
 use Exception;
-use Iquety\Shield\Assertion;
 
 /**
  * -> Assertions

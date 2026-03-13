@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use PHPUnit\Framework\MockObject\Builder\InvocationMocker;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase as FrameworkTestCase;
 

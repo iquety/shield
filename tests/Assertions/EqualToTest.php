@@ -9,6 +9,29 @@ use Tests\Stubs\ObjectOne;
 
 class EqualToTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new EqualTo($value, 'string');
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -48,17 +71,6 @@ class EqualToTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $valueOne, mixed $valueTwo): array
-    {
-        return [
-            $valueOne,
-            $valueTwo,
-            $this->makeMessageValue($valueOne),
-            $this->makeMessageValue($valueTwo)
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -73,12 +85,11 @@ class EqualToTest extends AssertionCase
         ];
 
         foreach ($typeValues as $type => $value) {
-            $list["string != $type"]     = $this->makeIncorrectItem("Palavra", $value);
+            $list["string != $type"]     = $this->makeIncorrectItem('Palavra', $value);
             $list["object != $type"]     = $this->makeIncorrectItem(new ObjectOne(''), $value);
             $list["integer != $type"]    = $this->makeIncorrectItem(44, $value);
             $list["float != $type"]      = $this->makeIncorrectItem(44.4, $value);
             $list["float zero != $type"] = $this->makeIncorrectItem(44.0, $value);
-            $list["null != $type"]       = $this->makeIncorrectItem(null, $value);
         }
 
         return $list;
@@ -163,5 +174,16 @@ class EqualToTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), "O valor $oneString e $twoString são diferentes");
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $valueOne, mixed $valueTwo): array
+    {
+        return [
+            $valueOne,
+            $valueTwo,
+            $this->makeMessageValue($valueOne),
+            $this->makeMessageValue($valueTwo)
+        ];
     }
 }

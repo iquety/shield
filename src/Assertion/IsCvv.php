@@ -22,8 +22,12 @@ class IsCvv extends Assertion
     {
         $cvv = $this->getValue();
 
+        if (empty($cvv) === true) {
+            return true;
+        }
+
         if ($cvv instanceof Stringable) {
-            $cvv = (string)$cvv;
+            $cvv = (string) $cvv;
         }
 
         if (
@@ -37,12 +41,24 @@ class IsCvv extends Assertion
         $brand = $this->getAssertValue();
 
         // Remove todos os caracteres não-numéricos
-        $cvv = (string)preg_replace('/\D/', '', (string)$cvv);
+        $cvv = (string) preg_replace('/\D/', '', (string) $cvv);
 
         return match ($brand) {
             CreditCardBrand::AMEX => $this->resolveAmex($cvv),
             default => strlen($cvv) === 3,
         };
+    }
+
+    public function getDefaultMessage(): Message
+    {
+        return new Message('Value must be a valid card verification code');
+    }
+
+    public function getDefaultNamedMessage(): Message
+    {
+        return new Message(
+            "Value of the field '{{ field }}' must be a valid card verification code",
+        );
     }
 
     private function resolveAmex(string $cvv): bool
@@ -52,17 +68,5 @@ class IsCvv extends Assertion
         }
 
         return true;
-    }
-
-    public function getDefaultMessage(): Message
-    {
-        return new Message("Value must be a valid card verification code");
-    }
-
-    public function getDefaultNamedMessage(): Message
-    {
-        return new Message(
-            "Value of the field '{{ field }}' must be a valid card verification code",
-        );
     }
 }

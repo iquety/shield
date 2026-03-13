@@ -9,6 +9,29 @@ use stdClass;
 
 class IsCreditCardTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsCreditCard($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
@@ -54,17 +77,6 @@ class IsCreditCardTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function incorrectValueProvider(): array
     {
@@ -74,15 +86,12 @@ class IsCreditCardTest extends AssertionCase
         $list['too short']              = $this->makeIncorrectItem('4111111111111');
         $list['too long']               = $this->makeIncorrectItem('55000000000000000000');
         $list['non-numeric']            = $this->makeIncorrectItem('abcdefg');
-        $list['empty string']           = $this->makeIncorrectItem('');
         $list['one space string']       = $this->makeIncorrectItem(' ');
         $list['two spaces string']      = $this->makeIncorrectItem('  ');
         $list['array']                  = $this->makeIncorrectItem(['a']);
         $list['object']                 = $this->makeIncorrectItem(new stdClass());
-        $list['false']                  = $this->makeIncorrectItem(false);
         $list['true']                   = $this->makeIncorrectItem(true);
-        $list['null']                   = $this->makeIncorrectItem(null);
-        $list["stringable non-numeric"] = $this->makeIncorrectItem($this->makeStringableObject('abcdefg'));
+        $list['stringable non-numeric'] = $this->makeIncorrectItem($this->makeStringableObject('abcdefg'));
 
         return $list;
     }
@@ -99,7 +108,7 @@ class IsCreditCardTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid credit card number"
+            'Value must be a valid credit card number'
         );
     }
 
@@ -149,5 +158,16 @@ class IsCreditCardTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

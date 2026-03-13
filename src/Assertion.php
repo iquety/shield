@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Iquety\Shield;
 
-use Iquety\Shield\Message;
 use ReflectionObject;
 
 /** @SuppressWarnings(PHPMD.NumberOfChildren) */
@@ -67,6 +66,11 @@ abstract class Assertion
         );
     }
 
+    public function message(string $pattern): void
+    {
+        $this->message = new Message($pattern);
+    }
+
     protected function stringfy(mixed $value): string
     {
         if (is_bool($value) && $value === true) {
@@ -108,7 +112,7 @@ abstract class Assertion
         return sprintf(
             '%s:%s',
             $object::class,
-            str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($state))
+            str_replace([':', '{', '}'], ['=>', '[', ']'], (string) json_encode($state))
         );
     }
 
@@ -121,7 +125,7 @@ abstract class Assertion
             $state[$name] = $value;
         }
 
-        return str_replace([':', '{', '}'], ['=>', '[', ']'], (string)json_encode($state));
+        return str_replace([':', '{', '}'], ['=>', '[', ']'], (string) json_encode($state));
     }
 
     private function makeDefaultMessage(): string
@@ -139,10 +143,5 @@ abstract class Assertion
             $this->stringfy($this->getValue()),
             $this->stringfy($this->getAssertValue())
         );
-    }
-
-    public function message(string $pattern): void
-    {
-        $this->message = new Message($pattern);
     }
 }

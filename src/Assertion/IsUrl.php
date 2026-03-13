@@ -23,8 +23,12 @@ class IsUrl extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_string($value) === true) {
@@ -35,21 +39,20 @@ class IsUrl extends Assertion
             is_bool($value) === true
             || is_object($value) === true
             || is_array($value) === true
-            || $value === null
             || $value === ''
         ) {
             return false;
         }
 
-        $value = (string)$value;
+        $value = (string) $value;
 
         // espaços não são permitidos
-        if (strpos($value, ' ') !== false) {
+        if (str_contains($value, ' ')) {
             return false;
         }
 
         // pontos seguidos não são permitidos
-        if (strpos($value, '..') !== false) {
+        if (str_contains($value, '..')) {
             return false;
         }
 
@@ -61,7 +64,7 @@ class IsUrl extends Assertion
         // path
         // query - after the question mark ?
         // fragment - after the hashmark #
-        $urlInfo = (array)parse_url($value);
+        $urlInfo = (array) parse_url($value);
 
         // protocolo e domínio são obrigatórios
         if (
@@ -80,7 +83,7 @@ class IsUrl extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid URL");
+        return new Message('Value must be a valid URL');
     }
 
     public function getDefaultNamedMessage(): Message

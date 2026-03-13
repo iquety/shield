@@ -18,6 +18,22 @@ class NotMatches extends AssertionSearchNot
         $this->setAssertValue($pattern);
     }
 
+    public function getDefaultMessage(): Message
+    {
+        return new Message(sprintf(
+            'Value must not match %s',
+            $this->getAssertValue()
+        ));
+    }
+
+    public function getDefaultNamedMessage(): Message
+    {
+        return new Message(sprintf(
+            "Value of the field '{{ field }}' must not match %s",
+            $this->getAssertValue()
+        ));
+    }
+
     protected function isMatches(string $value, mixed $needle): bool
     {
         return preg_match($needle, $value) === 0;
@@ -38,27 +54,11 @@ class NotMatches extends AssertionSearchNot
                 continue;
             }
 
-            if ($this->isMatches((string)$item, $element) === true) {
+            if ($this->isMatches((string) $item, $element) === true) {
                 $notMatched = false;
             }
         }
 
         return $notMatched;
-    }
-
-    public function getDefaultMessage(): Message
-    {
-        return new Message(sprintf(
-            "Value must not match %s",
-            $this->getAssertValue()
-        ));
-    }
-
-    public function getDefaultNamedMessage(): Message
-    {
-        return new Message(sprintf(
-            "Value of the field '{{ field }}' must not match %s",
-            $this->getAssertValue()
-        ));
     }
 }

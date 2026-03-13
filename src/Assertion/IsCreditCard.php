@@ -22,8 +22,12 @@ class IsCreditCard extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_object($value) === true || is_array($value) === true) {
@@ -31,7 +35,7 @@ class IsCreditCard extends Assertion
         }
 
         // Remove todos os caracteres não-numéricos
-        $value = (string)preg_replace('/\D/', '', (string)$value);
+        $value = (string) preg_replace('/\D/', '', (string) $value);
 
         try {
             CreditCardBrand::fromNumber($value);
@@ -42,6 +46,18 @@ class IsCreditCard extends Assertion
         return $this->isValidLuhn($value);
     }
 
+    public function getDefaultMessage(): Message
+    {
+        return new Message('Value must be a valid credit card number');
+    }
+
+    public function getDefaultNamedMessage(): Message
+    {
+        return new Message(
+            "Value of the field '{{ field }}' must be a valid credit card number",
+        );
+    }
+
     private function isValidLuhn(string $number): bool
     {
         $sum = 0;
@@ -49,7 +65,7 @@ class IsCreditCard extends Assertion
         $parity = $numDigits % 2;
 
         for ($i = 0; $i < $numDigits; $i++) {
-            $digit = (int)$number[$i];
+            $digit = (int) $number[$i];
 
             if ($i % 2 == $parity) {
                 $digit *= 2;
@@ -62,17 +78,5 @@ class IsCreditCard extends Assertion
         }
 
         return ($sum % 10) === 0;
-    }
-
-    public function getDefaultMessage(): Message
-    {
-        return new Message("Value must be a valid credit card number");
-    }
-
-    public function getDefaultNamedMessage(): Message
-    {
-        return new Message(
-            "Value of the field '{{ field }}' must be a valid credit card number",
-        );
     }
 }

@@ -9,6 +9,29 @@ use stdClass;
 
 class IsIpTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsIp($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -35,17 +58,6 @@ class IsIpTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -59,16 +71,12 @@ class IsIpTest extends AssertionCase
             'invalid ip - ipv6 too short'               => $this->makeIncorrectItem('2001:db8:85a3'),
 
             'invalid ip - ipv6 too long' => $this->makeIncorrectItem('2001:0db8:85a3:0000:0000:8a2e:0370:7334:1234'),
-            'invalid ip - empty string'  => $this->makeIncorrectItem(''),
             'invalid ip - spaces'        => $this->makeIncorrectItem('192. 168.1.1'),
-            'empty string'               => $this->makeIncorrectItem(''),
             'one space string'           => $this->makeIncorrectItem(' '),
             'two spaces string'          => $this->makeIncorrectItem('  '),
             'array'                      => $this->makeIncorrectItem(['a']),
             'object'                     => $this->makeIncorrectItem(new stdClass()),
-            'false'                      => $this->makeIncorrectItem(false),
             'true'                       => $this->makeIncorrectItem(true),
-            'null'                       => $this->makeIncorrectItem(null),
 
             'invalid stringable ip' => $this->makeIncorrectItem($this->makeStringableObject('abc.def.ghi.jkl')),
         ];
@@ -86,7 +94,7 @@ class IsIpTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid IP address"
+            'Value must be a valid IP address'
         );
     }
 
@@ -136,5 +144,16 @@ class IsIpTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

@@ -9,6 +9,29 @@ use Tests\Stubs\ObjectOne;
 
 class NotEqualToTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new NotEqualTo($value, 'needle');
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -23,7 +46,7 @@ class NotEqualToTest extends AssertionCase
         ];
 
         foreach ($typeValues as $type => $value) {
-            $list["string != $type"]     = ["Palavra", $value];
+            $list["string != $type"]     = ['Palavra', $value];
             $list["object != $type"]     = [new ObjectOne(''), $value];
             $list["integer != $type"]    = [44, $value];
             $list["float != $type"]      = [44.4, $value];
@@ -43,17 +66,6 @@ class NotEqualToTest extends AssertionCase
         $assertion = new NotEqualTo($one, $two);
 
         $this->assertTrue($assertion->isValid());
-    }
-
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $valueOne, mixed $valueTwo): array
-    {
-        return [
-            $valueOne,
-            $valueTwo,
-            $this->makeMessageValue($valueOne),
-            $this->makeMessageValue($valueTwo)
-        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -150,5 +162,16 @@ class NotEqualToTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), "O valor $oneString e $twoString são diferentes");
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $valueOne, mixed $valueTwo): array
+    {
+        return [
+            $valueOne,
+            $valueTwo,
+            $this->makeMessageValue($valueOne),
+            $this->makeMessageValue($valueTwo)
+        ];
     }
 }

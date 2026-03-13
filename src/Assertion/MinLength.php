@@ -24,8 +24,12 @@ class MinLength extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_string($value) === true) {
@@ -40,29 +44,13 @@ class MinLength extends Assertion
             return $this->isValidCountable($value, $this->getAssertValue());
         }
 
-        throw new InvalidArgumentException("The value is not valid");
-    }
-
-    private function isValidCountable(Countable $value, float|int $length): bool
-    {
-        return $value->count() >= (int)$length;
-    }
-
-    /** @param array<int|string,mixed> $value */
-    private function isValidArray(array $value, float|int $length): bool
-    {
-        return count($value) >= (int)$length;
-    }
-
-    private function isValidString(string $value, float|int $minLength): bool
-    {
-        return mb_strlen($value) >= (int)$minLength;
+        throw new InvalidArgumentException('The value is not valid');
     }
 
     public function getDefaultMessage(): Message
     {
         return new Message(sprintf(
-            "Value must be greater than %s characters",
+            'Value must be greater than %s characters',
             $this->getAssertValue()
         ));
     }
@@ -73,5 +61,21 @@ class MinLength extends Assertion
             "Value of the field '{{ field }}' must be greater than %s characters",
             $this->getAssertValue()
         ));
+    }
+
+    private function isValidCountable(Countable $value, float|int $length): bool
+    {
+        return $value->count() >= (int) $length;
+    }
+
+    /** @param array<int|string,mixed> $value */
+    private function isValidArray(array $value, float|int $length): bool
+    {
+        return count($value) >= (int) $length;
+    }
+
+    private function isValidString(string $value, float|int $minLength): bool
+    {
+        return mb_strlen($value) >= (int) $minLength;
     }
 }

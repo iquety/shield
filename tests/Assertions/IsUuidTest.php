@@ -9,6 +9,29 @@ use stdClass;
 
 class IsUuidTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsUuid($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string, array<int, mixed>> */
     public function valueProvider(): array
     {
@@ -30,17 +53,6 @@ class IsUuidTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string, array<int, mixed>> */
     public function invalueProvider(): array
     {
@@ -51,16 +63,13 @@ class IsUuidTest extends AssertionCase
             'invalid characters' => $this->makeIncorrectItem('12345678-ABCD-WXYZ-9012-345678901234'),
             'missing dashes'     => $this->makeIncorrectItem('1234567890123456789012345'),
             'special characters' => $this->makeIncorrectItem('1234*&^%$#@!~-9012-456-7890-123456789012'),
-            'empty string'       => $this->makeIncorrectItem(''),
             'one space string'   => $this->makeIncorrectItem(' '),
             'two spaces string'  => $this->makeIncorrectItem('  '),
             'spaces'             => $this->makeIncorrectItem('   '),
             'integer'            => $this->makeIncorrectItem(123456),
             'decimal'            => $this->makeIncorrectItem(123.456),
-            'boolen'             => $this->makeIncorrectItem(false),
             'array'              => $this->makeIncorrectItem(['a']),
             'object'             => $this->makeIncorrectItem(new stdClass()),
-            'null'               => $this->makeIncorrectItem(null),
         ];
     }
 
@@ -76,7 +85,7 @@ class IsUuidTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid UUID"
+            'Value must be a valid UUID'
         );
     }
 
@@ -130,5 +139,16 @@ class IsUuidTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

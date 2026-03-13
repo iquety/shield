@@ -9,6 +9,29 @@ use stdClass;
 
 class IsHexadecimalTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsHexadecimal($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -41,17 +64,6 @@ class IsHexadecimalTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -67,14 +79,11 @@ class IsHexadecimalTest extends AssertionCase
         $list['invalid hexadecimal 8']  = $this->makeIncorrectItem('0123456789abcdefABCDEFg123456789abcdef');
         $list['invalid hexadecimal 9']  = $this->makeIncorrectItem('1234567890ABCDEFabcdefg123456789ABCDEF');
         $list['invalid hexadecimal 10'] = $this->makeIncorrectItem('0123456789abcdefABCDEFg123456789ABCDEF');
-        $list['empty string']           = $this->makeIncorrectItem('');
         $list['one space string']       = $this->makeIncorrectItem(' ');
         $list['two spaces string']      = $this->makeIncorrectItem('  ');
         $list['array']                  = $this->makeIncorrectItem(['a']);
         $list['object']                 = $this->makeIncorrectItem(new stdClass());
-        $list['false']                  = $this->makeIncorrectItem(false);
         $list['true']                   = $this->makeIncorrectItem(true);
-        $list['null']                   = $this->makeIncorrectItem(null);
         $list['invalid stringable hexadecimal']
             = $this->makeIncorrectItem($this->makeStringableObject('1234567890g'));
 
@@ -93,7 +102,7 @@ class IsHexadecimalTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid hexadecimal number"
+            'Value must be a valid hexadecimal number'
         );
     }
 
@@ -147,5 +156,16 @@ class IsHexadecimalTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

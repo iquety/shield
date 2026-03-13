@@ -10,7 +10,7 @@ use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
 use Stringable;
 
-class IsNotEmpty extends Assertion
+class IsRequired extends Assertion
 {
     public function __construct(mixed $value)
     {
@@ -22,7 +22,7 @@ class IsNotEmpty extends Assertion
         $value = $this->getValue();
 
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if ($value instanceof Countable) {
@@ -30,7 +30,7 @@ class IsNotEmpty extends Assertion
         }
 
         if (is_object($value) === true) {
-            throw new InvalidArgumentException("The value is not valid");
+            throw new InvalidArgumentException('The value is not valid');
         }
 
         if (is_array($value) === true) {
@@ -52,24 +52,24 @@ class IsNotEmpty extends Assertion
         return $value !== null;
     }
 
-    private function stringIsNotEmpty(string $value): bool
-    {
-        $value = trim($value);
-
-        return empty($value) === false;
-    }
-
     public function getDefaultMessage(): Message
     {
         return new Message(
-            "Value must not be empty"
+            'Value is required'
         );
     }
 
     public function getDefaultNamedMessage(): Message
     {
         return new Message(
-            "Value of the field '{{ field }}' must not be empty"
+            "Value of the field '{{ field }}' is required"
         );
+    }
+
+    private function stringIsNotEmpty(string $value): bool
+    {
+        $value = trim($value);
+
+        return empty($value) === false;
     }
 }

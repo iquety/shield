@@ -10,6 +10,7 @@ use Stringable;
 
 class IsFalse extends Assertion
 {
+    // TODO
     public function __construct(mixed $value)
     {
         $this->setValue($value);
@@ -19,8 +20,12 @@ class IsFalse extends Assertion
     {
         $value = $this->getValue();
 
+        if ($value === '' || $value === []) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_string($value) === true) {
@@ -31,14 +36,13 @@ class IsFalse extends Assertion
             || $value === 'false'
             || $value === 0
             || $value === '0'
-            || $value === 'off'
-            || $value === '';
+            || $value === 'off';
     }
 
     public function getDefaultMessage(): Message
     {
         return new Message(
-            "Value must be false"
+            'Value must be false'
         );
     }
 

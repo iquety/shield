@@ -9,6 +9,29 @@ use stdClass;
 
 class IsEmailTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsEmail($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @test */
     public function valueIsEmail(): void
     {
@@ -21,17 +44,6 @@ class IsEmailTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,string>> */
     public function invalidProvider(): array
     {
@@ -39,14 +51,11 @@ class IsEmailTest extends AssertionCase
 
         $list['invalid']            = $this->makeIncorrectItem('testeteste.com');
         $list['stringable invalid'] = $this->makeIncorrectItem($this->makeStringableObject('testeteste.com'));
-        $list['empty string']       = $this->makeIncorrectItem('');
         $list['one space string']   = $this->makeIncorrectItem(' ');
         $list['two spaces string']  = $this->makeIncorrectItem('  ');
         $list['array']              = $this->makeIncorrectItem(['a']);
         $list['object']             = $this->makeIncorrectItem(new stdClass());
-        $list['false']              = $this->makeIncorrectItem(false);
         $list['true']               = $this->makeIncorrectItem(true);
-        $list['null']               = $this->makeIncorrectItem(null);
 
         return $list;
     }
@@ -63,7 +72,7 @@ class IsEmailTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid email"
+            'Value must be a valid email'
         );
     }
 
@@ -117,5 +126,16 @@ class IsEmailTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

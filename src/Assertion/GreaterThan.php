@@ -7,7 +7,6 @@ namespace Iquety\Shield\Assertion;
 use Countable;
 use InvalidArgumentException;
 use Iquety\Shield\Assertion;
-use Iquety\Shield\HasValueNormalizer;
 use Iquety\Shield\Message;
 
 class GreaterThan extends Assertion
@@ -23,8 +22,12 @@ class GreaterThan extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if (is_numeric($value) === true) {
-            return $this->isValidNumber((float)$value, $this->getAssertValue());
+            return $this->isValidNumber((float) $value, $this->getAssertValue());
         }
 
         if (is_array($value) === true) {
@@ -35,7 +38,23 @@ class GreaterThan extends Assertion
             return $this->isValidCountable($value, $this->getAssertValue());
         }
 
-        throw new InvalidArgumentException("The value to be checked must be numeric");
+        throw new InvalidArgumentException('The value to be checked must be numeric');
+    }
+
+    public function getDefaultMessage(): Message
+    {
+        return new Message(sprintf(
+            'Value must be greater than %s characters',
+            $this->getAssertValue()
+        ));
+    }
+
+    public function getDefaultNamedMessage(): Message
+    {
+        return new Message(sprintf(
+            "Value of the field '{{ field }}' must be greater than %s characters",
+            $this->getAssertValue()
+        ));
     }
 
     /** @param array<int|string,mixed> $value */
@@ -52,21 +71,5 @@ class GreaterThan extends Assertion
     private function isValidNumber(float|int $value, float|int $length): bool
     {
         return $value > $length;
-    }
-
-    public function getDefaultMessage(): Message
-    {
-        return new Message(sprintf(
-            "Value must be greater than %s characters",
-            $this->getAssertValue()
-        ));
-    }
-
-    public function getDefaultNamedMessage(): Message
-    {
-        return new Message(sprintf(
-            "Value of the field '{{ field }}' must be greater than %s characters",
-            $this->getAssertValue()
-        ));
     }
 }

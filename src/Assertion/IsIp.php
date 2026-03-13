@@ -19,8 +19,12 @@ class IsIp extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (filter_var($value, FILTER_VALIDATE_IP) === false) {
@@ -32,7 +36,7 @@ class IsIp extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid IP address");
+        return new Message('Value must be a valid IP address');
     }
 
     public function getDefaultNamedMessage(): Message

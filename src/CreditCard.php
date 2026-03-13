@@ -19,7 +19,7 @@ class CreditCard
             throw new InvalidArgumentException('Credit card number is invalid');
         }
 
-        $this->number = (int)preg_replace('/\D/', '', (string)$number);
+        $this->number = (int) preg_replace('/\D/', '', (string) $number);
     }
 
     public function getNumber(): int

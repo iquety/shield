@@ -19,15 +19,19 @@ class IsAlpha extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_bool($value) === true || is_object($value) === true || is_array($value) === true) {
             return false;
         }
 
-        $value = trim((string)$value);
+        $value = trim((string) $value);
 
         if (empty($value) === true) {
             return false;
@@ -41,7 +45,7 @@ class IsAlpha extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must contain only letters");
+        return new Message('Value must contain only letters');
     }
 
     public function getDefaultNamedMessage(): Message

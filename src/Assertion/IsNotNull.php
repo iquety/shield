@@ -16,13 +16,19 @@ class IsNotNull extends Assertion
 
     public function isValid(): bool
     {
-        return $this->getValue() !== null;
+        $value = $this->getValue();
+
+        if ($value === '' || $value === []) {
+            return true;
+        }
+
+        return $value !== null && $value !== 'null';
     }
 
     public function getDefaultMessage(): Message
     {
         return new Message(
-            "Value must not be null"
+            'Value must not be null'
         );
     }
 

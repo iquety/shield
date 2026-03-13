@@ -16,21 +16,6 @@ class EndsWith extends AssertionSearch
         $this->setAssertValue($needle);
     }
 
-    protected function isMatches(string $value, mixed $needle): bool
-    {
-        return str_ends_with($value, (string)$needle);
-    }
-
-    /** @param array<string,mixed> $list */
-    protected function isValidInArray(array $list, mixed $element): bool
-    {
-        if ($list === []) {
-            return false;
-        }
-
-        return $element === $list[array_key_last($list)];
-    }
-
     public function getDefaultMessage(): Message
     {
         return new Message(sprintf(
@@ -45,5 +30,20 @@ class EndsWith extends AssertionSearch
             "Value of the field '{{ field }}' must end with '%s'",
             $this->getAssertValue()
         ));
+    }
+
+    protected function isMatches(string $value, mixed $needle): bool
+    {
+        return str_ends_with($value, (string) $needle);
+    }
+
+    /** @param array<string,mixed> $list */
+    protected function isValidInArray(array $list, mixed $element): bool
+    {
+        if ($list === []) {
+            return false;
+        }
+
+        return $element === $list[array_key_last($list)];
     }
 }

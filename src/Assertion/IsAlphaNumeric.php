@@ -19,8 +19,12 @@ class IsAlphaNumeric extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (
@@ -35,7 +39,7 @@ class IsAlphaNumeric extends Assertion
             return true;
         }
 
-        $value = trim((string)$value);
+        $value = trim((string) $value);
 
         if (empty($value) === true) {
             return false;
@@ -49,7 +53,7 @@ class IsAlphaNumeric extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must contain only letters and numbers");
+        return new Message('Value must contain only letters and numbers');
     }
 
     public function getDefaultNamedMessage(): Message

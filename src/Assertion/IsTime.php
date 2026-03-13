@@ -20,8 +20,12 @@ class IsTime extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_string($value) === true) {
@@ -32,13 +36,12 @@ class IsTime extends Assertion
             is_bool($value) === true
             || is_object($value) === true
             || is_array($value) === true
-            || $value === null
             || empty($value) === true
         ) {
             return false;
         }
 
-        $value = (string)$value;
+        $value = (string) $value;
 
         // ISO 8601 format : 23:59:59
         //                   hh:mm:ss
@@ -65,7 +68,7 @@ class IsTime extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid time");
+        return new Message('Value must be a valid time');
     }
 
     public function getDefaultNamedMessage(): Message

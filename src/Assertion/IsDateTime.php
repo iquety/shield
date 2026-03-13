@@ -17,22 +17,28 @@ class IsDateTime extends Assertion
         $this->setValue($value);
     }
 
-    /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function isValid(): bool
     {
         $value = $this->getValue();
+
+        if (empty($value) === true) {
+            return true;
+        }
 
         if (
             is_numeric($value) === true
             || $value instanceof Stringable
         ) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (
             is_bool($value) === true
             || is_object($value) === true
-            || $value === null
             || is_array($value) === true
             || empty(trim($value)) === true
         ) {
@@ -49,7 +55,7 @@ class IsDateTime extends Assertion
             . '(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])'
             . '$/';
 
-        if (preg_match($regex, (string)$value) === 1) {
+        if (preg_match($regex, (string) $value) === 1) {
             return true;
         }
 
@@ -63,7 +69,7 @@ class IsDateTime extends Assertion
             . '(0[0-9]|1[0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])'
             . '$/';
 
-        if (preg_match($regex, (string)$value) === 1) {
+        if (preg_match($regex, (string) $value) === 1) {
             return true;
         }
 
@@ -72,7 +78,7 @@ class IsDateTime extends Assertion
         // Abbreviated month name = '31-Dec-2024 23:59:59'
         // Full month name = 'December 31, 2024 23:59:59'
         try {
-            new DateTime((string)$value);
+            new DateTime((string) $value);
 
             return true;
         } catch (Exception) {
@@ -82,7 +88,7 @@ class IsDateTime extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid date and time");
+        return new Message('Value must be a valid date and time');
     }
 
     public function getDefaultNamedMessage(): Message

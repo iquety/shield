@@ -23,8 +23,12 @@ class Length extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_string($value) === true) {
@@ -39,7 +43,23 @@ class Length extends Assertion
             return $this->isValidCountable($value, $this->getAssertValue());
         }
 
-        throw new InvalidArgumentException("The value is not valid");
+        throw new InvalidArgumentException('The value is not valid');
+    }
+
+    public function getDefaultMessage(): Message
+    {
+        return new Message(sprintf(
+            'Value must have length %s',
+            $this->getAssertValue()
+        ));
+    }
+
+    public function getDefaultNamedMessage(): Message
+    {
+        return new Message(sprintf(
+            "Value of the '{{ field }}' field must have length %s",
+            $this->getAssertValue()
+        ));
     }
 
     private function isValidCountable(Countable $value, int $length): bool
@@ -56,21 +76,5 @@ class Length extends Assertion
     private function isValidString(string $value, int $length): bool
     {
         return mb_strlen($value) === $length;
-    }
-
-    public function getDefaultMessage(): Message
-    {
-        return new Message(sprintf(
-            "Value must have length %s",
-            $this->getAssertValue()
-        ));
-    }
-
-    public function getDefaultNamedMessage(): Message
-    {
-        return new Message(sprintf(
-            "Value of the '{{ field }}' field must have length %s",
-            $this->getAssertValue()
-        ));
     }
 }

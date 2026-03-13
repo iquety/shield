@@ -15,13 +15,20 @@ class IsCpf extends Assertion
         $this->setValue($value);
     }
 
-    /** @SuppressWarnings(PHPMD.CyclomaticComplexity) */
+    /**
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     public function isValid(): bool
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (
@@ -33,7 +40,7 @@ class IsCpf extends Assertion
         }
 
         // mantém somente os números
-        $cpf = (string)preg_replace('/[^0-9]/is', '', (string)$value);
+        $cpf = (string) preg_replace('/[^0-9]/is', '', (string) $value);
 
         // cpf deve possuir 11 caracteres
         if (strlen($cpf) !== 11) {
@@ -48,12 +55,12 @@ class IsCpf extends Assertion
         // calcula o CPF
         for ($position = 9; $position < 11; $position++) {
             for ($digit = 0, $index = 0; $index < $position; $index++) {
-                $digit += (int)$cpf[$index] * (($position + 1) - $index);
+                $digit += (int) $cpf[$index] * (($position + 1) - $index);
             }
 
             $digit = ((10 * $digit) % 11) % 10;
 
-            if ($cpf[$index] !== (string)$digit) {
+            if ($cpf[$index] !== (string) $digit) {
                 return false;
             }
         }
@@ -63,7 +70,7 @@ class IsCpf extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid CPF");
+        return new Message('Value must be a valid CPF');
     }
 
     public function getDefaultNamedMessage(): Message

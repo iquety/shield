@@ -12,23 +12,11 @@ class Field
     /** @var array<int,Assertion> */
     private array $errorList = [];
 
-    public function __construct(private string $name)
-    {
-    }
+    public function __construct(private string $name) {}
 
     public function getName(): string
     {
         return $this->name;
-    }
-
-
-    private function proccess(): void
-    {
-        foreach ($this->assertionList as $assertion) {
-            if ($assertion->isValid() === false) {
-                $this->errorList[] = $assertion;
-            }
-        }
     }
 
     /** @return array<int,Assertion> */
@@ -50,5 +38,15 @@ class Field
         $this->assertionList[$index] = $assertion;
 
         return $this->assertionList[$index];
+    }
+
+
+    private function proccess(): void
+    {
+        foreach ($this->assertionList as $assertion) {
+            if ($assertion->isValid() === false) {
+                $this->errorList[] = $assertion;
+            }
+        }
     }
 }

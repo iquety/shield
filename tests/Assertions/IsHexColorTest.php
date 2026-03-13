@@ -9,6 +9,29 @@ use stdClass;
 
 class IsHexColorTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsHexColor($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function correctValueProvider(): array
     {
@@ -47,17 +70,6 @@ class IsHexColorTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function incorrectValueProvider(): array
     {
@@ -90,14 +102,11 @@ class IsHexColorTest extends AssertionCase
 
         $list['invalid stringable']  = $this->makeIncorrectItem($this->makeStringableObject('#12345G'));
 
-        $list['empty string']      = $this->makeIncorrectItem('');
         $list['one space string']  = $this->makeIncorrectItem(' ');
         $list['two spaces string'] = $this->makeIncorrectItem('  ');
         $list['array']             = $this->makeIncorrectItem(['a']);
         $list['object']            = $this->makeIncorrectItem(new stdClass());
-        $list['false']             = $this->makeIncorrectItem(false);
         $list['true']              = $this->makeIncorrectItem(true);
-        $list['null']              = $this->makeIncorrectItem(null);
 
         return $list;
     }
@@ -114,7 +123,7 @@ class IsHexColorTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid hexadecimal color"
+            'Value must be a valid hexadecimal color'
         );
     }
 
@@ -164,5 +173,16 @@ class IsHexColorTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

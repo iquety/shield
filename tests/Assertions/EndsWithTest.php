@@ -12,15 +12,36 @@ use stdClass;
 class EndsWithTest extends AssertionSearchCase
 {
     /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new EndsWith($value, 'string');
+
+        $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
 
-        $list['null is invalid value']    = [null];
         $list['integer is invalid value'] = [123];
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
-        $list['false is invalid value']   = [false];
 
         return $list;
     }
@@ -140,18 +161,6 @@ class EndsWithTest extends AssertionSearchCase
         $assertion = new EndsWith($value, $needle);
 
         $this->assertTrue($assertion->isValid());
-    }
-
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, mixed $needle): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            $needle,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
     }
 
     /**
@@ -274,5 +283,17 @@ class EndsWithTest extends AssertionSearchCase
         $this->assertFalse($assertion->isValid());
 
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, mixed $needle): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $needle,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

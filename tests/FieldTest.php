@@ -6,7 +6,6 @@ namespace Tests;
 
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Field;
-use Tests\TestCase;
 
 class FieldTest extends TestCase
 {

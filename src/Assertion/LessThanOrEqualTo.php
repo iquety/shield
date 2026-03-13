@@ -22,8 +22,12 @@ class LessThanOrEqualTo extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if (is_numeric($value) === true) {
-            return $this->isValidNumber((float)$value, $this->getAssertValue());
+            return $this->isValidNumber((float) $value, $this->getAssertValue());
         }
 
         if (is_array($value) === true) {
@@ -34,29 +38,13 @@ class LessThanOrEqualTo extends Assertion
             return $this->isValidCountable($value, $this->getAssertValue());
         }
 
-        throw new InvalidArgumentException("The value to be checked must be numeric");
-    }
-
-    private function isValidCountable(Countable $value, float|int $length): bool
-    {
-        return $value->count() <= (int)$length;
-    }
-
-    /** @param array<int|string,mixed> $value */
-    private function isValidArray(array $value, float|int $length): bool
-    {
-        return count($value) <= (int)$length;
-    }
-
-    private function isValidNumber(float|int $value, float|int $length): bool
-    {
-        return $value <= $length;
+        throw new InvalidArgumentException('The value to be checked must be numeric');
     }
 
     public function getDefaultMessage(): Message
     {
         return new Message(sprintf(
-            "Value must be less or equal to %s characters",
+            'Value must be less or equal to %s characters',
             $this->getAssertValue()
         ));
     }
@@ -67,5 +55,21 @@ class LessThanOrEqualTo extends Assertion
             "Value of the field '{{ field }}' must be less or equal to %s characters",
             $this->getAssertValue()
         ));
+    }
+
+    private function isValidCountable(Countable $value, float|int $length): bool
+    {
+        return $value->count() <= (int) $length;
+    }
+
+    /** @param array<int|string,mixed> $value */
+    private function isValidArray(array $value, float|int $length): bool
+    {
+        return count($value) <= (int) $length;
+    }
+
+    private function isValidNumber(float|int $value, float|int $length): bool
+    {
+        return $value <= $length;
     }
 }

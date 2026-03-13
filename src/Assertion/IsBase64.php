@@ -19,15 +19,19 @@ class IsBase64 extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_bool($value) === true || is_object($value) === true || is_array($value) === true) {
             return false;
         }
 
-        $value = (string)$value;
+        $value = (string) $value;
 
         if (empty($value) === true) {
             return false;
@@ -38,7 +42,7 @@ class IsBase64 extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid base64 string");
+        return new Message('Value must be a valid base64 string');
     }
 
     public function getDefaultNamedMessage(): Message

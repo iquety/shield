@@ -13,15 +13,36 @@ use Stringable;
 class ContainsTest extends AssertionSearchCase
 {
     /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new Contains($value, 'string');
+
+        $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
 
-        $list['null is invalid value']    = [null];
         $list['integer is invalid value'] = [123];
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
-        $list['false is invalid value']   = [false];
 
         return $list;
     }
@@ -149,24 +170,6 @@ class ContainsTest extends AssertionSearchCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, mixed $partial): array
-    {
-        if ($value instanceof Stringable) {
-            $value = (string)$value;
-        }
-
-        $messageValue = is_array($value) === true
-            ? $this->makeArrayMessage($value)
-            : $this->makeMessageValue($value);
-
-        return [
-            $value,
-            $partial,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array<string,array<int,mixed>>
@@ -287,5 +290,23 @@ class ContainsTest extends AssertionSearchCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, mixed $partial): array
+    {
+        if ($value instanceof Stringable) {
+            $value = (string) $value;
+        }
+
+        $messageValue = is_array($value) === true
+            ? $this->makeArrayMessage($value)
+            : $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $partial,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

@@ -19,8 +19,12 @@ class IsHexColor extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (
@@ -33,12 +37,12 @@ class IsHexColor extends Assertion
 
         $pattern = '/^#([A-Fa-f0-9]{8}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/';
 
-        return preg_match($pattern, (string)$value) === 1;
+        return preg_match($pattern, (string) $value) === 1;
     }
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid hexadecimal color");
+        return new Message('Value must be a valid hexadecimal color');
     }
 
     public function getDefaultNamedMessage(): Message

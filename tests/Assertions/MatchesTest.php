@@ -12,15 +12,36 @@ use stdClass;
 class MatchesTest extends AssertionSearchCase
 {
     /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new Matches($value, '/pattern/');
+
+        $this->assertTrue($assertion->isValid());
+    }
+
+    /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
 
-        $list['null is invalid value']    = [null];
         $list['integer is invalid value'] = [123];
         $list['float is invalid value']   = [12.3];
         $list['true is invalid value']    = [true];
-        $list['false is invalid value']   = [false];
 
         return $list;
     }
@@ -184,18 +205,6 @@ class MatchesTest extends AssertionSearchCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, string $pattern): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            $pattern,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -301,5 +310,17 @@ class MatchesTest extends AssertionSearchCase
         $this->assertFalse($assertion->isValid());
 
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, string $pattern): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $pattern,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

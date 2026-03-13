@@ -19,8 +19,12 @@ class IsMacAddress extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (
@@ -32,21 +36,21 @@ class IsMacAddress extends Assertion
         }
 
         if (
-            strpos((string)$value, ':') !== false
-            && strpos((string)$value, '-') !== false
+            str_contains((string) $value, ':')
+            && str_contains((string) $value, '-')
         ) {
             return false;
         }
 
         return preg_match(
             '/^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$/',
-            (string)$value
+            (string) $value
         ) === 1;
     }
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid MAC address");
+        return new Message('Value must be a valid MAC address');
     }
 
     public function getDefaultNamedMessage(): Message

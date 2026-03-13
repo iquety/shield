@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Tests;
 
 use Iquety\Shield\CreditCardBrand;
-use Tests\TestCase;
 use ValueError;
 
 class CreditCardBrandTest extends TestCase
@@ -92,44 +91,44 @@ class CreditCardBrandTest extends TestCase
     {
         $list = [];
 
-        $list["Random number string"] = ['1234567890123456'];
-        $list["Too short 1 digit string"] = ['4'];
-        $list["Too short 2 digits string"] = ['41'];
-        $list["Too short 3 digits string"] = ['411'];
-        $list["Too short 4 digits string"] = ['4111'];
-        $list["Too short 5 digits string"] = ['41111'];
-        $list["Too short 6 digits string"] = ['411111'];
-        $list["Too short 7 digits string"] = ['4111111'];
-        $list["Too short 8 digits string"] = ['41111111'];
-        $list["Too short 9 digits string"] = ['411111111'];
-        $list["Too short 10 digits string"] = ['4111111111'];
-        $list["Too short 11 digits string"] = ['41111111111'];
-        $list["Too short 12 digits string"] = ['411111111111'];
-        $list["Too short 13 digits string"] = ['4111111111111'];
-        $list["Too long 17 string"] = ['55000000000000000'];
-        $list["Too long 18 string"] = ['550000000000000000'];
-        $list["Too long 19 string"] = ['5500000000000000000'];
-        $list["Too long 20 string"] = ['55000000000000000000'];
-        $list["Non-numeric string"] = ['abcdefg'];
-        $list["Empty string string"] = [''];
+        $list['Random number string'] = ['1234567890123456'];
+        $list['Too short 1 digit string'] = ['4'];
+        $list['Too short 2 digits string'] = ['41'];
+        $list['Too short 3 digits string'] = ['411'];
+        $list['Too short 4 digits string'] = ['4111'];
+        $list['Too short 5 digits string'] = ['41111'];
+        $list['Too short 6 digits string'] = ['411111'];
+        $list['Too short 7 digits string'] = ['4111111'];
+        $list['Too short 8 digits string'] = ['41111111'];
+        $list['Too short 9 digits string'] = ['411111111'];
+        $list['Too short 10 digits string'] = ['4111111111'];
+        $list['Too short 11 digits string'] = ['41111111111'];
+        $list['Too short 12 digits string'] = ['411111111111'];
+        $list['Too short 13 digits string'] = ['4111111111111'];
+        $list['Too long 17 string'] = ['55000000000000000'];
+        $list['Too long 18 string'] = ['550000000000000000'];
+        $list['Too long 19 string'] = ['5500000000000000000'];
+        $list['Too long 20 string'] = ['55000000000000000000'];
+        $list['Non-numeric string'] = ['abcdefg'];
+        $list['Empty string string'] = [''];
 
-        $list["Random number numeric"] = [1234567890123456];
-        $list["Too short 1 digit numeric"] = [4];
-        $list["Too short 2 digits numeric"] = [41];
-        $list["Too short 3 digits numeric"] = [411];
-        $list["Too short 4 digits numeric"] = [4111];
-        $list["Too short 5 digits numeric"] = [41111];
-        $list["Too short 6 digits numeric"] = [411111];
-        $list["Too short 7 digits numeric"] = [4111111];
-        $list["Too short 8 digits numeric"] = [41111111];
-        $list["Too short 9 digits numeric"] = [411111111];
-        $list["Too short 10 digits numeric"] = [4111111111];
-        $list["Too short 11 digits numeric"] = [41111111111];
-        $list["Too short 12 digits numeric"] = [411111111111];
-        $list["Too short 13 digits numeric"] = [4111111111111];
-        $list["Too long 17 numeric"] = [55000000000000000];
-        $list["Too long 18 numeric"] = [550000000000000000];
-        $list["Too long 19 numeric"] = [5500000000000000000];
+        $list['Random number numeric'] = [1234567890123456];
+        $list['Too short 1 digit numeric'] = [4];
+        $list['Too short 2 digits numeric'] = [41];
+        $list['Too short 3 digits numeric'] = [411];
+        $list['Too short 4 digits numeric'] = [4111];
+        $list['Too short 5 digits numeric'] = [41111];
+        $list['Too short 6 digits numeric'] = [411111];
+        $list['Too short 7 digits numeric'] = [4111111];
+        $list['Too short 8 digits numeric'] = [41111111];
+        $list['Too short 9 digits numeric'] = [411111111];
+        $list['Too short 10 digits numeric'] = [4111111111];
+        $list['Too short 11 digits numeric'] = [41111111111];
+        $list['Too short 12 digits numeric'] = [411111111111];
+        $list['Too short 13 digits numeric'] = [4111111111111];
+        $list['Too long 17 numeric'] = [55000000000000000];
+        $list['Too long 18 numeric'] = [550000000000000000];
+        $list['Too long 19 numeric'] = [5500000000000000000];
 
         return $list;
     }

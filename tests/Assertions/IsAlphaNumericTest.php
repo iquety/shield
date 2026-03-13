@@ -9,6 +9,29 @@ use stdClass;
 
 class IsAlphaNumericTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsAlphaNumeric($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -39,17 +62,6 @@ class IsAlphaNumericTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -74,14 +86,11 @@ class IsAlphaNumericTest extends AssertionCase
             'full month name day'            => $this->makeIncorrectItem('December 32, 2024'),
             'special characters'             => $this->makeIncorrectItem('@#$%^&*()'),
             'numbers and special characters' => $this->makeIncorrectItem('123@#$%'),
-            'empty string'                   => $this->makeIncorrectItem(''),
             'one space string'               => $this->makeIncorrectItem(' '),
             'two spaces string'              => $this->makeIncorrectItem('  '),
             'array'                          => $this->makeIncorrectItem(['a']),
             'object'                         => $this->makeIncorrectItem(new stdClass()),
-            'false'                          => $this->makeIncorrectItem(false),
             'true'                           => $this->makeIncorrectItem(true),
-            'null'                           => $this->makeIncorrectItem(null)
         ];
     }
 
@@ -97,7 +106,7 @@ class IsAlphaNumericTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must contain only letters and numbers"
+            'Value must contain only letters and numbers'
         );
     }
 
@@ -147,5 +156,16 @@ class IsAlphaNumericTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

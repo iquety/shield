@@ -9,6 +9,29 @@ use stdClass;
 
 class IsCepTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsCep($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -41,17 +64,6 @@ class IsCepTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidProvider(): array
     {
@@ -59,21 +71,17 @@ class IsCepTest extends AssertionCase
             'invalid cep - too short'          => $this->makeIncorrectItem('1234-567'),
             'invalid cep - too long'           => $this->makeIncorrectItem('123456-789'),
             'invalid cep - invalid characters' => $this->makeIncorrectItem('12A45-678'),
-            'invalid cep - empty string'       => $this->makeIncorrectItem(''),
             'invalid cep - spaces'             => $this->makeIncorrectItem('123 45-678'),
             'invalid cep - special characters' => $this->makeIncorrectItem('123@5-678'),
             'invalid cep - many numbers'       => $this->makeIncorrectItem(123567890),
             'invalid cep - loss numbers'       => $this->makeIncorrectItem(123567),
             'invalid cep stringable'           => $this->makeIncorrectItem($this->makeStringableObject('123@5-678')),
-            'empty string'                     => $this->makeIncorrectItem(''),
             'one space string'                 => $this->makeIncorrectItem(' '),
             'two spaces string'                => $this->makeIncorrectItem('  '),
             'decimal'                          => $this->makeIncorrectItem(123.456),
             'array'                            => $this->makeIncorrectItem(['a']),
             'object'                           => $this->makeIncorrectItem(new stdClass()),
-            'false'                            => $this->makeIncorrectItem(false),
             'true'                             => $this->makeIncorrectItem(true),
-            'null'                             => $this->makeIncorrectItem(null),
         ];
     }
 
@@ -89,7 +97,7 @@ class IsCepTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid CEP"
+            'Value must be a valid CEP'
         );
     }
 
@@ -139,5 +147,16 @@ class IsCepTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

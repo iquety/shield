@@ -17,21 +17,10 @@ class Contains extends AssertionSearch
         $this->setAssertValue($needle);
     }
 
-    protected function isMatches(string $value, mixed $needle): bool
-    {
-        return str_contains($value, (string)$needle) === true;
-    }
-
-    /** @param array<string,mixed> $list */
-    protected function isValidInArray(array $list, mixed $element): bool
-    {
-        return array_search($element, $list, true) !== false;
-    }
-
     public function getDefaultMessage(): Message
     {
         return new Message(sprintf(
-            "Value must contain %s",
+            'Value must contain %s',
             $this->getAssertValue()
         ));
     }
@@ -42,5 +31,16 @@ class Contains extends AssertionSearch
             "Value of the field '{{ field }}' must contain %s",
             $this->getAssertValue()
         ));
+    }
+
+    protected function isMatches(string $value, mixed $needle): bool
+    {
+        return str_contains($value, (string) $needle) === true;
+    }
+
+    /** @param array<string,mixed> $list */
+    protected function isValidInArray(array $list, mixed $element): bool
+    {
+        return array_search($element, $list, true) !== false;
     }
 }

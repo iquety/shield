@@ -11,7 +11,6 @@ use Iquety\Shield\Field;
 use Iquety\Shield\Shield;
 use ReflectionClass;
 use ReflectionObject;
-use Tests\TestCase;
 
 class ShieldNamedTest extends TestCase
 {

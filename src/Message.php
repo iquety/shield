@@ -26,7 +26,7 @@ class Message
     {
         return str_replace(
             ['{{ ', ' }}'],
-            ['{{' , '}}' ],
+            ['{{', '}}' ],
             $pattern
         );
     }

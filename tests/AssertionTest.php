@@ -6,15 +6,13 @@ namespace Tests;
 
 use Iquety\Shield\Assertion;
 use Iquety\Shield\Message;
-use Tests\TestCase;
 
 class AssertionTest extends TestCase
 {
     /** @test */
     public function assertionNamedExecution(): void
     {
-        $object = new class extends Assertion
-        {
+        $object = new class () extends Assertion {
             public function isValid(): bool
             {
                 return true;
@@ -57,8 +55,7 @@ class AssertionTest extends TestCase
     /** @test */
     public function assertionExecution(): void
     {
-        $object = new class extends Assertion
-        {
+        $object = new class () extends Assertion {
             public function isValid(): bool
             {
                 return true;

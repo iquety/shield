@@ -19,8 +19,12 @@ class IsAmountTime extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (is_object($value) === true || is_array($value) === true) {
@@ -35,7 +39,7 @@ class IsAmountTime extends Assertion
             . ':([0-5][0-9])'
             . '$/';
 
-        if (preg_match($regex, (string)$value) === 1) {
+        if (preg_match($regex, (string) $value) === 1) {
             return true;
         }
 
@@ -44,7 +48,7 @@ class IsAmountTime extends Assertion
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid amount of time");
+        return new Message('Value must be a valid amount of time');
     }
 
     public function getDefaultNamedMessage(): Message

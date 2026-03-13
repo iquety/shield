@@ -16,21 +16,6 @@ class StartsWith extends AssertionSearch
         $this->setAssertValue($needle);
     }
 
-    protected function isMatches(string $value, mixed $needle): bool
-    {
-        return str_starts_with($value, (string)$needle);
-    }
-
-    /** @param array<string,mixed> $list */
-    protected function isValidInArray(array $list, mixed $element): bool
-    {
-        if ($list === []) {
-            return false;
-        }
-
-        return $element === $list[array_key_first($list)];
-    }
-
     public function getDefaultMessage(): Message
     {
         return new Message(sprintf(
@@ -45,5 +30,20 @@ class StartsWith extends AssertionSearch
             "Value of the field '{{ field }}' must start with '%s'",
             $this->getAssertValue()
         ));
+    }
+
+    protected function isMatches(string $value, mixed $needle): bool
+    {
+        return str_starts_with($value, (string) $needle);
+    }
+
+    /** @param array<string,mixed> $list */
+    protected function isValidInArray(array $list, mixed $element): bool
+    {
+        if ($list === []) {
+            return false;
+        }
+
+        return $element === $list[array_key_first($list)];
     }
 }

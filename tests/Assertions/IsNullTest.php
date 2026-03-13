@@ -8,23 +8,32 @@ use Iquety\Shield\Assertion\IsNull;
 
 class IsNullTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty array'   => [[]],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsNull($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @test */
     public function valueIsNull(): void
     {
         $assertion = new IsNull(null);
 
         $this->assertTrue($assertion->isValid());
-    }
-
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -38,10 +47,8 @@ class IsNullTest extends AssertionCase
         $list['int']          = $this->makeIncorrectItem(1);
         $list['float']        = $this->makeIncorrectItem(1.0);
         $list['array']        = $this->makeIncorrectItem(['x']);
-        $list['empty string'] = $this->makeIncorrectItem('');
         $list['empty int']    = $this->makeIncorrectItem(0);
         $list['empty float']  = $this->makeIncorrectItem(0.0);
-        $list['empty array']  = $this->makeIncorrectItem([]);
 
         return $list;
     }
@@ -58,7 +65,7 @@ class IsNullTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be null"
+            'Value must be null'
         );
     }
 
@@ -112,5 +119,16 @@ class IsNullTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

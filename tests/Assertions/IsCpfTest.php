@@ -9,6 +9,29 @@ use stdClass;
 
 class IsCpfTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsCpf($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validCpfProvider(): array
     {
@@ -37,22 +60,10 @@ class IsCpfTest extends AssertionCase
         $this->assertTrue($assertion->isValid());
     }
 
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
-    }
-
     /** @return array<string,array<int,mixed>> */
     public function invalidCpfProvider(): array
     {
         return [
-            'invalid cpf - 0' => $this->makeIncorrectItem('00000000000'),
             'invalid cpf - 1' => $this->makeIncorrectItem('11111111111'),
             'invalid cpf - 2' => $this->makeIncorrectItem('22222222222'),
             'invalid cpf - 3' => $this->makeIncorrectItem('33333333333'),
@@ -63,7 +74,6 @@ class IsCpfTest extends AssertionCase
             'invalid cpf - 8' => $this->makeIncorrectItem('88888888888'),
             'invalid cpf - 9' => $this->makeIncorrectItem('99999999999'),
 
-            'invalid integer cpf - 0' => $this->makeIncorrectItem(00000000000),
             'invalid integer cpf - 1' => $this->makeIncorrectItem(11111111111),
             'invalid integer cpf - 2' => $this->makeIncorrectItem(22222222222),
             'invalid integer cpf - 3' => $this->makeIncorrectItem(33333333333),
@@ -105,14 +115,11 @@ class IsCpfTest extends AssertionCase
             'invalid cpf integer- 8 calc' => $this->makeIncorrectItem(11303816444),
             'invalid cpf integer- 9 calc' => $this->makeIncorrectItem(10704535034),
 
-            'empty string'      => $this->makeIncorrectItem(''),
             'one space string'  => $this->makeIncorrectItem(' '),
             'two spaces string' => $this->makeIncorrectItem('  '),
             'array'             => $this->makeIncorrectItem(['a']),
             'object'            => $this->makeIncorrectItem(new stdClass()),
-            'false'             => $this->makeIncorrectItem(false),
             'true'              => $this->makeIncorrectItem(true),
-            'null'              => $this->makeIncorrectItem(null),
 
             'invalid stringable cpf' => $this->makeIncorrectItem($this->makeStringableObject('17734532493')),
 
@@ -131,7 +138,7 @@ class IsCpfTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid CPF"
+            'Value must be a valid CPF'
         );
     }
 
@@ -181,5 +188,16 @@ class IsCpfTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

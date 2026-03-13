@@ -22,7 +22,7 @@ class IsEmpty extends Assertion
         $value = $this->getValue();
 
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if ($value instanceof Countable) {
@@ -30,7 +30,7 @@ class IsEmpty extends Assertion
         }
 
         if (is_object($value) === true) {
-            throw new InvalidArgumentException("The value is not valid");
+            throw new InvalidArgumentException('The value is not valid');
         }
 
         if (is_array($value) === true) {
@@ -53,7 +53,7 @@ class IsEmpty extends Assertion
     public function getDefaultMessage(): Message
     {
         return new Message(
-            "Value must be empty"
+            'Value must be empty'
         );
     }
 

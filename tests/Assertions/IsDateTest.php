@@ -9,6 +9,29 @@ use stdClass;
 
 class IsDateTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new IsDate($value);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<int,mixed>> */
     public function validProvider(): array
     {
@@ -34,17 +57,6 @@ class IsDateTest extends AssertionCase
         $assertion = new IsDate($dateValue);
 
         $this->assertTrue($assertion->isValid());
-    }
-
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -79,14 +91,11 @@ class IsDateTest extends AssertionCase
 
         $list['stringable invalid'] = $this->makeIncorrectItem($this->makeStringableObject('December 32, 2024'));
 
-        $list['empty string']      = $this->makeIncorrectItem('');
         $list['one space string']  = $this->makeIncorrectItem(' ');
         $list['two spaces string'] = $this->makeIncorrectItem('  ');
         $list['array']             = $this->makeIncorrectItem(['a']);
         $list['object']            = $this->makeIncorrectItem(new stdClass());
-        $list['false']             = $this->makeIncorrectItem(false);
         $list['true']              = $this->makeIncorrectItem(true);
-        $list['null']              = $this->makeIncorrectItem(null);
         $list['integer']           = $this->makeIncorrectItem(12345);
 
         return $list;
@@ -104,7 +113,7 @@ class IsDateTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must be a valid date"
+            'Value must be a valid date'
         );
     }
 
@@ -158,5 +167,16 @@ class IsDateTest extends AssertionCase
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

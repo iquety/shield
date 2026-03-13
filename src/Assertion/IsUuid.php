@@ -19,8 +19,12 @@ class IsUuid extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (
@@ -33,12 +37,12 @@ class IsUuid extends Assertion
 
         $pattern = '/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/';
 
-        return preg_match($pattern, (string)$value) === 1;
+        return preg_match($pattern, (string) $value) === 1;
     }
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid UUID");
+        return new Message('Value must be a valid UUID');
     }
 
     public function getDefaultNamedMessage(): Message

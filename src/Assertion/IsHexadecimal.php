@@ -19,8 +19,12 @@ class IsHexadecimal extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (
@@ -31,12 +35,12 @@ class IsHexadecimal extends Assertion
             return false;
         }
 
-        return preg_match('/^[0-9a-fA-F]+$/', (string)$value) === 1;
+        return preg_match('/^[0-9a-fA-F]+$/', (string) $value) === 1;
     }
 
     public function getDefaultMessage(): Message
     {
-        return new Message("Value must be a valid hexadecimal number");
+        return new Message('Value must be a valid hexadecimal number');
     }
 
     public function getDefaultNamedMessage(): Message

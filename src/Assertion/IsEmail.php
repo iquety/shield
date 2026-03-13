@@ -19,8 +19,12 @@ class IsEmail extends Assertion
     {
         $value = $this->getValue();
 
+        if (empty($value) === true) {
+            return true;
+        }
+
         if ($value instanceof Stringable) {
-            $value = (string)$value;
+            $value = (string) $value;
         }
 
         if (filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
@@ -33,7 +37,7 @@ class IsEmail extends Assertion
     public function getDefaultMessage(): Message
     {
         return new Message(
-            "Value must be a valid email"
+            'Value must be a valid email'
         );
     }
 

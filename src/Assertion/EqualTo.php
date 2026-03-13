@@ -20,6 +20,10 @@ class EqualTo extends Assertion
 
     public function isValid(): bool
     {
+        if (empty($this->getValue()) === true) {
+            return true;
+        }
+
         if (
             is_object($this->getValue())
             && is_object($this->getAssertValue())

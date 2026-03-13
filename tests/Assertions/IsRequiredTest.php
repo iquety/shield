@@ -6,10 +6,10 @@ namespace Tests\Assertions;
 
 use ArrayObject;
 use InvalidArgumentException;
-use Iquety\Shield\Assertion\IsNotEmpty;
+use Iquety\Shield\Assertion\IsRequired;
 use stdClass;
 
-class IsNotEmptyTest extends AssertionCase
+class IsRequiredTest extends AssertionCase
 {
     /** @test */
     public function valueIsInvalid(): void
@@ -17,7 +17,7 @@ class IsNotEmptyTest extends AssertionCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('The value is not valid');
 
-        $assertion = new IsNotEmpty(new stdClass());
+        $assertion = new IsRequired(new stdClass());
 
         $assertion->isValid();
     }
@@ -44,22 +44,11 @@ class IsNotEmptyTest extends AssertionCase
      * @test
      * @dataProvider validProvider
      */
-    public function valueIsNotEmpty(mixed $value): void
+    public function valueIsRequired(mixed $value): void
     {
-        $assertion = new IsNotEmpty($value);
+        $assertion = new IsRequired($value);
 
         $this->assertTrue($assertion->isValid());
-    }
-
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -87,13 +76,13 @@ class IsNotEmptyTest extends AssertionCase
      */
     public function valueIsEmpty(mixed $value): void
     {
-        $assertion = new IsNotEmpty($value);
+        $assertion = new IsRequired($value);
 
         $this->assertFalse($assertion->isValid());
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value must not be empty"
+            'Value is required'
         );
     }
 
@@ -103,7 +92,7 @@ class IsNotEmptyTest extends AssertionCase
      */
     public function namedValueIsEmpty(mixed $value): void
     {
-        $assertion = new IsNotEmpty($value);
+        $assertion = new IsRequired($value);
 
         $assertion->setFieldName('name');
 
@@ -111,7 +100,7 @@ class IsNotEmptyTest extends AssertionCase
 
         $this->assertEquals(
             $assertion->makeMessage(),
-            "Value of the field 'name' must not be empty"
+            "Value of the field 'name' is required"
         );
     }
 
@@ -121,7 +110,7 @@ class IsNotEmptyTest extends AssertionCase
      */
     public function namedValueIsEmptyWithCustomMessage(mixed $value, string $message): void
     {
-        $assertion = new IsNotEmpty($value);
+        $assertion = new IsRequired($value);
 
         $assertion->setFieldName('name');
 
@@ -137,11 +126,22 @@ class IsNotEmptyTest extends AssertionCase
      */
     public function valueIsEmptyWithCustomMessage(mixed $value, string $message): void
     {
-        $assertion = new IsNotEmpty($value);
+        $assertion = new IsRequired($value);
 
         $assertion->message('O valor {{ value }} está errado');
 
         $this->assertFalse($assertion->isValid());
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

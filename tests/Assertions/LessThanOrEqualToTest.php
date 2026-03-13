@@ -10,17 +10,39 @@ use InvalidArgumentException;
 use Iquety\Shield\Assertion\LessThanOrEqualTo;
 use stdClass;
 
+/** @SuppressWarnings(PHPMD.TooManyPublicMethods) */
 class LessThanOrEqualToTest extends AssertionCase
 {
+    /** @return array<string,array<mixed>> */
+    public function emptyProvider(): array
+    {
+        return [
+            'empty string'  => [''],
+            'empty integer' => [0],
+            'empty array'   => [[]],
+            'empty false'   => [false],
+            'empty null'    => [null],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider emptyProvider
+     */
+    public function valueIsEmpty(mixed $value): void
+    {
+        $assertion = new LessThanOrEqualTo($value, 5);
+
+        $this->assertTrue($assertion->isValid());
+    }
+
     /** @return array<string,array<mixed>> */
     public function invalidValueProvider(): array
     {
         $list = [];
 
-        $list['null is invalid value']      = [null];
         $list['stdObject is invalid value'] = [new stdClass()];
         $list['true is invalid value']      = [true];
-        $list['false is invalid value']     = [false];
         $list['textual is invalid value']   = ['Coração#@!'];
 
         return $list;
@@ -83,18 +105,6 @@ class LessThanOrEqualToTest extends AssertionCase
         $assertion = new LessThanOrEqualTo($value, $length);
 
         $this->assertTrue($assertion->isValid());
-    }
-
-    /** @return array<int,mixed> */
-    private function makeIncorrectItem(mixed $value, float|int $length): array
-    {
-        $messageValue = $this->makeMessageValue($value);
-
-        return [
-            $value,
-            $length,
-            "O valor $messageValue está errado" // mensagem personalizada
-        ];
     }
 
     /** @return array<string,array<int,mixed>> */
@@ -197,5 +207,17 @@ class LessThanOrEqualToTest extends AssertionCase
         $this->assertFalse($assertion->isValid());
 
         $this->assertEquals($assertion->makeMessage(), $message);
+    }
+
+    /** @return array<int,mixed> */
+    private function makeIncorrectItem(mixed $value, float|int $length): array
+    {
+        $messageValue = $this->makeMessageValue($value);
+
+        return [
+            $value,
+            $length,
+            "O valor $messageValue está errado" // mensagem personalizada
+        ];
     }
 }

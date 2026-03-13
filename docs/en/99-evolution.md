@@ -54,10 +54,10 @@ they can be carried out individually:
 ```
 
 ```bash
-# Run PHP CS Fixer check
+# Run pattern check
 ./composer psr-check
 
-# Run PHP CS Fixer
+# Run fixer
 ./composer psr-fix
 ```
 
